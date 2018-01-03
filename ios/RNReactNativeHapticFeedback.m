@@ -5,17 +5,21 @@
 @implementation RNReactNativeHapticFeedback
 
 {
-//   UIImpactFeedbackGenerator *_impactFeedback;
+  UIImpactFeedbackGenerator *_impactFeedback;
   UINotificationFeedbackGenerator *_notificationFeedback;
-//   UISelectionFeedbackGenerator *_selectionFeedback;
+  UISelectionFeedbackGenerator *_selectionFeedback;
 }
+@synthesize bridge = _bridge;
+
+RCT_EXPORT_MODULE()
 
 - (void)setBridge:(RCTBridge *)bridge
 {
+  _bridge = bridge;
   if ([UIFeedbackGenerator class]) {
-    // _impactFeedback = [UIImpactFeedbackGenerator new];
+    _impactFeedback = [UIImpactFeedbackGenerator new];
     _notificationFeedback = [UINotificationFeedbackGenerator new];
-    // _selectionFeedback = [UISelectionFeedbackGenerator new];
+    _selectionFeedback = [UISelectionFeedbackGenerator new];
   }
 }
 
@@ -24,25 +28,23 @@
   return dispatch_get_main_queue();
 }
 
-RCT_EXPORT_METHOD(trigger:(NSString *)type)
+RCT_EXPORT_METHOD(generate:(NSString *)type)
 {
-  switch trigger {
-    case 'notificationError':
-        [UINotificationFeedbackGenerator notificationOccurred:UINotificationFeedbackTypeError];
-    case 'notificationWarning':
-        [UINotificationFeedbackGenerator notificationWarning:UINotificationFeedbackTypeWarning];
-    case 'notificationSuccess':
-        [UINotificationFeedbackGenerator notificationOccurred:UINotificationFeedbackTypeSuccess];
-    }
-    default:
-        [UINotificationFeedbackGenerator notificationOccurred:UINotificationFeedbackTypeSuccess];
+  if ([type isEqual: @"impact"]) {
+    [_impactFeedback impactOccurred];
+  } else if ([type isEqual:@"notification"]) {
+    [_notificationFeedback notificationOccurred:UINotificationFeedbackTypeWarning];
+  } else if ([type isEqual:@"selection"]) {
+    [_selectionFeedback selectionChanged];
+  } else {
+    [_impactFeedback impactOccurred];
+  }
 }
 
 RCT_EXPORT_METHOD(prepare)
 {
+  // Only calling prepare on one generator, it's sole purpose is to awake the taptic engine
   [_impactFeedback prepare];
 }
-
-RCT_EXPORT_MODULE()
 
 @end

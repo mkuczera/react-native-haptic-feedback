@@ -28,7 +28,7 @@ RCT_EXPORT_MODULE()
   return dispatch_get_main_queue();
 }
 
-RCT_EXPORT_METHOD(generate:(NSString *)type)
+RCT_EXPORT_METHOD(trigger:(NSString *)type)
 {
   if ([type isEqual: @"impact"]) {
     [_impactFeedback impactOccurred];

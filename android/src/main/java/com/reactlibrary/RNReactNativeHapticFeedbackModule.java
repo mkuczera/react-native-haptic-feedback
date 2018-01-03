@@ -1,23 +1,18 @@
 
 package com.reactlibrary;
 
+import android.os.Vibrator;
+import android.content.Context;
+
+import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
-import android.os.Vibrator;
 
 public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModule {
 
-  private final ReactApplicationContext reactContext;
-  private Vibrator vibrator;
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState)
-  {
-      super.onCreate(savedInstanceState);
-      vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
-  }
+  ReactApplicationContext reactContext;
 
   public RNReactNativeHapticFeedbackModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -29,7 +24,11 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
     return "RNReactNativeHapticFeedback";
   }
 
+  @ReactMethod
   public void trigger(String type) {
-    vibrator.vibrate(50);
+    Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+    if (v == null) return;
+
+    v.vibrate(50);
   }
 }

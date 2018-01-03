@@ -34,6 +34,8 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type)
     case 'notificationSuccess':
         [UINotificationFeedbackGenerator notificationOccurred:UINotificationFeedbackTypeSuccess];
     }
+    default:
+        [UINotificationFeedbackGenerator notificationOccurred:UINotificationFeedbackTypeSuccess];
 }
 
 RCT_EXPORT_METHOD(prepare)

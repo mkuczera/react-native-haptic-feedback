@@ -5,17 +5,19 @@
 @implementation RNReactNativeHapticFeedback
 
 {
-//   UIImpactFeedbackGenerator *_impactFeedback;
-  UINotificationFeedbackGenerator *_notificationFeedback;
-//   UISelectionFeedbackGenerator *_selectionFeedback;
+    UIImpactFeedbackGenerator *_impactFeedback;
+    UINotificationFeedbackGenerator *_notificationFeedback;
+    UISelectionFeedbackGenerator *_selectionFeedback;
 }
+
+@synthesize bridge = _bridge;
 
 - (void)setBridge:(RCTBridge *)bridge
 {
   if ([UIFeedbackGenerator class]) {
-    // _impactFeedback = [UIImpactFeedbackGenerator new];
+    _impactFeedback = [UIImpactFeedbackGenerator new];
     _notificationFeedback = [UINotificationFeedbackGenerator new];
-    // _selectionFeedback = [UISelectionFeedbackGenerator new];
+    _selectionFeedback = [UISelectionFeedbackGenerator new];
   }
 }
 
@@ -24,11 +26,12 @@
   return dispatch_get_main_queue();
 }
 
+RCT_EXPORT_MODULE();
+
 RCT_EXPORT_METHOD(trigger:(NSString *)type)
 {
     [_notificationFeedback notificationOccurred:UINotificationFeedbackTypeWarning];
 }
 
-RCT_EXPORT_MODULE()
 
 @end

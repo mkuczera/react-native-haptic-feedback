@@ -28,7 +28,30 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
   public void trigger(String type) {
     Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
     if (v == null) return;
+    int duration = 75;
 
-    v.vibrate(50);
+    switch (type) {
+      case "impactLight":
+        duration = 25;
+        break;
+      case "impactMedium":
+        duration = 50;
+        break;
+      case "impactHeavy":
+        duration = 100;
+        break;
+      case "notificationSuccess":
+        duration = 70;
+        break;
+      case "notificationWarning":
+        duration = 90;
+        break;
+      case "notificationError":
+        duration = 110;
+        break;
+      }
+
+      v.vibrate(duration);
+
   }
 }

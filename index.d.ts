@@ -1,5 +1,14 @@
 declare const ReactNativeHapticFeedback: {
-    trigger(type: 'impact' | 'notification' | 'selection'): void
-  }
-  
-  export default ReactNativeHapticFeedback;
+  trigger(
+    type:
+      | "selection"
+      | "impactLight"
+      | "impactMedium"
+      | "impactHeavy"
+      | "notificationSuccess"
+      | "notificationWarning"
+      | "notificationError"
+  ): void;
+};
+
+export default ReactNativeHapticFeedback;

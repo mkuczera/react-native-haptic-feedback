@@ -1,8 +1,8 @@
 
 {
   "name": "react-native-haptic-feedback",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "Basic haptic feedback for iOS and android",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +14,5 @@
   "license": "",
   "peerDependencies": {
     "react-native": "0.41.2"
-
   }
 }

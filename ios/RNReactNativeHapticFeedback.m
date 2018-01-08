@@ -17,39 +17,32 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(trigger:(FeedbackType)type)
+RCT_EXPORT_METHOD(trigger:(NSString *)type)
 {
-    if (![self supportsHaptic]){
-        return;
+    if ([self supportsHaptic]){
+        
+        if ([type isEqual: @"impactLight"]) {
+            [self generateImpactFeedback:UIImpactFeedbackStyleLight];
+        } else if ([type isEqual:@"impactMedium"]) {
+            [self generateImpactFeedback:UIImpactFeedbackStyleMedium];
+        } else if ([type isEqual:@"impactHeavy"]) {
+            [self generateImpactFeedback:UIImpactFeedbackStyleHeavy];
+        } else if ([type isEqual:@"notificationSuccess"]) {
+            [self generateNotificationFeedback:UINotificationFeedbackTypeSuccess];
+        } else if ([type isEqual:@"notificationWarning"]) {
+            [self generateNotificationFeedback:UINotificationFeedbackTypeWarning];
+        } else if ([type isEqual:@"notificationError"]) {
+            [self generateNotificationFeedback:UINotificationFeedbackTypeError];
+        } else {
+            [self generateSelectionFeedback];
+        }
+        
     }
     
-    switch (type) {
-        case impactLight:
-            [self generateImpactFeedback:UIImpactFeedbackStyleLight];
-            break;
-        case impactMedium:
-            [self generateImpactFeedback:UIImpactFeedbackStyleMedium];
-            break;
-        case impactHeavy:
-            [self generateImpactFeedback:UIImpactFeedbackStyleHeavy];
-            break;
-        case notificationSuccess:
-            [self generateNotificationFeedback:UINotificationFeedbackTypeSuccess];
-            break;
-        case notificationWarning:
-            [self generateNotificationFeedback:UINotificationFeedbackTypeWarning];
-            break;
-        case notificationError:
-            [self generateNotificationFeedback:UINotificationFeedbackTypeError];
-            break;
-        default:
-            [self generateSelectionFeedback];
-            break;
-    }
 }
 
 -(Boolean)supportsHaptic {
-    return [[UIDevice currentDevice] systemVersion].floatValue < 10.0;
+    return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0;
 }
 
 -(void)generateSelectionFeedback{

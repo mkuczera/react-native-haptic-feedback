@@ -38,7 +38,6 @@
 ```javascript
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-// TODO: What to do with the module?
 ReactNativeHapticFeedback.trigger('impactLight');
 ```
 

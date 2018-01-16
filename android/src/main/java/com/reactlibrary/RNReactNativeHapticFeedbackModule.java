@@ -32,13 +32,13 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
 
     switch (type) {
       case "impactLight":
-        duration = 15;
+        duration = 10;
         break;
       case "impactMedium":
-        duration = 25;
+        duration = 20;
         break;
       case "impactHeavy":
-        duration = 35;
+        duration = 30;
         break;
       case "notificationSuccess":
         duration = 50;

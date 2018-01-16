@@ -1,3 +1,13 @@
 import {NativeModules} from 'react-native';
 
-export default NativeModules.RNReactNativeHapticFeedback || {};
+class RNReactNativeHapticFeedback {
+    static trigger = (type = 'selection') => {
+        try {
+            NativeModules.RNReactNativeHapticFeedback.trigger(type);
+        } catch (err) {
+            console.warn('RNReactNativeHapticFeedback is not available');
+        }
+    }
+}
+
+export default RNReactNativeHapticFeedback;

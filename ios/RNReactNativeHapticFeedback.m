@@ -21,7 +21,7 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(trigger:(NSString *)type:(Boolean)enableVibrateFallback)
+RCT_EXPORT_METHOD(trigger:(NSString *)type enableVibrateFallback:(BOOL)enableVibrateFallback)
 {
     if ([self supportsHaptic]){
         

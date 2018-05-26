@@ -1,5 +1,5 @@
 
-# react-native-react-native-haptic-feedback
+# react-native-haptic-feedback
 
 ## Getting started
 
@@ -38,13 +38,14 @@
 ```javascript
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-ReactNativeHapticFeedback.trigger('impactLight');
+ReactNativeHapticFeedback.trigger('impactLight', true);
 ```
 
 ### Available methods
 
-Method | Description
------- | ------
-`trigger (method)` | Trigger haptic feedback. Possible values are "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", "notificationError" (default: "selection")
+#### trigger(method, enableVibrateFallback)
 
-  
+Argument | Description
+------ | ------
+`method` | Possible values are "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", "notificationError" (default: "selection")
+`enableVibrateFallback` | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s)

@@ -7,7 +7,8 @@ declare const ReactNativeHapticFeedback: {
       | "impactHeavy"
       | "notificationSuccess"
       | "notificationWarning"
-      | "notificationError"
+      | "notificationError",
+    enableVibrateFallback: boolean
   ): void;
 };
 

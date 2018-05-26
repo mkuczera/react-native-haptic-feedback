@@ -1,6 +1,10 @@
 
 #import "RNReactNativeHapticFeedback.h"
 #import <UIKit/UIKit.h>
+#import <sys/utsname.h>
+#import "DeviceUtils.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AudioToolbox/AudioServices.h>
 
 @implementation RNReactNativeHapticFeedback
 @synthesize bridge = _bridge;
@@ -17,7 +21,7 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(trigger:(NSString *)type)
+RCT_EXPORT_METHOD(trigger:(NSString *)type:(Boolean)enableVibrateFallback)
 {
     if ([self supportsHaptic]){
         
@@ -37,12 +41,14 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type)
             [self generateSelectionFeedback];
         }
         
+    } else if (enableVibrateFallback) {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
     
 }
 
 -(Boolean)supportsHaptic {
-    return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0;
+    return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [DeviceUtils deviceVersion:@"iPhone"] > 7;
 }
 
 -(void)generateSelectionFeedback{

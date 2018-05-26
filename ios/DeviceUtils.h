@@ -2,13 +2,12 @@
 //  DeviceUtils.h
 //  RNReactNativeHapticFeedback
 //
-//  Created by Michael Kuczera on 13.05.18.
-//  Copyright © 2018 Facebook. All rights reserved.
+//  Created by Michael Kuczera on 26.05.18.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface DeviceUtils : NSObject;
+@interface DeviceUtils : NSObject
 
 + (NSString *) platform;
 + (int)deviceVersion:(NSString*)deviceType;

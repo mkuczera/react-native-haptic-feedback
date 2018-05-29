@@ -12,7 +12,8 @@
 
 @implementation DeviceUtils;
 
-+ (NSString *) platform{
++ (NSString *)platform
+{
     size_t size;
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
     char *machine = malloc(size);
@@ -22,14 +23,19 @@
     return platform;
 }
 
-+ (int) deviceVersion:(NSString*) deviceType {
-    
++ (int)deviceVersion:(NSString *)deviceType
+{
     NSString *platform = [self platform];
     int deviceVersion = 0;
     
     if ([platform containsString:deviceType]) {
         NSString *platformSplit = [platform componentsSeparatedByString:@","][0];
-        deviceVersion = [[platformSplit substringFromIndex: [platformSplit length] - 1] intValue];
+        NSCharacterSet *setToRemove = [NSCharacterSet decimalDigitCharacterSet];
+        NSCharacterSet *setToKeep = [setToRemove invertedSet];
+        
+        NSString *platformVersion = [[platformSplit componentsSeparatedByCharactersInSet:setToKeep]
+         componentsJoinedByString:@""];
+        deviceVersion = [platformVersion intValue];
     }
     return deviceVersion;
 }

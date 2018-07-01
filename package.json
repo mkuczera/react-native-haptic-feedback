@@ -19,7 +19,7 @@
   ],
   "author": "Michael Kuczera",
   "peerDependencies": {
-    "react-native": "0.41.2"
+    "react-native": ">= 0.41.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

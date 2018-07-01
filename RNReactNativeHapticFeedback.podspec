@@ -1,7 +1,9 @@
+require 'json'
+version = JSON.parse(File.read('package.json'))["version"]
 
 Pod::Spec.new do |s|
   s.name         = "RNReactNativeHapticFeedback"
-  s.version      = "1.0.1"
+  s.version      = version
   s.summary      = "RNReactNativeHapticFeedback"
   s.description  = <<-DESC
                   RNReactNativeHapticFeedback

@@ -22,7 +22,7 @@
 #### Android
 
 1. Open up `android/app/src/main/java/[...]/MainApplication.java`
-  - Add `import com.reactlibrary.RNReactNativeHapticFeedbackPackage;` to the imports at the top of the file
+  - Add `import com.mkuczera.RNReactNativeHapticFeedbackPackage;` to the imports at the top of the file
   - Add `new RNReactNativeHapticFeedbackPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```

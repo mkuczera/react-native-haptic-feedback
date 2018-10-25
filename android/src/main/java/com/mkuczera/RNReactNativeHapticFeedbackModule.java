@@ -1,5 +1,5 @@
 
-package com.reactlibrary;
+package com.mkuczera;
 
 import android.os.Vibrator;
 import android.content.Context;

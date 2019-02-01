@@ -48,7 +48,9 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type enableVibrateFallback:(BOOL)enableVib
 }
 
 -(Boolean)supportsHaptic {
-    return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0 && [DeviceUtils deviceVersion:@"iPhone"] > 7;
+    return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0
+        && ![[DeviceUtils platform] isEqualToString:@"iPhone8,4"] // iPhone SE
+        && [DeviceUtils deviceVersion:@"iPhone"] > 7;
 }
 
 -(void)generateSelectionFeedback{

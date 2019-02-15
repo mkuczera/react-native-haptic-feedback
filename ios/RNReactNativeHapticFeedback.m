@@ -41,6 +41,17 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type enableVibrateFallback:(BOOL)enableVib
             [self generateSelectionFeedback];
         }
         
+    } else if ([self supportsHapticFor6SAnd6SPlus]) {
+        
+        // generates alternative haptic feedback
+        if ([type isEqual: @"selection"]) {
+            AudioServicesPlaySystemSound((SystemSoundID) 1519);
+        } else if ([type isEqual: @"impactMedium"]) {
+            AudioServicesPlaySystemSound((SystemSoundID) 1520);
+        } else if ([type isEqual:@"notificationWarning"]) {
+            AudioServicesPlaySystemSound((SystemSoundID) 1521);
+        }
+        
     } else if (enableVibrateFallback) {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
@@ -49,8 +60,13 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type enableVibrateFallback:(BOOL)enableVib
 
 -(Boolean)supportsHaptic {
     return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0
-        && ![[DeviceUtils platform] isEqualToString:@"iPhone8,4"] // iPhone SE
-        && [DeviceUtils deviceVersion:@"iPhone"] > 7;
+        && [DeviceUtils deviceVersion:@"iPhone"] > 8;
+}
+
+-(Boolean)supportsHapticFor6SAnd6SPlus {
+    return [[UIDevice currentDevice] systemVersion].floatValue >= 10.0
+        && ([[DeviceUtils platform] isEqualToString:@"iPhone8,1"]  // iPhone 6S
+        || [[DeviceUtils platform] isEqualToString:@"iPhone8,2"]); // iPhone 6S Plus
 }
 
 -(void)generateSelectionFeedback{

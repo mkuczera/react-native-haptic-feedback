@@ -3,6 +3,7 @@ package com.mkuczera;
 
 import android.os.Vibrator;
 import android.content.Context;
+import android.provider.Settings;
 
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -26,6 +27,9 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
 
   @ReactMethod
   public void trigger(String type) {
+    // Check system settings, if disabled return immediately
+    if (Settings.System.getInt(this.reactContext.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) == 0) return;
+
     Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
     if (v == null) return;
     long durations[] = {0, 20};

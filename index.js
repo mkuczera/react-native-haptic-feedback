@@ -1,12 +1,16 @@
-import {NativeModules, Platform} from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 class RNReactNativeHapticFeedback {
-    static trigger = (type = 'selection', enableVibrateFallback = false) => {
+    static trigger = (type = 'selection', options = {}) => {
         try {
-            if (Platform.OS === 'ios') {
-                NativeModules.RNReactNativeHapticFeedback.trigger(type, enableVibrateFallback);
+            if (typeof options === 'boolean') {
+                if (Platform === 'ios') {
+                    NativeModules.RNReactNativeHapticFeedback.trigger_deprecated(type, options);
+                } else {
+                    NativeModules.RNReactNativeHapticFeedback.trigger(type);
+                }
             } else {
-                NativeModules.RNReactNativeHapticFeedback.trigger(type);
+                NativeModules.RNReactNativeHapticFeedback.trigger(type, options);
             }
         } catch (err) {
             console.warn('RNReactNativeHapticFeedback is not available');

@@ -23,15 +23,15 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(trigger_deprecated:(NSString *)type enableVibrateFallback:(BOOL)enableVibrateFallback)
 {
-    NSDictionary *options = [NSDictionary dictionary];
-    [options setObject: enableVibrateFallback  forKey: @"enableVibrateFallback"];
+    NSMutableDictionary *options = [NSMutableDictionary dictionary];
+    [options setObject:[NSNumber numberWithBool:enableVibrateFallback]  forKey: @"enableVibrateFallback"];
     
-    [self trigger type:type options:options]
+    [self trigger:type options:options];
 }
 
 RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
-    BOOL enableVibrateFallback = [options valueForKey:@"enableVibrateFallback"];
+    BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"]boolValue];
     
     if ([self supportsHaptic]){
         

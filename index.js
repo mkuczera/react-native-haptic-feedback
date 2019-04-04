@@ -3,6 +3,7 @@ import { NativeModules, Platform } from 'react-native';
 class RNReactNativeHapticFeedback {
     static trigger = (type = 'selection', options = {}) => {
         const mergedOptions = {
+            enableVibrateFallback: false,
             ignoreAndroidSystemSettings: false,
             ...options
         }

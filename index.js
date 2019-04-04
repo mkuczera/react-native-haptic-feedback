@@ -9,12 +9,8 @@ class RNReactNativeHapticFeedback {
         }
 
         try {
-            if (typeof options === 'boolean') {
-                if (Platform === 'ios') {
-                    NativeModules.RNReactNativeHapticFeedback.trigger_deprecated(type, options);
-                } else {
-                    NativeModules.RNReactNativeHapticFeedback.trigger(type, mergedOptions);
-                }
+            if (typeof options === 'boolean' && Platform === 'ios') {
+                NativeModules.RNReactNativeHapticFeedback.trigger(type, options);
             } else {
                 NativeModules.RNReactNativeHapticFeedback.trigger(type, mergedOptions);
             }

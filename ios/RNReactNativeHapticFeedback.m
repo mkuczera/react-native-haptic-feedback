@@ -21,14 +21,6 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(trigger_deprecated:(NSString *)type enableVibrateFallback:(BOOL)enableVibrateFallback)
-{
-    NSMutableDictionary *options = [NSMutableDictionary dictionary];
-    [options setObject:[NSNumber numberWithBool:enableVibrateFallback]  forKey: @"enableVibrateFallback"];
-    
-    [self trigger:type options:options];
-}
-
 RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
     BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"]boolValue];

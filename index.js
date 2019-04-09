@@ -19,7 +19,7 @@ class RNReactNativeHapticFeedback {
     }
 }
 
-const triggerHaptic(type, options) {
+const triggerHaptic = (type, options) => {
     try {
         NativeModules.RNReactNativeHapticFeedback.trigger(type, options);
     } catch (err) {

@@ -38,10 +38,25 @@
 ```javascript
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-ReactNativeHapticFeedback.trigger('impactLight', true);
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false
+}
+
+ReactNativeHapticFeedback.trigger('impactLight', options);
 ```
 
 ### Available methods
+
+#### trigger(method, options)
+
+Argument | Description
+------ | ------
+`method` | Possible values are "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", "notificationError" (default: "selection")
+`options.enableVibrateFallback` | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s)
+`options.ignoreAndroidSystemSettings` | Android only. if Haptic is disabled in the Android system settings this will allow ignoring the setting and trigger haptic feeback.
+
+### Available methods version 1.6.0 and prior
 
 #### trigger(method, enableVibrateFallback)
 

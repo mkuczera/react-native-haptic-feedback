@@ -21,8 +21,10 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(trigger:(NSString *)type enableVibrateFallback:(BOOL)enableVibrateFallback)
+RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
+    BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"]boolValue];
+    
     if ([self supportsHaptic]){
         
         if ([type isEqual: @"impactLight"]) {

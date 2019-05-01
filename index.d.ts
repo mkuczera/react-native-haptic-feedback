@@ -1,18 +1,17 @@
-declare const ReactNativeHapticFeedback: {
-  trigger(
-    type:
-      | "selection"
-      | "impactLight"
-      | "impactMedium"
-      | "impactHeavy"
-      | "notificationSuccess"
-      | "notificationWarning"
-      | "notificationError",
-    options?: {
-      enableVibrateFallback?: boolean,
-      ignoreAndroidSystemSettings?: boolean
-    }
-  ): void;
-};
+declare module "react-native-haptic-feedback" {
+  type Feedback =
+    | "selection"
+    | "impactLight"
+    | "impactMedium"
+    | "impactHeavy"
+    | "notificationSuccess"
+    | "notificationWarning"
+    | "notificationError";
 
-export default ReactNativeHapticFeedback;
+  interface Options {
+    enableVibrateFallback?: boolean;
+    ignoreAndroidSystemSettings?: boolean;
+  }
+
+  function trigger(type: Feedback, options: Options): void;
+}

@@ -1,5 +1,5 @@
 declare module "react-native-haptic-feedback" {
-  type Feedback =
+  type HapticFeedbackTypes =
     | "selection"
     | "impactLight"
     | "impactMedium"
@@ -8,10 +8,10 @@ declare module "react-native-haptic-feedback" {
     | "notificationWarning"
     | "notificationError";
 
-  interface Options {
+  interface HapticOptions {
     enableVibrateFallback?: boolean;
     ignoreAndroidSystemSettings?: boolean;
   }
 
-  function trigger(type: Feedback, options: Options): void;
+  function trigger(type: HapticFeedbackTypes, options?: HapticOptions): void;
 }

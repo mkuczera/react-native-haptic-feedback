@@ -1,5 +1,5 @@
 require 'json'
-version = JSON.parse(File.read('package.json'))["version"]
+package = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'package.json')))
 
 Pod::Spec.new do |s|
   s.name         = "RNReactNativeHapticFeedback"

@@ -3,7 +3,7 @@
 ## Contributions welcome
 
 Right now the Android implementation is a small Vibrate pattern, similar to the "feeling" of the iOS haptic system. Android needs to be View bound to trigger the real haptic engine.
-So i want to enhance the Library to support a <TouchableWithHapticFeedback>. For iOS it´s pretty simple to archieve this behaviour. If there are any recommendations for the Java part of this (trigger the haptic feedback and give support to all the options of a TouchableWithoutFeedback), feel free to make a PR :)
+So i want to enhance the Library to support a `<TouchableWithHapticFeedback>`. For iOS it's pretty simple to archieve this behaviour. If there are any recommendations for the Java part of this (trigger the haptic feedback and give support to all the options of a TouchableWithoutFeedback), feel free to make a PR :)
 
 ## Getting started
 

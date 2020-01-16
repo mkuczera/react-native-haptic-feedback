@@ -6,7 +6,16 @@ declare module "react-native-haptic-feedback" {
     | "impactHeavy"
     | "notificationSuccess"
     | "notificationWarning"
-    | "notificationError";
+    | "notificationError"
+    | "clockTick"
+    | "contextClick"
+    | "keyboardPress"
+    | "keyboardRelease"
+    | "keyboardTap"
+    | "longPress"
+    | "textHandleMove"
+    | "virtualKey"
+    | "virtualKeyRelease";
 
   interface HapticOptions {
     enableVibrateFallback?: boolean;

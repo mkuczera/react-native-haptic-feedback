@@ -8,7 +8,8 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-  
+package-lock.json
+
 
 # Xcode
 #
@@ -29,7 +30,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-      
+
 
 # Android/IntelliJ
 #
@@ -38,9 +39,12 @@ build/
 .gradle
 local.properties
 *.iml
+caches/
+daemon/
+native/
+wrapper/
 
 # BUCK
 buck-out/
 \.buckd/
 *.keystore
-      

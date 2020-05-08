@@ -6,6 +6,10 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/AudioServices.h>
 
+static UISelectionFeedbackGenerator *selectionGenerator = nil;
+static NSMutableDictionary<NSNumber*, UIImpactFeedbackGenerator*> *impactGeneratorMap = nil;
+static UINotificationFeedbackGenerator *notificationGenerator = nil;
+
 @implementation RNReactNativeHapticFeedback
 @synthesize bridge = _bridge;
 
@@ -72,24 +76,34 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 }
 
 -(void)generateSelectionFeedback{
-    UISelectionFeedbackGenerator *generator = [[UISelectionFeedbackGenerator alloc] init];
-    [generator prepare];
-    [generator selectionChanged];
-    generator = nil;
+    if (selectionGenerator == nil){
+        selectionGenerator = [[UISelectionFeedbackGenerator alloc] init];
+        [selectionGenerator prepare];
+    }
+    [selectionGenerator selectionChanged];
+    [selectionGenerator prepare];
 }
 
 -(void)generateImpactFeedback:(UIImpactFeedbackStyle)style{
-    UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:style];
-    [generator prepare];
+    NSNumber *key = [NSNumber numberWithInteger: style];
+    if (impactGeneratorMap == nil)
+        impactGeneratorMap = [[NSMutableDictionary alloc] init];
+    if ([impactGeneratorMap objectForKey:key] == nil){
+        [impactGeneratorMap setValue:[[UIImpactFeedbackGenerator alloc] initWithStyle:style] forKey:key];
+        [[impactGeneratorMap objectForKey:key] prepare];
+    }
+    UIImpactFeedbackGenerator *generator = [impactGeneratorMap objectForKey:key];
     [generator impactOccurred];
-    generator = nil;
+    [generator prepare];
 }
 
 -(void)generateNotificationFeedback:(UINotificationFeedbackType)notificationType{
-    UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
-    [generator prepare];
-    [generator notificationOccurred:notificationType];
-    generator = nil;
+    if (notificationGenerator == nil){
+        notificationGenerator = [[UINotificationFeedbackGenerator alloc] init];
+        [notificationGenerator prepare];
+    }
+    [notificationGenerator notificationOccurred:notificationType];
+    [notificationGenerator prepare];
 }
 
 

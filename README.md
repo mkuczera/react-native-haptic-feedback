@@ -16,6 +16,7 @@ or
 ### Linking
 
 `$ react-native link react-native-haptic-feedback`
+`$ cd ios && pod install`
 
 ### Or Manual installation
 

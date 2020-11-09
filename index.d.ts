@@ -1,5 +1,5 @@
 declare module "react-native-haptic-feedback" {
-  type HapticFeedbackTypes =
+  export type HapticFeedbackTypes =
     | "selection"
     | "impactLight"
     | "impactMedium"

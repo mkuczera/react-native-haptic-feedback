@@ -4,6 +4,8 @@ declare module "react-native-haptic-feedback" {
     | "impactLight"
     | "impactMedium"
     | "impactHeavy"
+    | "rigid"
+    | "soft"
     | "notificationSuccess"
     | "notificationWarning"
     | "notificationError"

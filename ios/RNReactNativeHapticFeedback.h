@@ -14,6 +14,8 @@ typedef enum {
     impactLight,
     impactMedium,
     impactHeavy,
+    rigid,
+    soft,
     notificationSuccess,
     notificationWarning,
     notificationError

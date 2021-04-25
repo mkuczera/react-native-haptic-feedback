@@ -58,6 +58,12 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
       case "notificationError":
         durations = new long[]{0, 20, 40, 30, 40, 40};
         break;
+      case "rigid":
+        durations = new long[]{0, 30};
+        break;
+      case "soft":
+        durations = new long[]{0, 10};
+        break;
       case "clockTick":
         hapticConstant = HapticFeedbackConstants.CLOCK_TICK;
         break;

@@ -37,6 +37,10 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
             [self generateImpactFeedback:UIImpactFeedbackStyleMedium];
         } else if ([type isEqual:@"impactHeavy"]) {
             [self generateImpactFeedback:UIImpactFeedbackStyleHeavy];
+        } else if ([type isEqual:@"rigid"]) {
+            [self generateImpactFeedback:UIImpactFeedbackStyleRigid];
+        } else if ([type isEqual:@"soft"]) {
+            [self generateImpactFeedback:UIImpactFeedbackStyleSoft];
         } else if ([type isEqual:@"notificationSuccess"]) {
             [self generateNotificationFeedback:UINotificationFeedbackTypeSuccess];
         } else if ([type isEqual:@"notificationWarning"]) {

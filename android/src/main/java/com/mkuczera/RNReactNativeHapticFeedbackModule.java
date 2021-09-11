@@ -36,13 +36,9 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
     if (ignoreAndroidSystemSettings == false && hapticEnabledAndroidSystemSettings == 0) return;
 
     Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
-    if (v == null) return;
-
     Vibrate targetVibration = VibrateFactory.getVibration(type);
 
-    if (targetVibration == null) {
-      return;
-    }
+    if (v == null || targetVibration == null) return;
 
     targetVibration.apply(v);
   }

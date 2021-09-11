@@ -1,6 +1,9 @@
 
+package com.mkuczera;
+
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.os.Build;
 
 public class VibrateWithCreatePredefined implements Vibrate {
     int hapticConstant = 0;

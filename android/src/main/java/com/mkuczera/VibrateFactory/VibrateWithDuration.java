@@ -1,4 +1,6 @@
 
+package com.mkuczera;
+
 import android.os.Vibrator;
 
 public class VibrateWithDuration implements Vibrate {

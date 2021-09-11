@@ -4,6 +4,16 @@ package com.mkuczera;
 import android.view.HapticFeedbackConstants;
 import android.os.VibrationEffect;
 
+import com.mkuczera.Vibrate;
+import com.mkuczera.VibrateWithDuration;
+import com.mkuczera.VibrateWithHapticConstant;
+import com.mkuczera.VibrateWithCreatePredefined;
+
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Optional;
+
 public class VibrateFactory {
     static Map<String, Vibrate> vibrateMap = new HashMap<>();
     static {
@@ -30,7 +40,7 @@ public class VibrateFactory {
         vibrateMap.put("effectTick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_TICK));
     }
 
-    public static Optional<Vibrate> getVibration(String type) {
-        return Optional.ofNullable(vibrateMap.get(type));
+    public static Vibrate getVibration(String type) {
+        return vibrateMap.get(type);
     }
 }

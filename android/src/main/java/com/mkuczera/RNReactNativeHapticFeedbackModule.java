@@ -5,6 +5,7 @@ import android.os.Vibrator;
 import android.content.Context;
 import android.provider.Settings;
 import com.mkuczera.VibrateFactory;
+import com.mkuczera.Vibrate;
 
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -37,9 +38,9 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
     Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
     if (v == null) return;
 
-    Operation targetVibration = VibrateFactory.getVibration(type);
+    Vibrate targetVibration = VibrateFactory.getVibration(type);
 
-    if (!targetVibration.isPresent()) {
+    if (targetVibration == null) {
       return;
     }
 

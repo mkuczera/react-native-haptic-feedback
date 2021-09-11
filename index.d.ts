@@ -17,7 +17,11 @@ declare module "react-native-haptic-feedback" {
     | "longPress"
     | "textHandleMove"
     | "virtualKey"
-    | "virtualKeyRelease";
+    | "virtualKeyRelease"
+    | "effectClick"
+    | "effectDoubleClick"
+    | "effectHeavyClick"
+    | "effectTick";
 
   interface HapticOptions {
     enableVibrateFallback?: boolean;

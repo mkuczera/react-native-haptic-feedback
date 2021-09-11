@@ -8,7 +8,7 @@ public class VibrateFactory {
     static Map<String, Vibrate> vibrateMap = new HashMap<>();
     static {
         vibrateMap.put("impactLight", new VibrateWithDuration(new long[]{0, 20}));
-        vibrateMap.put("impactMedium", new VibrateWithDuration(new long[]{0, 40};));
+        vibrateMap.put("impactMedium", new VibrateWithDuration(new long[]{0, 40}));
         vibrateMap.put("impactHeavy", new VibrateWithDuration(new long[]{0, 60}));
         vibrateMap.put("notificationSuccess", new VibrateWithDuration(new long[]{0, 40 ,60, 20}));
         vibrateMap.put("notificationWarning", new VibrateWithDuration(new long[]{0, 20, 60, 40}));

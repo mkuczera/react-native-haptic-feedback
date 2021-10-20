@@ -4,7 +4,8 @@ package com.mkuczera;
 import android.os.Vibrator;
 import android.content.Context;
 import android.provider.Settings;
-import android.view.HapticFeedbackConstants;
+import com.mkuczera.VibrateFactory;
+import com.mkuczera.Vibrate;
 
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -35,68 +36,10 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
     if (ignoreAndroidSystemSettings == false && hapticEnabledAndroidSystemSettings == 0) return;
 
     Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
-    if (v == null) return;
-    long durations[] = {0, 20};
-    int hapticConstant = 0;
+    Vibrate targetVibration = VibrateFactory.getVibration(type);
 
-    switch (type) {
-      case "impactLight":
-        durations = new long[]{0, 20};
-        break;
-      case "impactMedium":
-        durations = new long[]{0, 40};
-        break;
-      case "impactHeavy":
-        durations = new long[]{0, 60};
-        break;
-      case "notificationSuccess":
-        durations = new long[]{0, 40 ,60, 20};
-        break;
-      case "notificationWarning":
-        durations = new long[]{0, 20, 60, 40};
-        break;
-      case "notificationError":
-        durations = new long[]{0, 20, 40, 30, 40, 40};
-        break;
-      case "rigid":
-        durations = new long[]{0, 30};
-        break;
-      case "soft":
-        durations = new long[]{0, 10};
-        break;
-      case "clockTick":
-        hapticConstant = HapticFeedbackConstants.CLOCK_TICK;
-        break;
-      case "contextClick":
-        hapticConstant = HapticFeedbackConstants.CONTEXT_CLICK;
-        break;
-      case "keyboardPress":
-        hapticConstant = HapticFeedbackConstants.KEYBOARD_PRESS;
-        break;
-      case "keyboardRelease":
-        hapticConstant = HapticFeedbackConstants.KEYBOARD_RELEASE;
-        break;
-      case "keyboardTap":
-        hapticConstant = HapticFeedbackConstants.KEYBOARD_TAP;
-        break;
-      case "longPress":
-        hapticConstant = HapticFeedbackConstants.LONG_PRESS;
-        break;
-      case "textHandleMove":
-        hapticConstant = HapticFeedbackConstants.TEXT_HANDLE_MOVE;
-        break;
-      case "virtualKey":
-        hapticConstant = HapticFeedbackConstants.VIRTUAL_KEY;
-        break;
-      case "virtualKeyRelease":
-        hapticConstant = HapticFeedbackConstants.VIRTUAL_KEY_RELEASE;
-        break;
-      }
+    if (v == null || targetVibration == null) return;
 
-      if (hapticConstant != 0) {
-        v.vibrate(hapticConstant);
-      } else {
-        v.vibrate(durations, -1);
-      }
+    targetVibration.apply(v);
   }
 }

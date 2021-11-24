@@ -72,7 +72,6 @@ ReactNativeHapticFeedback.trigger("impactLight", options);
 
 | Method | Android | iOS |
 | :---: | :---: | :---: |
-| selection | :heavy_check_mark: | :heavy_check_mark: |
 | impactLight | :heavy_check_mark: | :heavy_check_mark: |
 | impactMedium | :heavy_check_mark: | :heavy_check_mark: |
 | impactHeavy | :heavy_check_mark: | :heavy_check_mark: |
@@ -81,6 +80,7 @@ ReactNativeHapticFeedback.trigger("impactLight", options);
 | notificationSuccess | :heavy_check_mark: | :heavy_check_mark: |
 | notificationWarning | :heavy_check_mark: | :heavy_check_mark: |
 | notificationError | :heavy_check_mark: | :heavy_check_mark: |
+| selection | | :heavy_check_mark: |
 | clockTick | :heavy_check_mark: | |
 | contextClick | :heavy_check_mark: | |
 | keyboardPress | :heavy_check_mark: | |

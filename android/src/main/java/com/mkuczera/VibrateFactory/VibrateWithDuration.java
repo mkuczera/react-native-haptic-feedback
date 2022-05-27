@@ -1,4 +1,3 @@
-
 package com.mkuczera;
 
 import android.os.Vibrator;
@@ -12,6 +11,10 @@ public class VibrateWithDuration implements Vibrate {
 
     @Override
     public void apply(Vibrator v) {
-        v.vibrate(this.durations, -1);
+        try {
+            if (v.hasVibrator()) {
+                v.vibrate(this.durations, -1);
+            }
+        } catch (Exception e) {}
     }
 }

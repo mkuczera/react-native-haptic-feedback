@@ -1,4 +1,3 @@
-
 package com.mkuczera;
 
 import android.os.Vibrator;
@@ -14,9 +13,14 @@ public class VibrateWithCreatePredefined implements Vibrate {
 
     @Override
     public void apply(Vibrator v) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return;
         }
-        v.vibrate(VibrationEffect.createPredefined(this.hapticConstant));
+
+        try {
+            if (v.hasVibrator()) {
+                v.vibrate(VibrationEffect.createPredefined(this.hapticConstant));
+            }
+        } catch (Exception e) {}
     }
 }

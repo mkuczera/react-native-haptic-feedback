@@ -1,5 +1,5 @@
 declare module "react-native-haptic-feedback" {
-  type HapticFeedbackTypes =
+  export type HapticFeedbackTypes =
     | "selection"
     | "impactLight"
     | "impactMedium"
@@ -23,10 +23,14 @@ declare module "react-native-haptic-feedback" {
     | "effectHeavyClick"
     | "effectTick";
 
-  interface HapticOptions {
+  export interface HapticOptions {
     enableVibrateFallback?: boolean;
     ignoreAndroidSystemSettings?: boolean;
   }
 
-  function trigger(type: HapticFeedbackTypes, options?: HapticOptions): void;
+  class ReactNativeHapticFeedback {
+    static trigger(type: HapticFeedbackTypes, options?: HapticOptions): void;
+  }
+
+  export = ReactNativeHapticFeedback;
 }

@@ -1,4 +1,3 @@
-
 package com.mkuczera;
 
 import android.os.Vibrator;
@@ -12,6 +11,10 @@ public class VibrateWithHapticConstant implements Vibrate {
 
     @Override
     public void apply(Vibrator v) {
-        v.vibrate(this.hapticConstant);
+        try {
+            if (v.hasVibrator()) {
+                v.vibrate(this.hapticConstant);
+            }
+        } catch (Exception e) {}
     }
 }

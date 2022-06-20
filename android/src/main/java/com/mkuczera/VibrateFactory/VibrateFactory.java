@@ -1,4 +1,3 @@
-
 package com.mkuczera;
 
 import java.util.Map;

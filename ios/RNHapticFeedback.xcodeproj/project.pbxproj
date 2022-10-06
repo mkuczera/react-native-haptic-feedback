@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3E7B58A1CC2AC0600A0062D /* RNReactNativeHapticFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNReactNativeHapticFeedback.m */; };
-		DA67B20420B9909800D46867 /* DeviceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA67B20320B9909800D46867 /* DeviceUtils.m */; };
+		558CBA9428EF1100007CF242 /* DeviceUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 558CBA9228EF1100007CF242 /* DeviceUtils.mm */; };
+		558CBA9528EF1100007CF242 /* RNHapticFeedback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 558CBA9328EF1100007CF242 /* RNHapticFeedback.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,11 +24,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		134814201AA4EA6300B7C361 /* libRNReactNativeHapticFeedback.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNReactNativeHapticFeedback.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5881CC2AC0600A0062D /* RNReactNativeHapticFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNReactNativeHapticFeedback.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* RNReactNativeHapticFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNReactNativeHapticFeedback.m; sourceTree = "<group>"; };
-		DA67B20220B9909800D46867 /* DeviceUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceUtils.h; sourceTree = "<group>"; };
-		DA67B20320B9909800D46867 /* DeviceUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeviceUtils.m; sourceTree = "<group>"; };
+		134814201AA4EA6300B7C361 /* libRNHapticFeedback.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNHapticFeedback.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		558CBA9028EF1100007CF242 /* RNHapticFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNHapticFeedback.h; path = RNHapticFeedback/RNHapticFeedback.h; sourceTree = "<group>"; };
+		558CBA9128EF1100007CF242 /* DeviceUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeviceUtils.h; path = RNHapticFeedback/DeviceUtils.h; sourceTree = "<group>"; };
+		558CBA9228EF1100007CF242 /* DeviceUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceUtils.mm; path = RNHapticFeedback/DeviceUtils.mm; sourceTree = "<group>"; };
+		558CBA9328EF1100007CF242 /* RNHapticFeedback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RNHapticFeedback.mm; path = RNHapticFeedback/RNHapticFeedback.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +45,7 @@
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				134814201AA4EA6300B7C361 /* libRNReactNativeHapticFeedback.a */,
+				134814201AA4EA6300B7C361 /* libRNHapticFeedback.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,10 +53,10 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				DA67B20220B9909800D46867 /* DeviceUtils.h */,
-				DA67B20320B9909800D46867 /* DeviceUtils.m */,
-				B3E7B5881CC2AC0600A0062D /* RNReactNativeHapticFeedback.h */,
-				B3E7B5891CC2AC0600A0062D /* RNReactNativeHapticFeedback.m */,
+				558CBA9128EF1100007CF242 /* DeviceUtils.h */,
+				558CBA9228EF1100007CF242 /* DeviceUtils.mm */,
+				558CBA9028EF1100007CF242 /* RNHapticFeedback.h */,
+				558CBA9328EF1100007CF242 /* RNHapticFeedback.mm */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,9 +64,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		58B511DA1A9E6C8500147676 /* RNReactNativeHapticFeedback */ = {
+		58B511DA1A9E6C8500147676 /* RNHapticFeedback */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNReactNativeHapticFeedback" */;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNHapticFeedback" */;
 			buildPhases = (
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
@@ -76,9 +76,9 @@
 			);
 			dependencies = (
 			);
-			name = RNReactNativeHapticFeedback;
+			name = RNHapticFeedback;
 			productName = RCTDataManager;
-			productReference = 134814201AA4EA6300B7C361 /* libRNReactNativeHapticFeedback.a */;
+			productReference = 134814201AA4EA6300B7C361 /* libRNHapticFeedback.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -95,11 +95,12 @@
 					};
 				};
 			};
-			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNReactNativeHapticFeedback" */;
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNHapticFeedback" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
@@ -107,7 +108,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58B511DA1A9E6C8500147676 /* RNReactNativeHapticFeedback */,
+				58B511DA1A9E6C8500147676 /* RNHapticFeedback */,
 			);
 		};
 /* End PBXProject section */
@@ -117,8 +118,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* RNReactNativeHapticFeedback.m in Sources */,
-				DA67B20420B9909800D46867 /* DeviceUtils.m in Sources */,
+				558CBA9428EF1100007CF242 /* DeviceUtils.mm in Sources */,
+				558CBA9528EF1100007CF242 /* RNHapticFeedback.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +218,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = RNReactNativeHapticFeedback;
+				PRODUCT_NAME = RNHapticFeedback;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -233,7 +234,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = RNReactNativeHapticFeedback;
+				PRODUCT_NAME = RNHapticFeedback;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -241,7 +242,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNReactNativeHapticFeedback" */ = {
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RNHapticFeedback" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511ED1A9E6C8500147676 /* Debug */,
@@ -250,7 +251,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNReactNativeHapticFeedback" */ = {
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RNHapticFeedback" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,

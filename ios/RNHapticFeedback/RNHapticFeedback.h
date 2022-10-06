@@ -3,7 +3,7 @@
 #import <UIKit/UIKit.h>
 #import <React/RCTBridgeModule.h>
 
-@interface RNReactNativeHapticFeedback : NSObject <RCTBridgeModule>
+@interface RNHapticFeedback : NSObject <RCTBridgeModule>
 
 typedef enum {
     selection,

@@ -54,12 +54,13 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
     } else if ([self supportsHapticFor6SAnd6SPlus]) {
         
         // generates alternative haptic feedback
-        if ([type isEqual: @"selection"]) {
-            AudioServicesPlaySystemSound((SystemSoundID) 1519);
-        } else if ([type isEqual: @"impactMedium"]) {
+        if ([type isEqual: @"impactMedium"]) {
             AudioServicesPlaySystemSound((SystemSoundID) 1520);
         } else if ([type isEqual:@"notificationWarning"]) {
             AudioServicesPlaySystemSound((SystemSoundID) 1521);
+        } else {
+            // Default selection haptic feedback
+            AudioServicesPlaySystemSound((SystemSoundID) 1519);
         }
         
     } else if (enableVibrateFallback) {

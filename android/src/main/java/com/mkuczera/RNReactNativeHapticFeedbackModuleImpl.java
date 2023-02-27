@@ -15,7 +15,7 @@ import com.facebook.react.bridge.ReadableMap;
 
 public class RNReactNativeHapticFeedbackModuleImpl {
 
-    public static final String NAME = "HapticFeedback";
+    public static final String NAME = "RNHapticFeedback";
 
     public static void trigger(ReactApplicationContext reactContext, String type, ReadableMap options) {
       // Check system settings, if disabled and we're not explicitly ignoring then return immediatly

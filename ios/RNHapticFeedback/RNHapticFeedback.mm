@@ -1,8 +1,3 @@
-// Thanks to this guard, we won't import this header when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
-#import "RNHapticFeedbackSpec.h"
-#endif
-
 #import "RNHapticFeedback.h"
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>
@@ -27,12 +22,18 @@ static UINotificationFeedbackGenerator *notificationGenerator = nil;
   return dispatch_get_main_queue();
 }
 
-RCT_EXPORT_MODULE(HapticFeedback);
+RCT_EXPORT_MODULE();
 
+#ifdef RCT_NEW_ARCH_ENABLED
+RCT_EXPORT_METHOD(trigger:(NSString *)type options:(JS::NativeHapticFeedback::SpecTriggerOptions&)options)
+{
+    BOOL enableVibrateFallback = options.enableVibrateFallback().value();
+#else
 RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
     BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"]boolValue];
-    
+#endif
+
     if ([self supportsHaptic]){
         
         if ([type isEqual: @"impactLight"]) {

@@ -1,10 +1,14 @@
-
 # react-native-haptic-feedback
 
 ## Contributions welcome
 
-Right now the Android implementation is a small Vibrate pattern, similar to the "feeling" of the iOS haptic system. Android needs to be View bound to trigger the real haptic engine.
-So i want to enhance the Library to support a `<TouchableWithHapticFeedback>`. For iOS it's pretty simple to achieve this behaviour. If there are any recommendations for the Java part of this (trigger the haptic feedback and give support to all the options of a TouchableWithoutFeedback), feel free to make a PR :)
+Thanks for the awesome support of all contributors so far
+
+<a href="https://github.com/mkuczera/react-native-haptic-feedback/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mkuczera/react-native-haptic-feedback" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## Getting started
 
@@ -52,7 +56,7 @@ import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
 const options = {
   enableVibrateFallback: true,
-  ignoreAndroidSystemSettings: false
+  ignoreAndroidSystemSettings: false,
 };
 
 ReactNativeHapticFeedback.trigger("impactLight", options);
@@ -62,39 +66,38 @@ ReactNativeHapticFeedback.trigger("impactLight", options);
 
 #### trigger(method, options)
 
-| Argument                              | Description                                                                                                                                                             
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `method`                              | See methods below
-| `options.enableVibrateFallback`       |  iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s) (default: false)                                                                                                                                                                                                                                                                                                                   |
-| `options.ignoreAndroidSystemSettings` | Android only. if Haptic is disabled in the Android system settings this will allow ignoring the setting and trigger haptic feeback.  (default: false)                                                                                                                                                                                                                                                                                                     |                                     
+| Argument                              | Description                                                                                                                                          |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `method`                              | See methods below                                                                                                                                    |
+| `options.enableVibrateFallback`       | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s) (default: false)               |
+| `options.ignoreAndroidSystemSettings` | Android only. if Haptic is disabled in the Android system settings this will allow ignoring the setting and trigger haptic feeback. (default: false) |
 
 ### Method Overview
 
-| Method | Android | iOS |
-| :---: | :---: | :---: |
-| impactLight | :heavy_check_mark: | :heavy_check_mark: |
-| impactMedium | :heavy_check_mark: | :heavy_check_mark: |
-| impactHeavy | :heavy_check_mark: | :heavy_check_mark: |
-| rigid | :heavy_check_mark: | :heavy_check_mark: |
-| soft | :heavy_check_mark: | :heavy_check_mark: |
+|       Method        |      Android       |        iOS         |
+| :-----------------: | :----------------: | :----------------: |
+|     impactLight     | :heavy_check_mark: | :heavy_check_mark: |
+|    impactMedium     | :heavy_check_mark: | :heavy_check_mark: |
+|     impactHeavy     | :heavy_check_mark: | :heavy_check_mark: |
+|        rigid        | :heavy_check_mark: | :heavy_check_mark: |
+|        soft         | :heavy_check_mark: | :heavy_check_mark: |
 | notificationSuccess | :heavy_check_mark: | :heavy_check_mark: |
 | notificationWarning | :heavy_check_mark: | :heavy_check_mark: |
-| notificationError | :heavy_check_mark: | :heavy_check_mark: |
-| selection | | :heavy_check_mark: |
-| clockTick | :heavy_check_mark: | |
-| contextClick | :heavy_check_mark: | |
-| keyboardPress | :heavy_check_mark: | |
-| keyboardRelease | :heavy_check_mark: | |
-| keyboardTap | :heavy_check_mark: | |
-| longPress | :heavy_check_mark: | |
-| textHandleMove | :heavy_check_mark: | |
-| virtualKey | :heavy_check_mark: | |
-| virtualKeyRelease | :heavy_check_mark: | |
-| effectClick | :heavy_check_mark: | |
-| effectDoubleClick | :heavy_check_mark: | |
-| effectHeavyClick | :heavy_check_mark: | |
-| effectTick | :heavy_check_mark: | |
-
+|  notificationError  | :heavy_check_mark: | :heavy_check_mark: |
+|      selection      |                    | :heavy_check_mark: |
+|      clockTick      | :heavy_check_mark: |                    |
+|    contextClick     | :heavy_check_mark: |                    |
+|    keyboardPress    | :heavy_check_mark: |                    |
+|   keyboardRelease   | :heavy_check_mark: |                    |
+|     keyboardTap     | :heavy_check_mark: |                    |
+|      longPress      | :heavy_check_mark: |                    |
+|   textHandleMove    | :heavy_check_mark: |                    |
+|     virtualKey      | :heavy_check_mark: |                    |
+|  virtualKeyRelease  | :heavy_check_mark: |                    |
+|     effectClick     | :heavy_check_mark: |                    |
+|  effectDoubleClick  | :heavy_check_mark: |                    |
+|  effectHeavyClick   | :heavy_check_mark: |                    |
+|     effectTick      | :heavy_check_mark: |                    |
 
 ### Available methods version 1.6.0 and prior
 
@@ -103,4 +106,4 @@ ReactNativeHapticFeedback.trigger("impactLight", options);
 | Argument                | Description                                                                                                                                                             |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `method`                | Possible values are "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", "notificationError" (default: "selection") |
-| `enableVibrateFallback` |  iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s)                                                  |
+| `enableVibrateFallback` | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s)                                                   |

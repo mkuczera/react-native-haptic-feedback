@@ -1,5 +1,4 @@
-
-#import "RNReactNativeHapticFeedback.h"
+#import "RNHapticFeedback.h"
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>
 #import "DeviceUtils.h"
@@ -7,10 +6,10 @@
 #import <AudioToolbox/AudioServices.h>
 
 static UISelectionFeedbackGenerator *selectionGenerator = nil;
-static NSMutableDictionary<NSNumber*, UIImpactFeedbackGenerator*> *impactGeneratorMap = nil;
+static NSMutableDictionary<NSString*, UIImpactFeedbackGenerator*> *impactGeneratorMap = nil;
 static UINotificationFeedbackGenerator *notificationGenerator = nil;
 
-@implementation RNReactNativeHapticFeedback
+@implementation RNHapticFeedback
 @synthesize bridge = _bridge;
 
 - (void)setBridge:(RCTBridge *)bridge
@@ -25,10 +24,16 @@ static UINotificationFeedbackGenerator *notificationGenerator = nil;
 
 RCT_EXPORT_MODULE();
 
+#ifdef RCT_NEW_ARCH_ENABLED
+RCT_EXPORT_METHOD(trigger:(NSString *)type options:(JS::NativeHapticFeedback::SpecTriggerOptions&)options)
+{
+    BOOL enableVibrateFallback = options.enableVibrateFallback().value();
+#else
 RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
     BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"]boolValue];
-    
+#endif
+
     if ([self supportsHaptic]){
         
         if ([type isEqual: @"impactLight"]) {
@@ -90,7 +95,7 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 }
 
 -(void)generateImpactFeedback:(UIImpactFeedbackStyle)style{
-    NSNumber *key = [NSNumber numberWithInteger: style];
+    NSString *key = [[NSNumber numberWithInteger: style] stringValue];
     if (impactGeneratorMap == nil)
         impactGeneratorMap = [[NSMutableDictionary alloc] init];
     if ([impactGeneratorMap objectForKey:key] == nil){
@@ -111,5 +116,13 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
     [notificationGenerator prepare];
 }
 
+// Thanks to this guard, we won't compile this code when we build for the old architecture.
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeHapticFeedbackSpecJSI>(params);
+}
+#endif
 
 @end

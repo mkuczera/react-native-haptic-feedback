@@ -3,7 +3,7 @@
   "version": "1.14.0",
   "description": "Basic haptic feedback for iOS and android",
   "license": "MIT",
-  "main": "index.js",
+  "main": "src/index.js",
   "nativePackage": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,5 +32,13 @@
   "readme": "https://github.com/mkuczera/react-native-haptic-feedback#readme",
   "bugs": {
     "url": "https://github.com/mkuczera/react-native-haptic-feedback/issues"
+  },
+  "codegenConfig": {
+    "name": "RNHapticFeedbackSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.mkuczera"
+    }
   }
 }

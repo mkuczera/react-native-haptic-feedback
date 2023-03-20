@@ -54,12 +54,27 @@ or
 ```javascript
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
+// optional
 const options = {
   enableVibrateFallback: true,
   ignoreAndroidSystemSettings: false,
 };
 
 ReactNativeHapticFeedback.trigger("impactLight", options);
+```
+
+or
+
+```javascript
+import { trigger } from "react-native-haptic-feedback";
+
+// optional
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false,
+};
+
+trigger("impactLight", options);
 ```
 
 ### Available methods

@@ -1,11 +1,13 @@
 {
   "name": "react-native-haptic-feedback",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Basic haptic feedback for iOS and android",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "build/index.js",
+  "source": "./src/",
   "nativePackage": true,
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -40,5 +42,14 @@
     "android": {
       "javaPackageName": "com.mkuczera"
     }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/runtime": "^7.21.0",
+    "@types/node": "^18.15.3",
+    "@types/react": "^18.0.28",
+    "@types/react-native": "^0.71.3",
+    "prettier": "^2.8.5",
+    "typescript": "^5.0.2"
   }
 }

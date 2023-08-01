@@ -85,7 +85,7 @@ trigger("impactLight", options);
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `method`                              | See methods below                                                                                                                                    |
 | `options.enableVibrateFallback`       | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s) (default: false)               |
-| `options.ignoreAndroidSystemSettings` | Android only. if Haptic is disabled in the Android system settings this will allow ignoring the setting and trigger haptic feeback. (default: false) |
+| `options.ignoreAndroidSystemSettings` | Android only. if Haptic is disabled in the Android system settings this will allow ignoring the setting and trigger haptic feedback. (default: false) |
 
 ### Method Overview
 

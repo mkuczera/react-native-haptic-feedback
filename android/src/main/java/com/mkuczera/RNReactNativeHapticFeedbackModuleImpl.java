@@ -37,7 +37,6 @@ public class RNReactNativeHapticFeedbackModuleImpl {
     public static void trigger(ReactApplicationContext reactContext, String type, ReadableMap options) {
       // Check system settings, if disabled and we're not explicitly ignoring then return immediatly
       boolean ignoreAndroidSystemSettings = options.getBoolean("ignoreAndroidSystemSettings");
-      int hapticEnabledAndroidSystemSettings = Settings.System.getInt(reactContext.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ENABLED, 0);
       boolean isVibrationEnabled = isVibrationEnabled(reactContext);
 
       if (ignoreAndroidSystemSettings == false && !isVibrationEnabled) return;

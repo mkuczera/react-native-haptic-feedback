@@ -1,5 +1,5 @@
 
-package com.mkuczera;
+package com.mkuczera.vibrateFactory;
 
 import android.os.Vibrator;
 

@@ -1,124 +1,174 @@
 # react-native-haptic-feedback
 
-## Contributions welcome
+## Contributions Welcome
 
-Thanks for the awesome support of all contributors so far
+Thanks to all the amazing contributors for their support.
 
-<a href="https://github.com/mkuczera/react-native-haptic-feedback/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mkuczera/react-native-haptic-feedback" />
-</a>
+[![Contributors](https://contrib.rocks/image?repo=mkuczera/react-native-haptic-feedback)](https://github.com/mkuczera/react-native-haptic-feedback/graphs/contributors)
 
 Made with [contrib.rocks](https://contrib.rocks).
 
-## Getting started
+## Getting Started
 
-`$ npm install react-native-haptic-feedback --save`
+Install the `react-native-haptic-feedback` package using npm or yarn:
 
-or
+```bash
+$ npm install react-native-haptic-feedback --save # or use $ yarn add react-native-haptic-feedback
+```
 
-`$ yarn add react-native-haptic-feedback`
+## Linking
 
-### Linking
+:information_source: **Note:** Starting from React Native version 0.60, native modules are auto-linked. For more details, refer to the [official documentation](https://facebook.github.io/react-native/blog/2019/07/03/version-60#native-modules-are-now-autolinked).
 
-`$ react-native link react-native-haptic-feedback`
-`$ cd ios && pod install`
+### Automatic Linking (React Native 0.60+)
 
-### Or Manual installation
+For React Native 0.60 and above, manual linking is generally unnecessary. Auto-linking handles the process automatically.
 
-#### iOS
+### Manual Linking
 
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-haptic-feedback` and add `RNReactNativeHapticFeedback.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNReactNativeHapticFeedback.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
+If you're using an older React Native version or face issues with auto-linking, follow these manual linking steps:
 
-#### Android
-
-1. Open up `android/app/src/main/java/[...]/MainApplication.java`
-
-- Add `import com.mkuczera.RNReactNativeHapticFeedbackPackage;` to the imports at the top of the file
-- Add `new RNReactNativeHapticFeedbackPackage()` to the list returned by the `getPackages()` method
-
-2. Append the following lines to `android/settings.gradle`:
+1. Link the module:
+   ```bash
+   $ react-native link react-native-haptic-feedback
    ```
-   include ':react-native-haptic-feedback'
-   project(':react-native-haptic-feedback').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-haptic-feedback/android')
+2. For iOS, navigate to the iOS directory and install CocoaPods dependencies:
+   ```bash
+   $ cd ios && pod install
    ```
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+   If you encounter issues with the previous step on iOS, clean up and reinstall the dependencies using these commands:
+   ```bash
+   $ rm -rf ios/Pods && rm -rf ios/build && cd ios && pod install && cd ../
+   $ rm -rf node_modules && rm yarn.lock
+   $ yarn install   # or use $ npm install
    ```
-     implementation project(":react-native-haptic-feedback")
-   ```
+   
+## Manual Setup Guide - iOS
 
+1. **Open Your Project in Xcode:** Launch Xcode and navigate to your project in the project navigator.
+
+2. **Add RNReactNativeHapticFeedback Project:** Right-click on the "Libraries" folder in the project navigator and select "Add Files to [your project's name]". Locate `RNReactNativeHapticFeedback.xcodeproj` in your project's `node_modules` directory and add it.
+
+3. **Navigate to Project Settings:** In Xcode, select your project from the project navigator to access project settings.
+
+4. **Select App Target:** Under the "Targets" section, choose the target corresponding to your app.
+
+5. **Link Binary With Libraries:** Go to the "Build Phases" tab and expand the "Link Binary With Libraries" section.
+
+6. **Add Library:** Click the "+" button to add a library.
+
+7. **Add libRNReactNativeHapticFeedback.a:** From the list of libraries, select `libRNReactNativeHapticFeedback.a` and add it.
+
+8. **Run Your Project:** Press `Cmd+R` to build and run your project in the iOS simulator or on a connected device.
+
+## Manual Setup Guide - Android
+
+1. **Configure MainApplication.java:** Open `android/app/src/main/java/[...]/MainApplication.java`.
+
+   - Add the following import at the top of the file:
+     ```java
+     import com.mkuczera.RNReactNativeHapticFeedbackPackage;
+     ```
+   - Inside the `getPackages()` method, add the instance of `RNReactNativeHapticFeedbackPackage()` to the list returned by the method:
+     ```java
+     @Override
+     protected List<ReactPackage> getPackages() {
+       return Arrays.asList(
+           // ... other packages
+           new RNReactNativeHapticFeedbackPackage()
+       );
+     }
+     ```
+
+2. **Modify settings.gradle:** Append the following lines to `android/settings.gradle`:
+      ```gradle
+      include ':react-native-haptic-feedback'
+      project(':react-native-haptic-feedback').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-haptic-feedback/android')
+      ```
 ## Usage
+
+To use the library, import it in your JavaScript file:
 
 ```javascript
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
-// optional
+// Optional configuration
 const options = {
   enableVibrateFallback: true,
   ignoreAndroidSystemSettings: false,
 };
 
+// Trigger haptic feedback
 ReactNativeHapticFeedback.trigger("impactLight", options);
 ```
 
-or
+Alternatively, you can use the named import:
 
 ```javascript
 import { trigger } from "react-native-haptic-feedback";
 
-// optional
+// Optional configuration
 const options = {
   enableVibrateFallback: true,
   ignoreAndroidSystemSettings: false,
 };
 
+// Trigger haptic feedback
 trigger("impactLight", options);
 ```
 
-### Available methods
+## Available Methods
 
-#### trigger(method, options)
+### `trigger(method, options)`
+
+Use this method to trigger haptic feedback.
 
 | Argument                              | Description                                                                                                                                          |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `method`                              | See methods below                                                                                                                                    |
-| `options.enableVibrateFallback`       | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s) (default: false)               |
-| `options.ignoreAndroidSystemSettings` | Android only. if Haptic is disabled in the Android system settings this will allow ignoring the setting and trigger haptic feeback. (default: false) |
+| `method`                              | Specifies the type of haptic feedback. See the list of available methods below.                                                                     |
+| `options.enableVibrateFallback`       | :iphone: iOS only. If haptic feedback is unavailable (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s) (default: false).   |
+| `options.ignoreAndroidSystemSettings` | :android: Android only. If haptic is disabled in the Android system settings, this allows ignoring the setting and triggering haptic feedback. (default: false). |
 
-### Method Overview
+## Method Overview
+
+Here's an overview of the available methods and their compatibility:
 
 |       Method        |      Android       |        iOS         |
 | :-----------------: | :----------------: | :----------------: |
-|     impactLight     | :heavy_check_mark: | :heavy_check_mark: |
-|    impactMedium     | :heavy_check_mark: | :heavy_check_mark: |
-|     impactHeavy     | :heavy_check_mark: | :heavy_check_mark: |
-|        rigid        | :heavy_check_mark: | :heavy_check_mark: |
-|        soft         | :heavy_check_mark: | :heavy_check_mark: |
-| notificationSuccess | :heavy_check_mark: | :heavy_check_mark: |
-| notificationWarning | :heavy_check_mark: | :heavy_check_mark: |
-|  notificationError  | :heavy_check_mark: | :heavy_check_mark: |
-|      selection      |                    | :heavy_check_mark: |
-|      clockTick      | :heavy_check_mark: |                    |
-|    contextClick     | :heavy_check_mark: |                    |
-|    keyboardPress    | :heavy_check_mark: |                    |
-|   keyboardRelease   | :heavy_check_mark: |                    |
-|     keyboardTap     | :heavy_check_mark: |                    |
-|      longPress      | :heavy_check_mark: |                    |
-|   textHandleMove    | :heavy_check_mark: |                    |
-|     virtualKey      | :heavy_check_mark: |                    |
-|  virtualKeyRelease  | :heavy_check_mark: |                    |
-|     effectClick     | :heavy_check_mark: |                    |
-|  effectDoubleClick  | :heavy_check_mark: |                    |
-|  effectHeavyClick   | :heavy_check_mark: |                    |
-|     effectTick      | :heavy_check_mark: |                    |
+|     impactLight     |   ✅   |   ✅   |
+|    impactMedium     |   ✅   |   ✅   |
+|     impactHeavy     |   ✅   |   ✅   |
+|        rigid        |   ✅   |   ✅   |
+|        soft         |   ✅   |   ✅   |
+| notificationSuccess |   ✅   |   ✅   |
+| notificationWarning |   ✅   |   ✅   |
+|  notificationError  |   ✅   |   ✅   |
+|      selection      |   ❌   |   ✅   |
+|      clockTick      |   ✅   |   ❌   |
+|    contextClick     |   ✅   |   ❌   |
+|    keyboardPress    |   ✅   |   ❌   |
+|   keyboardRelease   |   ✅   |   ❌   |
+|     keyboardTap     |   ✅   |   ❌   |
+|      longPress      |   ✅   |   ❌   |
+|   textHandleMove    |   ✅   |   ❌   |
+|     virtualKey      |   ✅   |   ❌   |
+|  virtualKeyRelease  |   ✅   |   ❌   |
+|     effectClick     |   ✅   |   ❌   |
+|  effectDoubleClick  |   ✅   |   ❌   |
+|  effectHeavyClick   |   ✅   |   ❌   |
+|     effectTick      |   ✅   |   ❌   |
 
-### Available methods version 1.6.0 and prior
+## Available Methods (Version 1.6.0 and Prior)
 
-#### trigger(method, enableVibrateFallback)
+If you're using version 1.6.0 or earlier, you can use this method:
 
-| Argument                | Description                                                                                                                                                             |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `method`                | Possible values are "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", "notificationError" (default: "selection") |
-| `enableVibrateFallback` | iOS only. if haptic feedback is not available (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s)                                                   |
+```javascript
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+
+// Trigger haptic feedback with vibrate fallback
+ReactNativeHapticFeedback.trigger("method", enableVibrateFallback);
+```
+
+Where `method` can be one of: "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", or "notificationError". The `enableVibrateFallback` option is for iOS devices without haptic feedback support.
+
+We recommend using the newer approach for enhanced flexibility and improved compatibility.

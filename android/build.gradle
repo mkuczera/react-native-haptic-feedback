@@ -64,6 +64,11 @@ if (isNewArchitectureEnabled()) {
 }
 
 android {
+    def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
+    if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
+      namespace "com.mkuczera"
+    }
+
     compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
 
     defaultConfig {

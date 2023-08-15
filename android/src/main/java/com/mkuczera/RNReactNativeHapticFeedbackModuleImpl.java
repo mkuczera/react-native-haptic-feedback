@@ -4,8 +4,8 @@ import android.os.Vibrator;
 import android.content.Context;
 import android.provider.Settings;
 import android.media.AudioManager;
-import com.mkuczera.VibrateFactory;
-import com.mkuczera.Vibrate;
+import com.mkuczera.vibrateFactory.VibrateFactory;
+import com.mkuczera.vibrateFactory.Vibrate;
 
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;

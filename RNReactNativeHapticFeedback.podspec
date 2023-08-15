@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author             = { "author" => "m.kuczera@gmail.com" }
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "12.4"
   s.source       = { :git => "https://github.com/mkuczera/react-native-haptic-feedback.git", :tag => "master" }
   s.source_files  = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
@@ -37,4 +37,4 @@ Pod::Spec.new do |s|
   end
 end
 
-  
+

@@ -1,15 +1,11 @@
-package com.mkuczera;
+package com.mkuczera.vibrateFactory;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Optional;
 
 import android.view.HapticFeedbackConstants;
 import android.os.VibrationEffect;
-import com.mkuczera.Vibrate;
-import com.mkuczera.VibrateWithDuration;
-import com.mkuczera.VibrateWithHapticConstant;
-import com.mkuczera.VibrateWithCreatePredefined;
+
 
 public class VibrateFactory {
     static Map<String, Vibrate> vibrateMap = new HashMap<>();

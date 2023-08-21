@@ -10,6 +10,7 @@ import com.facebook.react.TurboReactPackage;
 import com.facebook.react.uimanager.ViewManager;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class RNReactNativeHapticFeedbackPackage extends TurboReactPackage {
 

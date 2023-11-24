@@ -12,11 +12,11 @@ const defaultOptions = {
 
 class RNReactNativeHapticFeedback {
   static trigger = (
-    type: string | HapticFeedbackTypes = HapticFeedbackTypes.selection,
+    type: keyof typeof HapticFeedbackTypes | HapticFeedbackTypes = HapticFeedbackTypes.selection,
     options: HapticOptions = {},
   ) => {
     const triggerOptions = createTriggerOptions(options);
-
+    
     try {
       const isTurboModuleEnabled = global.__turboModuleProxy != null;
       const hapticFeedback = isTurboModuleEnabled

@@ -69,16 +69,6 @@ If you're using an older React Native version or face issues with auto-linking, 
      ```java
      import com.mkuczera.RNReactNativeHapticFeedbackPackage;
      ```
-   - Inside the `getPackages()` method, add the instance of `RNReactNativeHapticFeedbackPackage()` to the list returned by the method:
-     ```java
-     @Override
-     protected List<ReactPackage> getPackages() {
-       return Arrays.asList(
-           // ... other packages
-           new RNReactNativeHapticFeedbackPackage()
-       );
-     }
-     ```
 
 2. **Modify settings.gradle:** Append the following lines to `android/settings.gradle`:
       ```gradle

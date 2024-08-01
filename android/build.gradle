@@ -69,6 +69,12 @@ android {
       namespace "com.mkuczera"
     }
 
+    if (agpVersion.tokenize('.')[0].toInteger() >= 8) {
+        buildFeatures {
+            buildConfig = true
+        }
+    }
+
     compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
 
     defaultConfig {

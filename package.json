@@ -50,7 +50,10 @@
     "@types/react": "^18.0.28",
     "@types/react-native": "^0.71.3",
     "prettier": "^2.8.5",
-    "typescript": "^5.0.2"
+    "typescript": "^5.5.4"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "yarn@3.6.4",
+  "dependencies": {
+    "turbo": "^2.0.11"
+  }
 }

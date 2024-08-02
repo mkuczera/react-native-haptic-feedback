@@ -1,6 +1,6 @@
 {
   "name": "react-native-haptic-feedback",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Basic haptic feedback for iOS and android",
   "license": "MIT",
   "main": "build/index.js",
@@ -51,5 +51,6 @@
     "@types/react-native": "^0.71.3",
     "prettier": "^2.8.5",
     "typescript": "^5.0.2"
-  }
+  },
+  "packageManager": "yarn@3.6.4"
 }

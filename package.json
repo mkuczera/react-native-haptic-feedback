@@ -8,7 +8,9 @@
   "nativePackage": true,
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "lint": "eslint \"**/*.{js,ts,tsx}\""
   },
   "keywords": [
     "react-native",
@@ -44,13 +46,29 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/preset-react": "^7.24.7",
     "@babel/runtime": "^7.21.0",
+    "@eslint/js": "^9.8.0",
+    "@react-native/eslint-config": "^0.74.86",
+    "@types/jest": "^29.5.12",
     "@types/node": "^18.15.3",
     "@types/react": "^18.0.28",
     "@types/react-native": "^0.71.3",
+    "babel-jest": "^29.7.0",
+    "eslint": "9.x",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
+    "jest": "^29.7.0",
+    "metro-react-native-babel-preset": "^0.77.0",
     "prettier": "^2.8.5",
-    "typescript": "^5.5.4"
+    "react-native": "^0.74.4",
+    "ts-jest": "^29.2.4",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.0"
   },
   "packageManager": "yarn@3.6.4",
   "dependencies": {

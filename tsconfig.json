@@ -16,7 +16,7 @@
       "alwaysStrict": true,
       "strictFunctionTypes": true,
       "resolveJsonModule": true,
-      "importHelpers": false,
+      "importHelpers": true,
       "experimentalDecorators": true,
       "strictPropertyInitialization": false,
       "allowSyntheticDefaultImports": true,

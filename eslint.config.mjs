@@ -9,7 +9,7 @@ export default [
   ...tseslint.configs.recommended,
   {
     ignores: [
-      "build/*",
+      "lib/*",
       "node_modules/*",
       "example/*",
       "setupTests.js",
@@ -20,6 +20,7 @@ export default [
   {
     rules: {
       "@typescript-eslint/no-require-imports": "off",
+      "no-var": "off",
     },
   },
 ];

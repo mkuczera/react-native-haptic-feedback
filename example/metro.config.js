@@ -3,6 +3,12 @@ const { getDefaultConfig } = require("@react-native/metro-config");
 const { getConfig } = require("react-native-builder-bob/metro-config");
 const pkg = require("../package.json");
 
+console.log(
+  "### metro.config.js",
+  __dirname,
+  typeof __dirname,
+  path.resolve(__dirname, ".."),
+);
 const root = path.resolve(__dirname, "..");
 
 /**

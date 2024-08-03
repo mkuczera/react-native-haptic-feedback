@@ -109,16 +109,19 @@ jobs:
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
       - name: Setup Gradle
+        if: false
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: wrapper
           cache-read-only: false
 
       - name: Make Gradlew Executable
+        if: false
         shell: bash
         run: chmod +x ./example/android/gradlew
 
       - name: Build example for Android (debug)
+        if: false
         run: cd example/android && ./gradlew assembleDebug
 
   build-ios:

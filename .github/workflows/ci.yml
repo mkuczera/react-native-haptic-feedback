@@ -114,6 +114,21 @@ jobs:
       - name: Ensure gradlew is executable
         run: chmod +x example/android/gradlew
 
+      - name: Ensure gradle wrapper files are present
+        run: |
+          if [ ! -f "example/android/gradle/wrapper/gradle-wrapper.jar" ]; then
+            echo "Error: gradle-wrapper.jar is missing from gradle/wrapper directory"
+            exit 1
+          fi
+          if [ ! -f "example/android/gradle/wrapper/gradle-wrapper.properties" ]; then
+            echo "Error: gradle-wrapper.properties is missing from gradle/wrapper directory"
+            exit 1
+          fi
+          if [ ! -f "example/android/gradlew" ]; then
+            echo "Error: gradlew is missing"
+            exit 1
+          fi
+
       - name: Build example for Android (debug)
         run: cd example/android && ./gradlew assembleDebug
 
@@ -158,7 +173,6 @@ jobs:
             ${{ runner.os }}-cocoapods-
 
       - name: Install cocoapods
-        if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
         run: |
           cd example/ios
           pod install
@@ -166,7 +180,7 @@ jobs:
           NO_FLIPPER: 1
 
       - name: Build example for iOS
-        if: contains(github.ref, 'release') || github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 

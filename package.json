@@ -3,6 +3,7 @@
   "version": "2.3.0",
   "description": "Basic haptic feedback for iOS and android",
   "license": "MIT",
+  "source": "src/index.ts",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
   "exports": {

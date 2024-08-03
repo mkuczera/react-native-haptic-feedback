@@ -83,19 +83,16 @@ jobs:
           fi
 
       - name: Install JDK
-        if: env.turbo_cache_hit != 1
         uses: actions/setup-java@v3
         with:
           distribution: "zulu"
           java-version: "17"
 
       - name: Finalize Android SDK
-        if: env.turbo_cache_hit != 1
         run: |
           /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
 
       - name: Cache Gradle
-        if: env.turbo_cache_hit != 1
         uses: actions/cache@v4
         with:
           path: |
@@ -110,6 +107,9 @@ jobs:
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
         run: |
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+      - name: Ensure gradlew is executable
+        run: chmod +x example/android/gradlew
 
       - name: Build example for Android (debug)
         run: cd example/android && ./gradlew assembleDebug
@@ -169,4 +169,4 @@ jobs:
       - name: Build example for iOS (debug)
         run: |
           cd example/ios
-          xcodebuild -workspace Example.xcworkspace -scheme TextExample -configuration Debug -sdk iphonesimulator build
+          xcodebuild -workspace Example.xcworkspace -scheme ReactTestApp -configuration Debug -sdk iphonesimulator -derivedDataPath build/ios

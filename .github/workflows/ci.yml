@@ -111,6 +111,9 @@ jobs:
         run: |
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
+      - name: Build example for Android (debug)
+        run: cd example/android && ./gradlew assembleDebug
+
   build-ios:
     runs-on: macos-14
     needs:
@@ -162,3 +165,8 @@ jobs:
       - name: Build example for iOS
         run: |
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+      - name: Build example for iOS (debug)
+        run: |
+          cd example/ios
+          xcodebuild -workspace Example.xcworkspace -scheme TextExample -configuration Debug -sdk iphonesimulator build

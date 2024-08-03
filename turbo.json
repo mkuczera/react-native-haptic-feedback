@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build:android": {
+      "inputs": [
+        "package.json",
+        "android",
+        "!android/build",
+        "*.js",
+        "src/*.js",
+        "src/*.ts",
+        "src/*.tsx",
+        "example",
+        "!example/ios",
+        "!example/android/build",
+        "!example/android/app/build"
+      ],
+      "outputs": []
+    },
+    "build:ios": {
+      "inputs": [
+        "package.json",
+        "*.podspec",
+        "ios",
+        "*.js",
+        "src/*.js",
+        "src/*.ts",
+        "src/*.tsx",
+        "example",
+        "!example/android",
+        "!example/ios/build",
+        "!example/ios/Pods"
+      ],
+      "outputs": []
+    }
+  }
+}

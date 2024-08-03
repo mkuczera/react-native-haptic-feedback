@@ -1,0 +1,20 @@
+{
+  "name": "TestExample",
+  "displayName": "TestExample",
+  "components": [
+    {
+      "appKey": "TestExample",
+      "displayName": "TestExample"
+    }
+  ],
+  "resources": {
+    "android": ["dist/res", "dist/main.android.jsbundle"],
+    "ios": ["dist/assets", "dist/main.ios.jsbundle"]
+  },
+  "android": {
+    "package": "test.example"
+  },
+  "ios": {
+    "bundleIdentifier": "test.example"
+  }
+}

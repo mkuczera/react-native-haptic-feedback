@@ -1,0 +1,186 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  merge_group:
+    types:
+      - checks_requested
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Lint files
+        run: yarn lint
+
+      - name: Typecheck files
+        run: yarn typecheck
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run unit tests
+        run: yarn test --maxWorkers=2 --coverage
+
+  build-library:
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build package
+        run: yarn build
+
+  build-android:
+    runs-on: ubuntu-latest
+    needs:
+      - build-library
+    env:
+      TURBO_CACHE_DIR: .turbo/android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Cache turborepo for Android
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TURBO_CACHE_DIR }}
+          key: ${{ runner.os }}-turborepo-android-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-turborepo-android-
+
+      - name: Check turborepo cache for Android
+        run: |
+          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'build:android').cache.status")
+
+          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
+            echo "turbo_cache_hit=1" >> $GITHUB_ENV
+          fi
+
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Finalize Android SDK
+        run: |
+          /bin/bash -c "yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null"
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build example for Android
+        env:
+          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+        run: |
+          yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+      - name: Setup Gradle
+        if: false
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: wrapper
+          cache-read-only: false
+
+      - name: Make Gradlew Executable
+        if: false
+        shell: bash
+        run: chmod +x ./example/android/gradlew
+
+      - name: Build example for Android (debug)
+        if: false
+        run: cd example/android && ./gradlew assembleDebug
+
+  build-ios:
+    runs-on: macos-14
+    needs:
+      - build-library
+    env:
+      TURBO_CACHE_DIR: .turbo/ios
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Cache turborepo for iOS
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.TURBO_CACHE_DIR }}
+          key: ${{ runner.os }}-turborepo-ios-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-turborepo-ios-
+
+      - name: Check turborepo cache for iOS
+        run: |
+          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'build:ios').cache.status")
+
+          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
+            echo "turbo_cache_hit=1" >> $GITHUB_ENV
+          fi
+
+      - name: Cache cocoapods
+        if: env.turbo_cache_hit != 1
+        id: cocoapods-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/ios/Pods
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('example/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cocoapods-
+
+      - name: Install cocoapods
+        run: |
+          cd example/ios
+          pod install
+        env:
+          NO_FLIPPER: 1
+
+      - name: Build example for iOS
+        run: |
+          yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+      - name: Build example for iOS (debug)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd example/ios
+          xcodebuild -workspace Example.xcworkspace -scheme ReactTestApp -configuration Debug -sdk iphonesimulator -derivedDataPath build/ios

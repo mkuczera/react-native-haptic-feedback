@@ -1,14 +1,18 @@
 name: CI
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
   pull_request:
     branches:
       - main
   merge_group:
     types:
       - checks_requested
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:

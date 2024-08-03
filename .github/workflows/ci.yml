@@ -85,7 +85,7 @@ jobs:
       - name: Install JDK
         uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
+          distribution: "temurin"
           java-version: "17"
 
       - name: Finalize Android SDK

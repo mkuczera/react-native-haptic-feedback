@@ -114,6 +114,10 @@ jobs:
           gradle-version: wrapper
           cache-read-only: false
 
+      - name: Make Gradlew Executable
+        shell: bash
+        run: chmod +x ./example/android/gradlew
+
       - name: Build example for Android (debug)
         run: cd example/android && ./gradlew assembleDebug
 

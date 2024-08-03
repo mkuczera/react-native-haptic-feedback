@@ -114,24 +114,6 @@ jobs:
           gradle-version: wrapper
           cache-read-only: false
 
-      - name: Ensure gradlew is executable
-        run: chmod +x example/android/gradlew
-
-      - name: Ensure gradle wrapper files are present
-        run: |
-          if [ ! -f "example/android/gradle/wrapper/gradle-wrapper.jar" ]; then
-            echo "Error: gradle-wrapper.jar is missing from gradle/wrapper directory"
-            exit 1
-          fi
-          if [ ! -f "example/android/gradle/wrapper/gradle-wrapper.properties" ]; then
-            echo "Error: gradle-wrapper.properties is missing from gradle/wrapper directory"
-            exit 1
-          fi
-          if [ ! -f "example/android/gradlew" ]; then
-            echo "Error: gradlew is missing"
-            exit 1
-          fi
-
       - name: Build example for Android (debug)
         run: cd example/android && ./gradlew assembleDebug
 

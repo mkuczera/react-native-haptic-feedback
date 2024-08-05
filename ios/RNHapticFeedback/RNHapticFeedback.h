@@ -24,6 +24,5 @@ typedef NS_ENUM(NSInteger, FeedbackType) {
 };
 
 - (Boolean)supportsHaptic;
-- (void)triggerHapticFeedback:(NSString *)feedbackType;
 
 @end

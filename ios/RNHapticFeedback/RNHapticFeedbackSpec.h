@@ -12,7 +12,4 @@
 // Indicates whether the device supports haptic feedback
 - (Boolean)supportsHaptic;
 
-// Triggers haptic feedback with the given intensity
-- (void)triggerHapticFeedback:(NSString *)feedbackType;
-
 @end

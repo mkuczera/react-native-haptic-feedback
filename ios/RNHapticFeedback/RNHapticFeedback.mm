@@ -14,7 +14,7 @@ static UINotificationFeedbackGenerator *notificationGenerator = nil;
 
 - (void)setBridge:(RCTBridge *)bridge
 {
-    @synthesize _bridge = bridge;
+    _bridge = bridge;
 }
 
 - (dispatch_queue_t)methodQueue
@@ -122,7 +122,6 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
     return std::make_shared<facebook::react::NativeHapticFeedbackSpecJSI>(params);
 }
 #endif
-
-@end
+    
 @end
     

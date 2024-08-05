@@ -14,7 +14,7 @@ static UINotificationFeedbackGenerator *notificationGenerator = nil;
 
 - (void)setBridge:(RCTBridge *)bridge
 {
-    _bridge = bridge;
+    @synthesize _bridge = bridge;
 }
 
 - (dispatch_queue_t)methodQueue
@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(JS::NativeHapticFeedback::Sp
 #else
 RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
-    BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"]boolValue];
+    BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"] boolValue];
 #endif
 
     if ([self supportsHaptic]){
@@ -118,11 +118,11 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 
 // Thanks to this guard, we won't compile this code when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
-- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
-    (const facebook::react::ObjCTurboModule::InitParams &)params
-{
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule: (const facebook::react::ObjCTurboModule::InitParams &)params {
     return std::make_shared<facebook::react::NativeHapticFeedbackSpecJSI>(params);
 }
 #endif
 
 @end
+@end
+    

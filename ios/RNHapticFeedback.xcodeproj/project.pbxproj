@@ -25,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNHapticFeedback.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNHapticFeedback.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FAF13E52C6144D7002E28B1 /* RNHapticFeedbackSpec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNHapticFeedbackSpec.h; path = RNHapticFeedback/RNHapticFeedbackSpec.h; sourceTree = "<group>"; };
 		558CBA9028EF1100007CF242 /* RNHapticFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNHapticFeedback.h; path = RNHapticFeedback/RNHapticFeedback.h; sourceTree = "<group>"; };
 		558CBA9128EF1100007CF242 /* DeviceUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeviceUtils.h; path = RNHapticFeedback/DeviceUtils.h; sourceTree = "<group>"; };
 		558CBA9228EF1100007CF242 /* DeviceUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DeviceUtils.mm; path = RNHapticFeedback/DeviceUtils.mm; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				3FAF13E52C6144D7002E28B1 /* RNHapticFeedbackSpec.h */,
 				558CBA9128EF1100007CF242 /* DeviceUtils.h */,
 				558CBA9228EF1100007CF242 /* DeviceUtils.mm */,
 				558CBA9028EF1100007CF242 /* RNHapticFeedback.h */,

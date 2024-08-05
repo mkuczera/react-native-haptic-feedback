@@ -1,20 +1,17 @@
-// Thanks to this guard, we won't import this header when we build for the old architecture.
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RNHapticFeedbackSpec.h"
+
+@interface RNHapticFeedback : NSObject <NativeHapticFeedbackSpec>
 #else
 #import <React/RCTBridgeModule.h>
+
+@interface RNHapticFeedback : NSObject <RCTBridgeModule>
 #endif
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#ifdef RCT_NEW_ARCH_ENABLED
-@interface RNHapticFeedback : NSObject <NativeHapticFeedbackSpec>
-#else
-@interface RNHapticFeedback : NSObject <RCTBridgeModule>
-#endif
-
-typedef enum {
+typedef NS_ENUM(NSInteger, FeedbackType) {
     selection,
     impactLight,
     impactMedium,
@@ -24,9 +21,9 @@ typedef enum {
     notificationSuccess,
     notificationWarning,
     notificationError
-}FeedbackType;
+};
 
 - (Boolean)supportsHaptic;
+- (void)triggerHapticFeedback:(NSString *)feedbackType;
 
 @end
-  

@@ -5,19 +5,20 @@ import java.util.HashMap;
 
 import android.view.HapticFeedbackConstants;
 import android.os.VibrationEffect;
-
+import android.os.Build;
+import android.os.Vibrator;
 
 public class VibrateFactory {
     static Map<String, Vibrate> vibrateMap = new HashMap<>();
     static {
-        vibrateMap.put("impactLight", new VibrateWithDuration(new long[]{0, 20}));
-        vibrateMap.put("impactMedium", new VibrateWithDuration(new long[]{0, 40}));
-        vibrateMap.put("impactHeavy", new VibrateWithDuration(new long[]{0, 60}));
-        vibrateMap.put("notificationSuccess", new VibrateWithDuration(new long[]{0, 40 ,60, 20}));
-        vibrateMap.put("notificationWarning", new VibrateWithDuration(new long[]{0, 20, 60, 40}));
-        vibrateMap.put("notificationError", new VibrateWithDuration(new long[]{0, 20, 40, 30, 40, 40}));
-        vibrateMap.put("rigid", new VibrateWithDuration(new long[]{0, 30}));
-        vibrateMap.put("soft", new VibrateWithDuration(new long[]{0, 10}));
+        vibrateMap.put("impactLight", new VibrateWithDuration(new long[] { 0, 20 }));
+        vibrateMap.put("impactMedium", new VibrateWithDuration(new long[] { 0, 40 }));
+        vibrateMap.put("impactHeavy", new VibrateWithDuration(new long[] { 0, 60 }));
+        vibrateMap.put("notificationSuccess", new VibrateWithDuration(new long[] { 0, 40, 60, 20 }));
+        vibrateMap.put("notificationWarning", new VibrateWithDuration(new long[] { 0, 20, 60, 40 }));
+        vibrateMap.put("notificationError", new VibrateWithDuration(new long[] { 0, 20, 40, 30, 40, 40 }));
+        vibrateMap.put("rigid", new VibrateWithDuration(new long[] { 0, 30 }));
+        vibrateMap.put("soft", new VibrateWithDuration(new long[] { 0, 10 }));
         vibrateMap.put("clockTick", new VibrateWithHapticConstant(HapticFeedbackConstants.CLOCK_TICK));
         vibrateMap.put("contextClick", new VibrateWithHapticConstant(HapticFeedbackConstants.CONTEXT_CLICK));
         vibrateMap.put("keyboardPress", new VibrateWithHapticConstant(HapticFeedbackConstants.KEYBOARD_PRESS));
@@ -31,6 +32,8 @@ public class VibrateFactory {
         vibrateMap.put("effectDoubleClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_DOUBLE_CLICK));
         vibrateMap.put("effectHeavyClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_HEAVY_CLICK));
         vibrateMap.put("effectTick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_TICK));
+        vibrateMap.put("selection",
+                new VibrateWithPredefined(VibrationEffect.createOneShot(70, VibrationEffect.DEFAULT_AMPLITUDE)));
     }
 
     public static Vibrate getVibration(String type) {

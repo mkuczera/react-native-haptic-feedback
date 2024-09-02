@@ -1145,7 +1145,7 @@ PODS:
     - React-Core
     - React-jsi
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNReactNativeHapticFeedback (2.3.0):
+  - RNReactNativeHapticFeedback (2.3.1):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1402,10 +1402,10 @@ SPEC CHECKSUMS:
   ReactNativeHost: 4983b4bfdef9f1a67f523b633909df57a9c1dae9
   ReactTestApp-DevSupport: f781365c3ae6377dcfa2affe319ae66e0fb20777
   ReactTestApp-Resources: 857244f3a23f2b3157b364fa06cf3e8866deff9c
-  RNReactNativeHapticFeedback: 1c82b2b3d51105a01ed0d4b1d696319479e2c777
+  RNReactNativeHapticFeedback: 5945b9c7a2e9db8df62e1d94063d8a135c187f32
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 0efb3e1bd40ba59b009f01badea863281101de78
 
 PODFILE CHECKSUM: 58b1b5d965384968b1dd12f033ef182aec4c1b6b
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

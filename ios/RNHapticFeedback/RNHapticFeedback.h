@@ -1,5 +1,5 @@
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RNHapticFeedbackSpec.h"
+#import <RNHapticFeedbackSpec/RNHapticFeedbackSpec.h>
 
 @interface RNHapticFeedback : NSObject <NativeHapticFeedbackSpec>
 #else

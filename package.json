@@ -5,7 +5,9 @@
   "license": "MIT",
   "source": "src/index.ts",
   "main": "./lib/commonjs/index.js",
+  "react-native": "src/index.ts",
   "module": "./lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
   "scripts": {
     "typecheck": "tsc --noEmit --project tsconfig.test.json",
     "test": "jest",
@@ -61,7 +63,7 @@
   "codegenConfig": {
     "name": "RNHapticFeedbackSpec",
     "type": "modules",
-    "jsSrcsDir": "src",
+    "jsSrcsDir": "./src/codegenSpec",
     "android": {
       "javaPackageName": "com.mkuczera"
     }
@@ -100,25 +102,9 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      [
-        "commonjs",
-        {
-          "esm": true
-        }
-      ],
-      [
-        "module",
-        {
-          "esm": true
-        }
-      ],
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json",
-          "esm": true
-        }
-      ]
+      "commonjs",
+      "module",
+      "typescript"
     ]
   }
 }

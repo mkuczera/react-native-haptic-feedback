@@ -22,5 +22,6 @@ const RNHapticFeedback = {
   }
 }
 
+export * from "./types";
 export const { trigger } = RNHapticFeedback;
 export default RNHapticFeedback;

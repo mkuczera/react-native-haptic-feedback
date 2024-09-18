@@ -20,7 +20,9 @@ import {
 
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
-import HapticFeedback from "react-native-haptic-feedback";
+import HapticFeedback, {
+  HapticFeedbackTypes,
+} from "react-native-haptic-feedback";
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -62,7 +64,7 @@ function App(): React.JSX.Element {
   };
 
   const triggerHapticFeedback = () => {
-    HapticFeedback.trigger("impactMedium", {
+    HapticFeedback.trigger(HapticFeedbackTypes.impactMedium, {
       enableVibrateFallback: true,
       ignoreAndroidSystemSettings: false,
     });

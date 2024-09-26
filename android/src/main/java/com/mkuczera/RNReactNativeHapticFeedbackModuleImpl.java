@@ -18,33 +18,33 @@ public class RNReactNativeHapticFeedbackModuleImpl {
 
     public static final String NAME = "RNHapticFeedback";
 
-    public static boolean isVibrationEnabled(Context context) {
-      Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-      AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
+    private static boolean isVibrationEnabled(Context context, Vibrator vibrator) {
       // 1. Check the vibration function of the user's device
-      boolean hasVibrator = vibrator != null && vibrator.hasVibrator();
+      if (!vibrator.hasVibrator()) return false;
+
+      AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+      if (audioManager == null) return false;
 
       // 2. Check if the user has turned on the sound
       boolean isVolumeOn = audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT;
+      if (isVolumeOn) return true;
 
       // 3. Check if the user has set the vibrate mode
       boolean isVibrateMode = audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE;
-
-      return hasVibrator && (isVolumeOn || isVibrateMode);
+      return isVibrateMode;
    }
 
     public static void trigger(ReactApplicationContext reactContext, String type, ReadableMap options) {
+      Vibrator vibrator = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+      if (vibrator == null) return;
+
       // Check system settings, if disabled and we're not explicitly ignoring then return immediatly
       boolean ignoreAndroidSystemSettings = options.getBoolean("ignoreAndroidSystemSettings");
-      boolean isVibrationEnabled = isVibrationEnabled(reactContext);
+      if (ignoreAndroidSystemSettings == false && !isVibrationEnabled(reactContext, vibrator)) return; 
 
-      if (ignoreAndroidSystemSettings == false && !isVibrationEnabled) return;
-      Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
       Vibrate targetVibration = VibrateFactory.getVibration(type);
+      if (targetVibration == null) return;
 
-      if (v == null || targetVibration == null) return;
-
-      targetVibration.apply(v);
+      targetVibration.apply(vibrator);
     }
 }

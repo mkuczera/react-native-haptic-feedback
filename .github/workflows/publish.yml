@@ -8,6 +8,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # Only run for stable tags, not nitro pre-release tags (v*-nitro)
+    if: "!endsWith(github.ref_name, '-nitro')"
     permissions:
       contents: write
       id-token: write

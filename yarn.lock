@@ -8779,7 +8779,11 @@ __metadata:
     typescript: ^5.5.4
     typescript-eslint: ^8.0.0
   peerDependencies:
+    react: ">=18.0.0"
     react-native: ">=0.71.0"
+  peerDependenciesMeta:
+    react:
+      optional: true
   languageName: unknown
   linkType: soft
 

@@ -281,6 +281,19 @@ RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
     }
 }
 
+RCT_EXPORT_METHOD(getSystemHapticStatus:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    BOOL vibrationEnabled = NO;
+    if (@available(iOS 13.0, *)) {
+        vibrationEnabled = [CHHapticEngine capabilitiesForHardware].supportsHaptics;
+    }
+    resolve(@{
+        @"vibrationEnabled": @(vibrationEnabled),
+        @"ringerMode": @"normal",
+    });
+}
+
 // MARK: - New arch TurboModule
 
 #ifdef RCT_NEW_ARCH_ENABLED

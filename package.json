@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit --project tsconfig.test.json",
     "test": "jest",
     "build": "bob build",
-    "lint": "eslint \"**/*.{js,ts,tsx}\""
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "husky"
   },
   "keywords": [
     "react-native",
@@ -89,6 +90,7 @@
     "eslint-config-prettier": "^9",
     "eslint-plugin-prettier": "^5",
     "globals": "^15",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "prettier": "^2.8.8",
     "react-native": "^0.74.7",

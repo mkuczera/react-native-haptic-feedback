@@ -1,6 +1,8 @@
 package com.mkuczera.vibrateFactory;
 
+import android.os.Build;
 import android.os.Vibrator;
+import android.os.VibrationEffect;
 
 public class VibrateWithDuration implements Vibrate {
     long durations[] = {};
@@ -13,7 +15,11 @@ public class VibrateWithDuration implements Vibrate {
     public void apply(Vibrator v) {
         try {
             if (v.hasVibrator()) {
-                v.vibrate(this.durations, -1);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v.vibrate(VibrationEffect.createWaveform(this.durations, -1));
+                } else {
+                    v.vibrate(this.durations, -1);
+                }
             }
         } catch (Exception e) {}
     }

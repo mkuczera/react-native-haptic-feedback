@@ -26,21 +26,24 @@ public class RNReactNativeHapticFeedbackPackage extends TurboReactPackage {
 
     @Override
     public ReactModuleInfoProvider getReactModuleInfoProvider() {
-        return () -> {
-            final Map<String, ReactModuleInfo> moduleInfos = new HashMap<>();
-            boolean isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
-            moduleInfos.put(
-                    RNReactNativeHapticFeedbackModuleImpl.NAME,
-                    new ReactModuleInfo(
-                            RNReactNativeHapticFeedbackModuleImpl.NAME,
-                            RNReactNativeHapticFeedbackModuleImpl.NAME,
-                            false, // canOverrideExistingModule
-                            false, // needsEagerInit
-                            true, // hasConstants
-                            false, // isCxxModule
-                            isTurboModule // isTurboModule
-            ));
-            return moduleInfos;
+        return new ReactModuleInfoProvider() {
+            @Override
+            public Map<String, ReactModuleInfo> getReactModuleInfos() {
+                final Map<String, ReactModuleInfo> moduleInfos = new HashMap<>();
+                boolean isTurboModule = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+                moduleInfos.put(
+                        RNReactNativeHapticFeedbackModuleImpl.NAME,
+                        new ReactModuleInfo(
+                                RNReactNativeHapticFeedbackModuleImpl.NAME,
+                                RNReactNativeHapticFeedbackModuleImpl.NAME,
+                                false, // canOverrideExistingModule
+                                false, // needsEagerInit
+                                true, // hasConstants
+                                false, // isCxxModule
+                                isTurboModule // isTurboModule
+                ));
+                return moduleInfos;
+            }
         };
     }
 }

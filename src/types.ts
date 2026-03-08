@@ -27,3 +27,21 @@ export interface HapticOptions {
   enableVibrateFallback?: boolean;
   ignoreAndroidSystemSettings?: boolean;
 }
+
+export interface HapticEvent {
+  /** Time offset from pattern start in milliseconds */
+  time: number;
+  type?: 'transient' | 'continuous';
+  /** Duration in milliseconds, for continuous events only */
+  duration?: number;
+  /** 0.0–1.0 */
+  intensity?: number;
+  /** 0.0–1.0 */
+  sharpness?: number;
+}
+
+export interface SystemHapticStatus {
+  /** true if device has vibrator and is not in silent mode */
+  vibrationEnabled: boolean;
+  ringerMode: 'silent' | 'vibrate' | 'normal';
+}

@@ -13,6 +13,10 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 
 public class RNReactNativeHapticFeedbackModuleImpl {
 
@@ -22,20 +26,14 @@ public class RNReactNativeHapticFeedbackModuleImpl {
       Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
       AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-      // 1. Check the vibration function of the user's device
       boolean hasVibrator = vibrator != null && vibrator.hasVibrator();
-
-      // 2. Check if the user has turned on the sound
       boolean isVolumeOn = audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT;
-
-      // 3. Check if the user has set the vibrate mode
       boolean isVibrateMode = audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE;
 
       return hasVibrator && (isVolumeOn || isVibrateMode);
    }
 
     public static void trigger(ReactApplicationContext reactContext, String type, ReadableMap options) {
-      // Check system settings, if disabled and we're not explicitly ignoring then return immediatly
       boolean ignoreAndroidSystemSettings = options.getBoolean("ignoreAndroidSystemSettings");
       boolean isVibrationEnabled = isVibrationEnabled(reactContext);
 
@@ -46,5 +44,62 @@ public class RNReactNativeHapticFeedbackModuleImpl {
       if (v == null || targetVibration == null) return;
 
       targetVibration.apply(v);
+    }
+
+    public static void stop() {
+        // Android vibrations are fire-and-forget; nothing to cancel
+    }
+
+    public static boolean isSupported(ReactApplicationContext reactContext) {
+        Vibrator vibrator = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+        return vibrator != null && vibrator.hasVibrator();
+    }
+
+    public static void triggerPattern(ReactApplicationContext reactContext, ReadableArray events, ReadableMap options) {
+        boolean ignoreAndroidSystemSettings = options != null && options.hasKey("ignoreAndroidSystemSettings")
+            && options.getBoolean("ignoreAndroidSystemSettings");
+        boolean isVibrationEnabled = isVibrationEnabled(reactContext);
+
+        if (!ignoreAndroidSystemSettings && !isVibrationEnabled) return;
+
+        Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+        if (v == null || !v.hasVibrator()) return;
+
+        VibrateFactory.vibratePattern(v, events);
+    }
+
+    public static void getSystemHapticStatus(ReactApplicationContext reactContext, Promise promise) {
+        try {
+            AudioManager audioManager = (AudioManager) reactContext.getSystemService(Context.AUDIO_SERVICE);
+            Vibrator vibrator = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+
+            boolean hasVibrator = vibrator != null && vibrator.hasVibrator();
+            int ringerModeInt = audioManager.getRingerMode();
+
+            String ringerMode;
+            boolean vibrationEnabled;
+
+            switch (ringerModeInt) {
+                case AudioManager.RINGER_MODE_SILENT:
+                    ringerMode = "silent";
+                    vibrationEnabled = false;
+                    break;
+                case AudioManager.RINGER_MODE_VIBRATE:
+                    ringerMode = "vibrate";
+                    vibrationEnabled = hasVibrator;
+                    break;
+                default:
+                    ringerMode = "normal";
+                    vibrationEnabled = hasVibrator;
+                    break;
+            }
+
+            WritableMap result = Arguments.createMap();
+            result.putBoolean("vibrationEnabled", vibrationEnabled);
+            result.putString("ringerMode", ringerMode);
+            promise.resolve(result);
+        } catch (Exception e) {
+            promise.reject("getSystemHapticStatus", e.getMessage());
+        }
     }
 }

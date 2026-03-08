@@ -1,0 +1,16 @@
+{
+  "nitrogen": {
+    "spec": "src/nitro",
+    "outputDir": {
+      "ios": "ios/generated",
+      "android": "android/src/main/cpp/generated"
+    },
+    "ios": {
+      "iosModuleName": "RNHapticFeedback"
+    },
+    "android": {
+      "androidNamespace": "com.mkuczera",
+      "androidCMakeLibName": "rnhapticfeedback"
+    }
+  }
+}

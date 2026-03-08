@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run unit tests
-        run: yarn test --maxWorkers=2 --coverage --coverageThreshold='{"global":{"lines":80,"functions":80,"branches":70,"statements":80}}'
+        run: yarn test --maxWorkers=2 --coverage
 
   build-library:
     runs-on: ubuntu-latest

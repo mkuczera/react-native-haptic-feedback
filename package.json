@@ -1,6 +1,6 @@
 {
   "name": "react-native-haptic-feedback",
-  "version": "3.0.0",
+  "version": "3.0.0-nitro",
   "description": "Basic haptic feedback for iOS and android",
   "license": "MIT",
   "source": "src/index.ts",
@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit --project tsconfig.test.json",
     "test": "jest",
     "build": "bob build",
-    "lint": "eslint \"**/*.{js,ts,tsx}\""
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "nitro-codegen": "nitrogen"
   },
   "keywords": [
     "react-native",
@@ -46,7 +47,8 @@
   "author": "Michael Kuczera",
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-native": ">=0.71.0"
+    "react-native": ">=0.75.0",
+    "react-native-nitro-modules": ">=0.20.0"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -97,7 +99,8 @@
     "tslib": "^2",
     "turbo": "^2",
     "typescript": "^5",
-    "typescript-eslint": "^8"
+    "typescript-eslint": "^8",
+    "nitrogen": "latest"
   },
   "packageManager": "yarn@3.6.4",
   "resolutions": {

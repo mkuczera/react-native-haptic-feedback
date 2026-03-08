@@ -1,164 +1,257 @@
 # react-native-haptic-feedback
 
-## Contributions Welcome
+The most complete haptic feedback library for React Native — Core Haptics on iOS, rich Composition API on Android, custom patterns, and a developer-friendly hook.
 
-Thanks to all the amazing contributors for their support.
+## Contributions Welcome
 
 [![Contributors](https://contrib.rocks/image?repo=mkuczera/react-native-haptic-feedback)](https://github.com/mkuczera/react-native-haptic-feedback/graphs/contributors)
 
 Made with [contrib.rocks](https://contrib.rocks).
 
-## Getting Started
+---
 
-Install the `react-native-haptic-feedback` package using npm or yarn:
+## Requirements
+
+| Platform | Minimum version |
+|---|---|
+| iOS | 13.0 (Core Haptics) |
+| Android | API 21 |
+| React Native | 0.71.0 |
+
+---
+
+## Installation
 
 ```bash
-$ npm install react-native-haptic-feedback --save # or use $ yarn add react-native-haptic-feedback
+npm install react-native-haptic-feedback
+# or
+yarn add react-native-haptic-feedback
 ```
 
-## Linking
+React Native 0.71+ uses auto-linking — no extra steps needed.
 
-:information_source: **Note:** Starting from React Native version 0.60, native modules are auto-linked. For more details, refer to the [official documentation](https://facebook.github.io/react-native/blog/2019/07/03/version-60#native-modules-are-now-autolinked).
+---
 
-### Automatic Linking (React Native 0.60+)
+## Basic Usage
 
-For React Native 0.60 and above, manual linking is generally unnecessary. Auto-linking handles the process automatically.
+```typescript
+import RNHapticFeedback from "react-native-haptic-feedback";
 
-### Manual Linking
+RNHapticFeedback.trigger("impactMedium");
 
-If you're using an older React Native version or face issues with auto-linking, follow these manual linking steps:
-
-1. Link the module:
-   ```bash
-   $ react-native link react-native-haptic-feedback
-   ```
-2. For iOS, navigate to the iOS directory and install CocoaPods dependencies:
-   ```bash
-   $ cd ios && pod install
-   ```
-   If you encounter issues with the previous step on iOS, clean up and reinstall the dependencies using these commands:
-   ```bash
-   $ rm -rf ios/Pods && rm -rf ios/build && cd ios && pod install && cd ../
-   $ rm -rf node_modules && rm yarn.lock
-   $ yarn install   # or use $ npm install
-   ```
-   
-## Manual Setup Guide - iOS
-
-1. **Open Your Project in Xcode:** Launch Xcode and navigate to your project in the project navigator.
-
-2. **Add RNReactNativeHapticFeedback Project:** Right-click on the "Libraries" folder in the project navigator and select "Add Files to [your project's name]". Locate `RNReactNativeHapticFeedback.xcodeproj` in your project's `node_modules` directory and add it.
-
-3. **Navigate to Project Settings:** In Xcode, select your project from the project navigator to access project settings.
-
-4. **Select App Target:** Under the "Targets" section, choose the target corresponding to your app.
-
-5. **Link Binary With Libraries:** Go to the "Build Phases" tab and expand the "Link Binary With Libraries" section.
-
-6. **Add Library:** Click the "+" button to add a library.
-
-7. **Add libRNReactNativeHapticFeedback.a:** From the list of libraries, select `libRNReactNativeHapticFeedback.a` and add it.
-
-8. **Run Your Project:** Press `Cmd+R` to build and run your project in the iOS simulator or on a connected device.
-
-## Manual Setup Guide - Android
-
-1. **Configure MainApplication.java:** Open `android/app/src/main/java/[...]/MainApplication.java`.
-
-   - Add the following import at the top of the file:
-     ```java
-     import com.mkuczera.RNReactNativeHapticFeedbackPackage;
-     ```
-
-2. **Modify settings.gradle:** Append the following lines to `android/settings.gradle`:
-      ```gradle
-      include ':react-native-haptic-feedback'
-      project(':react-native-haptic-feedback').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-haptic-feedback/android')
-      ```
-## Usage
-
-To use the library, import it in your JavaScript file:
-
-```javascript
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-
-// Optional configuration
-const options = {
-  enableVibrateFallback: true,
+// With options
+RNHapticFeedback.trigger("notificationSuccess", {
+  enableVibrateFallback: true,   // iOS: vibrate if Core Haptics unavailable
   ignoreAndroidSystemSettings: false,
-};
-
-// Trigger haptic feedback
-ReactNativeHapticFeedback.trigger("impactLight", options);
+});
 ```
 
-Alternatively, you can use the named import:
+Named exports are also available:
 
-```javascript
+```typescript
 import { trigger } from "react-native-haptic-feedback";
-
-// Optional configuration
-const options = {
-  enableVibrateFallback: true,
-  ignoreAndroidSystemSettings: false,
-};
-
-// Trigger haptic feedback
-trigger("impactLight", options);
+trigger("impactLight");
 ```
 
-## Available Methods
+---
 
-### `trigger(method, options)`
+## API Reference
 
-Use this method to trigger haptic feedback.
+### `trigger(type, options?)`
 
-| Argument                              | Description                                                                                                                                          |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `method`                              | Specifies the type of haptic feedback. See the list of available methods below.                                                                     |
-| `options.enableVibrateFallback`       | :iphone: iOS only. If haptic feedback is unavailable (iOS < 10 OR Device < iPhone6s), vibrate with default method (heavy 1s) (default: false).   |
-| `options.ignoreAndroidSystemSettings` | :android: Android only. If haptic is disabled in the Android system settings, this allows ignoring the setting and triggering haptic feedback. (default: false). |
+Play a predefined haptic type.
 
-## Method Overview
-
-Here's an overview of the available methods and their compatibility:
-
-|       Method        |      Android       |        iOS         |
-| :-----------------: | :----------------: | :----------------: |
-|     impactLight     |   ✅   |   ✅   |
-|    impactMedium     |   ✅   |   ✅   |
-|     impactHeavy     |   ✅   |   ✅   |
-|        rigid        |   ✅   |   ✅   |
-|        soft         |   ✅   |   ✅   |
-| notificationSuccess |   ✅   |   ✅   |
-| notificationWarning |   ✅   |   ✅   |
-|  notificationError  |   ✅   |   ✅   |
-|      selection      |   ❌   |   ✅   |
-|      clockTick      |   ✅   |   ❌   |
-|    contextClick     |   ✅   |   ❌   |
-|    keyboardPress    |   ✅   |   ❌   |
-|   keyboardRelease   |   ✅   |   ❌   |
-|     keyboardTap     |   ✅   |   ❌   |
-|      longPress      |   ✅   |   ❌   |
-|   textHandleMove    |   ✅   |   ❌   |
-|     virtualKey      |   ✅   |   ❌   |
-|  virtualKeyRelease  |   ✅   |   ❌   |
-|     effectClick     |   ✅   |   ❌   |
-|  effectDoubleClick  |   ✅   |   ❌   |
-|  effectHeavyClick   |   ✅   |   ❌   |
-|     effectTick      |   ✅   |   ❌   |
-
-## Available Methods (Version 1.6.0 and Prior)
-
-If you're using version 1.6.0 or earlier, you can use this method:
-
-```javascript
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-
-// Trigger haptic feedback with vibrate fallback
-ReactNativeHapticFeedback.trigger("method", enableVibrateFallback);
+```typescript
+RNHapticFeedback.trigger(type: HapticFeedbackTypes | string, options?: HapticOptions): void
 ```
 
-Where `method` can be one of: "selection", "impactLight", "impactMedium", "impactHeavy", "notificationSuccess", "notificationWarning", or "notificationError". The `enableVibrateFallback` option is for iOS devices without haptic feedback support.
+| Option | Default | Description |
+|---|---|---|
+| `enableVibrateFallback` | `false` | iOS: use `AudioServicesPlaySystemSound` if Core Haptics not supported |
+| `ignoreAndroidSystemSettings` | `false` | Android: trigger even if vibration is disabled in system settings |
 
-We recommend using the newer approach for enhanced flexibility and improved compatibility.
+### `stop()`
+
+Cancel the current haptic player and stop the engine.
+
+```typescript
+RNHapticFeedback.stop(): void
+```
+
+### `isSupported()`
+
+Synchronously returns `true` if Core Haptics is supported on the device (iOS 13+ hardware). Always returns `true` on Android if the device has a vibrator.
+
+```typescript
+RNHapticFeedback.isSupported(): boolean
+```
+
+### `triggerPattern(events, options?)`
+
+Play a custom sequence of haptic events.
+
+```typescript
+RNHapticFeedback.triggerPattern(events: HapticEvent[], options?: HapticOptions): void
+```
+
+```typescript
+interface HapticEvent {
+  time: number;        // ms from pattern start
+  type?: 'transient' | 'continuous';
+  duration?: number;   // ms — for continuous events only
+  intensity?: number;  // 0.0–1.0
+  sharpness?: number;  // 0.0–1.0
+}
+```
+
+### `playAHAP(fileName)`
+
+Play an Apple Haptic and Audio Pattern (`.ahap`) file. iOS only — resolves immediately on Android.
+
+```typescript
+RNHapticFeedback.playAHAP(fileName: string): Promise<void>
+```
+
+Place `.ahap` files in `<bundle>/haptics/` or the bundle root. Pass the file name without path prefix.
+
+### `getSystemHapticStatus()`
+
+Android only: returns the device's current ringer mode and whether vibration is available.
+
+```typescript
+RNHapticFeedback.getSystemHapticStatus(): Promise<SystemHapticStatus>
+
+interface SystemHapticStatus {
+  vibrationEnabled: boolean;
+  ringerMode: 'silent' | 'vibrate' | 'normal';
+}
+```
+
+---
+
+## Pattern Notation Helper
+
+Build `HapticEvent[]` from a compact string notation:
+
+| Character | Meaning |
+|---|---|
+| `o` | Soft transient (intensity 0.4, sharpness 0.4) |
+| `O` | Strong transient (intensity 1.0, sharpness 0.8) |
+| `.` | 100 ms gap |
+| `-` | 300 ms gap |
+| `=` | 1000 ms gap |
+
+```typescript
+import { pattern } from "react-native-haptic-feedback";
+
+RNHapticFeedback.triggerPattern(pattern('oO.O'));
+// → soft, strong, 100ms pause, strong
+```
+
+---
+
+## Built-in Presets
+
+```typescript
+import { Patterns } from "react-native-haptic-feedback";
+
+RNHapticFeedback.triggerPattern(Patterns.success);
+RNHapticFeedback.triggerPattern(Patterns.error);
+RNHapticFeedback.triggerPattern(Patterns.warning);
+RNHapticFeedback.triggerPattern(Patterns.heartbeat);
+RNHapticFeedback.triggerPattern(Patterns.tripleClick);
+RNHapticFeedback.triggerPattern(Patterns.notification);
+```
+
+---
+
+## `useHaptics` Hook
+
+```typescript
+import { useHaptics } from "react-native-haptic-feedback";
+
+function MyButton() {
+  const haptics = useHaptics({ enableVibrateFallback: true });
+
+  return (
+    <Pressable onPress={() => haptics.trigger('impactMedium')}>
+      Press me
+    </Pressable>
+  );
+}
+```
+
+The hook accepts default options that are merged with per-call overrides.
+
+---
+
+## Available Feedback Types
+
+|       Type          |  Android  |   iOS   | Notes |
+| :-----------------: | :-------: | :-----: |---|
+| `impactLight`       | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` |
+| `impactMedium`      | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` |
+| `impactHeavy`       | ✅ | ✅ | API 31+: `PRIMITIVE_HEAVY_CLICK` |
+| `rigid`             | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` (scale 0.9) |
+| `soft`              | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` (scale 0.3) |
+| `notificationSuccess` | ✅ | ✅ | |
+| `notificationWarning` | ✅ | ✅ | |
+| `notificationError`   | ✅ | ✅ | |
+| `selection`         | ✅ | ✅ | |
+| `clockTick`         | ✅ | ❌ | |
+| `contextClick`      | ✅ | ❌ | |
+| `keyboardPress`     | ✅ | ❌ | |
+| `keyboardRelease`   | ✅ | ❌ | |
+| `keyboardTap`       | ✅ | ❌ | |
+| `longPress`         | ✅ | ❌ | |
+| `textHandleMove`    | ✅ | ❌ | |
+| `virtualKey`        | ✅ | ❌ | |
+| `virtualKeyRelease` | ✅ | ❌ | |
+| `effectClick`       | ✅ | ❌ | API 29+ |
+| `effectDoubleClick` | ✅ | ❌ | API 29+ |
+| `effectHeavyClick`  | ✅ | ❌ | API 29+ |
+| `effectTick`        | ✅ | ❌ | API 29+ |
+
+---
+
+## Jest Mock
+
+```typescript
+// In your test file:
+jest.mock('react-native-haptic-feedback');
+
+// All methods are automatically mocked:
+// trigger, stop, isSupported (→ true), triggerPattern, playAHAP (→ Promise.resolve()),
+// getSystemHapticStatus (→ { vibrationEnabled: true, ringerMode: 'normal' }),
+// useHaptics, pattern, Patterns
+```
+
+---
+
+## Migrating from v2 to v3
+
+### Breaking changes
+
+1. **iOS minimum target is now 13.0** — remove any `<13.0` deployment-target overrides.
+2. **React Native minimum is 0.71** — update your peer dependency if needed.
+3. The internal `DeviceUtils` class is removed — if you referenced it directly, remove those imports.
+4. `enableVibrateFallback` on devices without Core Haptics now calls `kSystemSoundID_Vibrate` instead of the UIKit generator path.
+
+### Upgrade steps
+
+```bash
+npm install react-native-haptic-feedback@3
+cd ios && pod install
+```
+
+All existing `trigger()` call-sites continue to work without changes.
+
+---
+
+## Troubleshooting
+
+**Haptics not firing on iOS simulator** — Core Haptics does not work in the iOS Simulator. Test on a physical device.
+
+**`isSupported()` returns false** — the device does not have a Taptic Engine (iPhone 7 or older without the A9 chip, or iPads). Use `enableVibrateFallback: true` to fall back to system vibration.
+
+**Android vibration seems weak** — upgrade your target device to API 31+ and ensure the device has a high-quality actuator. Use `triggerPattern` with explicit amplitudes for more control.

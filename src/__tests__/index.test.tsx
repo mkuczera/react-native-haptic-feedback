@@ -1,22 +1,22 @@
-import RNHapticFeedback from "../index";
+import RNHapticFeedback, {
+  trigger,
+  stop,
+  isSupported,
+  triggerPattern,
+  playAHAP,
+  getSystemHapticStatus,
+} from "../index";
 import { HapticFeedbackTypes } from "../types";
+import { pattern } from "../utils/pattern";
+import { Patterns } from "../presets";
+import { useHaptics } from "../index";
 
 const NativeHapticFeedbackMock = require("../codegenSpec/NativeHapticFeedback").default;
 
-describe("RNReactNativeHapticFeedback", () => {
-  it("should trigger haptic feedback with default options using NativeModules when turbo module is not used", () => {
-    RNHapticFeedback.trigger(HapticFeedbackTypes.selection);
+// ─── trigger ────────────────────────────────────────────────────────────────
 
-    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
-      "selection",
-      {
-        enableVibrateFallback: false,
-        ignoreAndroidSystemSettings: false,
-      },
-    );
-  });
-
-  it("should trigger haptic feedback with turbo module when enabled", () => {
+describe("trigger", () => {
+  it("calls native trigger with default options", () => {
     RNHapticFeedback.trigger(HapticFeedbackTypes.selection);
 
     expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith("selection", {
@@ -25,17 +25,240 @@ describe("RNReactNativeHapticFeedback", () => {
     });
   });
 
-  it("should pass the correct options", () => {
+  it("calls native trigger with turbo module path", () => {
+    trigger(HapticFeedbackTypes.selection);
+
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith("selection", {
+      enableVibrateFallback: false,
+      ignoreAndroidSystemSettings: false,
+    });
+  });
+
+  it("merges provided options over defaults", () => {
     const options = {
       enableVibrateFallback: true,
       ignoreAndroidSystemSettings: true,
     };
-
     RNHapticFeedback.trigger(HapticFeedbackTypes.selection, options);
 
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith("selection", options);
+  });
+
+  it("accepts a string type key", () => {
+    RNHapticFeedback.trigger("impactHeavy");
     expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
-      "selection",
-      options,
+      "impactHeavy",
+      expect.any(Object),
+    );
+  });
+});
+
+// ─── stop ────────────────────────────────────────────────────────────────────
+
+describe("stop", () => {
+  it("calls native stop", () => {
+    RNHapticFeedback.stop();
+    expect(NativeHapticFeedbackMock.stop).toHaveBeenCalled();
+  });
+
+  it("named export calls native stop", () => {
+    stop();
+    expect(NativeHapticFeedbackMock.stop).toHaveBeenCalled();
+  });
+});
+
+// ─── isSupported ─────────────────────────────────────────────────────────────
+
+describe("isSupported", () => {
+  it("returns native value (true from mock)", () => {
+    expect(RNHapticFeedback.isSupported()).toBe(true);
+  });
+
+  it("named export returns native value", () => {
+    expect(isSupported()).toBe(true);
+  });
+
+  it("calls native isSupported", () => {
+    RNHapticFeedback.isSupported();
+    expect(NativeHapticFeedbackMock.isSupported).toHaveBeenCalled();
+  });
+});
+
+// ─── triggerPattern ──────────────────────────────────────────────────────────
+
+describe("triggerPattern", () => {
+  it("calls native triggerPattern with events array", () => {
+    const events = [{ time: 0, type: "transient" as const, intensity: 0.5, sharpness: 0.5 }];
+    RNHapticFeedback.triggerPattern(events);
+    expect(NativeHapticFeedbackMock.triggerPattern).toHaveBeenCalledWith(
+      events,
+      expect.objectContaining({ enableVibrateFallback: false }),
+    );
+  });
+
+  it("named export calls native triggerPattern", () => {
+    const events = [{ time: 100, type: "transient" as const, intensity: 1.0, sharpness: 0.8 }];
+    triggerPattern(events, { enableVibrateFallback: true });
+    expect(NativeHapticFeedbackMock.triggerPattern).toHaveBeenCalledWith(
+      events,
+      expect.objectContaining({ enableVibrateFallback: true }),
+    );
+  });
+});
+
+// ─── playAHAP ────────────────────────────────────────────────────────────────
+
+describe("playAHAP", () => {
+  it("calls native playAHAP with filename", async () => {
+    await RNHapticFeedback.playAHAP("custom.ahap");
+    expect(NativeHapticFeedbackMock.playAHAP).toHaveBeenCalledWith("custom.ahap");
+  });
+
+  it("named export resolves", async () => {
+    await expect(playAHAP("test.ahap")).resolves.toBeUndefined();
+  });
+});
+
+// ─── getSystemHapticStatus ───────────────────────────────────────────────────
+
+describe("getSystemHapticStatus", () => {
+  it("resolves with expected shape", async () => {
+    const status = await RNHapticFeedback.getSystemHapticStatus();
+    expect(status).toHaveProperty("vibrationEnabled");
+    expect(status).toHaveProperty("ringerMode");
+  });
+
+  it("named export resolves with shape from mock", async () => {
+    const status = await getSystemHapticStatus();
+    expect(status.vibrationEnabled).toBe(true);
+    expect(status.ringerMode).toBe("normal");
+  });
+});
+
+// ─── pattern utility ─────────────────────────────────────────────────────────
+
+describe("pattern()", () => {
+  it("empty string returns empty array", () => {
+    expect(pattern("")).toEqual([]);
+  });
+
+  it("'o' produces a soft transient at time 0", () => {
+    const [evt] = pattern("o");
+    expect(evt).toMatchObject({ time: 0, type: "transient", intensity: 0.4, sharpness: 0.4 });
+  });
+
+  it("'O' produces a strong transient at time 0", () => {
+    const [evt] = pattern("O");
+    expect(evt).toMatchObject({ time: 0, type: "transient", intensity: 1.0, sharpness: 0.8 });
+  });
+
+  it("'.' advances cursor by 100ms", () => {
+    const events = pattern(".O");
+    expect(events[0]!.time).toBe(100);
+  });
+
+  it("'-' advances cursor by 300ms", () => {
+    const events = pattern("-O");
+    expect(events[0]!.time).toBe(300);
+  });
+
+  it("'=' advances cursor by 1000ms", () => {
+    const events = pattern("=O");
+    expect(events[0]!.time).toBe(1000);
+  });
+
+  it("'oO.O' produces 3 events with correct times", () => {
+    const events = pattern("oO.O");
+    expect(events).toHaveLength(3);
+    expect(events[0]!.time).toBe(0);
+    expect(events[1]!.time).toBe(0);
+    expect(events[2]!.time).toBe(100);
+  });
+
+  it("unknown characters are ignored", () => {
+    expect(pattern("x?!")).toEqual([]);
+  });
+
+  it("combined gaps accumulate", () => {
+    const events = pattern(".-O"); // 100 + 300 = 400
+    expect(events[0]!.time).toBe(400);
+  });
+});
+
+// ─── Patterns presets ────────────────────────────────────────────────────────
+
+describe("Patterns presets", () => {
+  it("all presets are non-empty arrays", () => {
+    for (const [, events] of Object.entries(Patterns)) {
+      expect(Array.isArray(events)).toBe(true);
+      expect(events.length).toBeGreaterThan(0);
+      // Each event has at minimum a 'time' property
+      for (const evt of events) {
+        expect(typeof evt.time).toBe("number");
+      }
+    }
+  });
+
+  it("success preset has correct shape", () => {
+    const events = Patterns.success!;
+    expect(events.length).toBeGreaterThan(0);
+    expect(events[0]).toHaveProperty("time");
+    expect(events[0]).toHaveProperty("intensity");
+  });
+});
+
+// ─── useHaptics hook ─────────────────────────────────────────────────────────
+
+describe("useHaptics", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("trigger passes type to RNHapticFeedback.trigger", () => {
+    const haptics = useHaptics();
+    haptics.trigger(HapticFeedbackTypes.impactMedium);
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
+      "impactMedium",
+      expect.any(Object),
+    );
+  });
+
+  it("merges defaultOptions into trigger call", () => {
+    const haptics = useHaptics({ enableVibrateFallback: true });
+    haptics.trigger(HapticFeedbackTypes.impactLight);
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
+      "impactLight",
+      expect.objectContaining({ enableVibrateFallback: true }),
+    );
+  });
+
+  it("per-call options override defaultOptions", () => {
+    const haptics = useHaptics({ enableVibrateFallback: true });
+    haptics.trigger(HapticFeedbackTypes.impactHeavy, { enableVibrateFallback: false });
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
+      "impactHeavy",
+      expect.objectContaining({ enableVibrateFallback: false }),
+    );
+  });
+
+  it("stop() calls RNHapticFeedback.stop", () => {
+    const haptics = useHaptics();
+    haptics.stop();
+    expect(NativeHapticFeedbackMock.stop).toHaveBeenCalled();
+  });
+
+  it("isSupported() returns native value", () => {
+    const haptics = useHaptics();
+    expect(haptics.isSupported()).toBe(true);
+  });
+
+  it("triggerPattern passes events and merged options", () => {
+    const haptics = useHaptics({ enableVibrateFallback: true });
+    const events = pattern("oO");
+    haptics.triggerPattern(events);
+    expect(NativeHapticFeedbackMock.triggerPattern).toHaveBeenCalledWith(
+      events,
+      expect.objectContaining({ enableVibrateFallback: true }),
     );
   });
 });

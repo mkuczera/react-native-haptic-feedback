@@ -186,10 +186,22 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isSupported)
 }
 #endif
 
-RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events)
+#ifdef RCT_NEW_ARCH_ENABLED
+RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events options:(JS::NativeHapticFeedback::SpecTriggerPatternOptions&)options)
 {
+    BOOL enableVibrateFallback = options.enableVibrateFallback().value();
+#else
+RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events options:(NSDictionary *)options)
+{
+    BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"] boolValue];
+#endif
     if (@available(iOS 13.0, *)) {
-        if (![CHHapticEngine capabilitiesForHardware].supportsHaptics) return;
+        if (![CHHapticEngine capabilitiesForHardware].supportsHaptics) {
+            if (enableVibrateFallback) {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            return;
+        }
 
         NSMutableArray<CHHapticEvent *> *hapticEvents = [NSMutableArray array];
         for (NSDictionary *evt in events) {
@@ -267,6 +279,19 @@ RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
     } else {
         resolve(nil);
     }
+}
+
+RCT_EXPORT_METHOD(getSystemHapticStatus:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    BOOL vibrationEnabled = NO;
+    if (@available(iOS 13.0, *)) {
+        vibrationEnabled = [CHHapticEngine capabilitiesForHardware].supportsHaptics;
+    }
+    resolve(@{
+        @"vibrationEnabled": @(vibrationEnabled),
+        @"ringerMode": @"normal",
+    });
 }
 
 // MARK: - New arch TurboModule

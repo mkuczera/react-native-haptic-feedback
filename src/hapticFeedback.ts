@@ -54,8 +54,11 @@ const RNHapticFeedback = {
   },
 
   async getSystemHapticStatus(): Promise<SystemHapticStatus> {
-    const result = await NativeHapticFeedback.getSystemHapticStatus() as SystemHapticStatus;
-    return result;
+    try {
+      return await NativeHapticFeedback.getSystemHapticStatus() as SystemHapticStatus;
+    } catch {
+      return { vibrationEnabled: false, ringerMode: 'normal' };
+    }
   },
 };
 

@@ -186,10 +186,22 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isSupported)
 }
 #endif
 
-RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events)
+#ifdef RCT_NEW_ARCH_ENABLED
+RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events options:(JS::NativeHapticFeedback::SpecTriggerPatternOptions&)options)
 {
+    BOOL enableVibrateFallback = options.enableVibrateFallback().value();
+#else
+RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events options:(NSDictionary *)options)
+{
+    BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"] boolValue];
+#endif
     if (@available(iOS 13.0, *)) {
-        if (![CHHapticEngine capabilitiesForHardware].supportsHaptics) return;
+        if (![CHHapticEngine capabilitiesForHardware].supportsHaptics) {
+            if (enableVibrateFallback) {
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
+            return;
+        }
 
         NSMutableArray<CHHapticEvent *> *hapticEvents = [NSMutableArray array];
         for (NSDictionary *evt in events) {

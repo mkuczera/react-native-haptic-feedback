@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - main-nitro
   pull_request:
     branches:
-      - main
+      - main-nitro
   merge_group:
     types:
       - checks_requested
@@ -112,22 +112,6 @@ jobs:
         run: |
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
-      - name: Setup Gradle
-        if: false
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: wrapper
-          cache-read-only: false
-
-      - name: Make Gradlew Executable
-        if: false
-        shell: bash
-        run: chmod +x ./example/android/gradlew
-
-      - name: Build example for Android (debug)
-        if: false
-        run: cd example/android && ./gradlew assembleDebug
-
   build-ios:
     runs-on: macos-14
     needs:
@@ -180,7 +164,7 @@ jobs:
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
       - name: Build example for iOS (debug)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main-nitro'
         run: |
           cd example/ios
           xcodebuild -workspace Example.xcworkspace -scheme ReactTestApp -configuration Debug -sdk iphonesimulator -derivedDataPath build/ios

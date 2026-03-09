@@ -40,16 +40,20 @@ RCT_EXPORT_MODULE();
     _engine.stoppedHandler = ^(CHHapticEngineStoppedReason reason) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            strongSelf.engine = nil;
-            strongSelf.hapticPlayer = nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                strongSelf.engine = nil;
+                strongSelf.hapticPlayer = nil;
+            });
         }
     };
 
     _engine.resetHandler = ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            NSError *startError = nil;
-            [strongSelf.engine startAndReturnError:&startError];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSError *startError = nil;
+                [strongSelf.engine startAndReturnError:&startError];
+            });
         }
     };
 
@@ -238,9 +242,15 @@ RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events options:(NSDictionary *)optio
     }
 }
 
+#ifdef RCT_NEW_ARCH_ENABLED
+RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+#else
 RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
+#endif
 {
     if (@available(iOS 13.0, *)) {
         [self initEngine];
@@ -275,8 +285,13 @@ RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
     }
 }
 
+#ifdef RCT_NEW_ARCH_ENABLED
+RCT_EXPORT_METHOD(getSystemHapticStatus:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+#else
 RCT_EXPORT_METHOD(getSystemHapticStatus:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
+#endif
 {
     BOOL vibrationEnabled = NO;
     if (@available(iOS 13.0, *)) {

@@ -22,10 +22,18 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Installation
 
+**Stable (v2):**
 ```bash
 npm install react-native-haptic-feedback
 # or
 yarn add react-native-haptic-feedback
+```
+
+**Pre-release (v3 — battle testing):**
+```bash
+npm install react-native-haptic-feedback@next
+# or
+yarn add react-native-haptic-feedback@next
 ```
 
 React Native 0.71+ uses auto-linking — no extra steps needed.
@@ -142,10 +150,17 @@ Build `HapticEvent[]` from a compact string notation:
 | `=` | 1000 ms gap |
 
 ```typescript
-import { pattern } from "react-native-haptic-feedback";
+import { pattern, PATTERN_CHARS } from "react-native-haptic-feedback";
+import type { PatternChar } from "react-native-haptic-feedback";
 
 RNHapticFeedback.triggerPattern(pattern('oO.O'));
 // → soft, strong, 100ms pause, strong
+```
+
+`pattern()` throws a `TypeError` if the string contains any character not in `PATTERN_CHARS`. Use `PATTERN_CHARS` for programmatic validation:
+
+```typescript
+const valid = [...input].every(c => PATTERN_CHARS.has(c as PatternChar));
 ```
 
 ---
@@ -185,32 +200,65 @@ The hook accepts default options that are merged with per-call overrides.
 
 ---
 
+## `TouchableHaptic` Component
+
+A drop-in `Pressable` wrapper that automatically triggers haptic feedback. Accepts all standard `PressableProps` plus three extra props:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `hapticType` | `HapticFeedbackTypes` | `impactMedium` | Feedback type to play |
+| `hapticTrigger` | `'onPressIn' \| 'onPress' \| 'onLongPress'` | `onPressIn` | Which event triggers haptics |
+| `hapticOptions` | `HapticOptions` | — | Options forwarded to `trigger()` |
+
+```typescript
+import { TouchableHaptic } from "react-native-haptic-feedback";
+
+<TouchableHaptic
+  hapticType="impactMedium"
+  hapticTrigger="onPressIn"
+  onPress={handlePress}
+  style={styles.button}
+>
+  <Text>Press me</Text>
+</TouchableHaptic>
+```
+
+---
+
 ## Available Feedback Types
 
-|       Type          |  Android  |   iOS   | Notes |
-| :-----------------: | :-------: | :-----: |---|
-| `impactLight`       | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` |
-| `impactMedium`      | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` |
-| `impactHeavy`       | ✅ | ✅ | API 31+: `PRIMITIVE_HEAVY_CLICK` |
-| `rigid`             | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` (scale 0.9) |
-| `soft`              | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` (scale 0.3) |
-| `notificationSuccess` | ✅ | ✅ | |
-| `notificationWarning` | ✅ | ✅ | |
-| `notificationError`   | ✅ | ✅ | |
-| `selection`         | ✅ | ✅ | |
-| `clockTick`         | ✅ | ❌ | |
-| `contextClick`      | ✅ | ❌ | |
-| `keyboardPress`     | ✅ | ❌ | |
-| `keyboardRelease`   | ✅ | ❌ | |
-| `keyboardTap`       | ✅ | ❌ | |
-| `longPress`         | ✅ | ❌ | |
-| `textHandleMove`    | ✅ | ❌ | |
-| `virtualKey`        | ✅ | ❌ | |
-| `virtualKeyRelease` | ✅ | ❌ | |
-| `effectClick`       | ✅ | ❌ | API 29+ |
-| `effectDoubleClick` | ✅ | ❌ | API 29+ |
-| `effectHeavyClick`  | ✅ | ❌ | API 29+ |
-| `effectTick`        | ✅ | ❌ | API 29+ |
+|       Type               |  Android  |   iOS   | Notes |
+| :----------------------: | :-------: | :-----: |---|
+| `impactLight`            | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` |
+| `impactMedium`           | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` |
+| `impactHeavy`            | ✅ | ✅ | API 31+: `PRIMITIVE_HEAVY_CLICK` |
+| `rigid`                  | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` (scale 0.9) |
+| `soft`                   | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` (scale 0.3) |
+| `notificationSuccess`    | ✅ | ✅ | |
+| `notificationWarning`    | ✅ | ✅ | |
+| `notificationError`      | ✅ | ✅ | |
+| `selection`              | ✅ | ✅ | |
+| `confirm`                | ✅ | ✅ | Android API 30+: `CONFIRM`; fallback waveform on older |
+| `reject`                 | ✅ | ✅ | Android API 30+: `REJECT`; fallback waveform on older |
+| `gestureStart`           | ✅ | ✅ | Android API 30+: `GESTURE_START`; fallback waveform on older |
+| `gestureEnd`             | ✅ | ✅ | Android API 30+: `GESTURE_END`; fallback waveform on older |
+| `segmentTick`            | ✅ | ✅ | Android API 30+: `SEGMENT_TICK`; fallback waveform on older |
+| `segmentFrequentTick`    | ✅ | ✅ | Android API 30+: `SEGMENT_FREQUENT_TICK`; fallback waveform on older |
+| `toggleOn`               | ✅ | ✅ | Android API 30+: `TOGGLE_ON`; fallback waveform on older |
+| `toggleOff`              | ✅ | ✅ | Android API 30+: `TOGGLE_OFF`; fallback waveform on older |
+| `clockTick`              | ✅ | ❌ | |
+| `contextClick`           | ✅ | ❌ | |
+| `keyboardPress`          | ✅ | ❌ | |
+| `keyboardRelease`        | ✅ | ❌ | |
+| `keyboardTap`            | ✅ | ❌ | |
+| `longPress`              | ✅ | ❌ | |
+| `textHandleMove`         | ✅ | ❌ | |
+| `virtualKey`             | ✅ | ❌ | |
+| `virtualKeyRelease`      | ✅ | ❌ | |
+| `effectClick`            | ✅ | ❌ | API 29+ |
+| `effectDoubleClick`      | ✅ | ❌ | API 29+ |
+| `effectHeavyClick`       | ✅ | ❌ | API 29+ |
+| `effectTick`             | ✅ | ❌ | API 29+ |
 
 ---
 
@@ -236,15 +284,17 @@ jest.mock('react-native-haptic-feedback');
 2. **React Native minimum is 0.71** — update your peer dependency if needed.
 3. The internal `DeviceUtils` class is removed — if you referenced it directly, remove those imports.
 4. `enableVibrateFallback` on devices without Core Haptics now calls `kSystemSoundID_Vibrate` instead of the UIKit generator path.
+5. `pattern()` now throws a `TypeError` for invalid characters instead of silently ignoring them.
 
 ### Upgrade steps
 
 ```bash
-npm install react-native-haptic-feedback@3
+# Pre-release (recommended for testing)
+npm install react-native-haptic-feedback@next
 cd ios && pod install
 ```
 
-All existing `trigger()` call-sites continue to work without changes.
+All existing `trigger()` call-sites continue to work without changes. The new `confirm`, `reject`, `gestureStart/End`, `segmentTick/FrequentTick`, `toggleOn/Off` types are additive.
 
 ---
 

@@ -122,16 +122,31 @@ RNHapticFeedback.playAHAP(fileName: string): Promise<void>
 
 Place `.ahap` files in `<bundle>/haptics/` or the bundle root. Pass the file name without path prefix.
 
+For cross-platform usage, prefer `playHaptic` below.
+
+### `playHaptic(ahapFile, fallback, options?)`
+
+Cross-platform wrapper for AHAP playback. Plays the `.ahap` file on iOS and falls back to a `triggerPattern` call on Android.
+
+```typescript
+import { playHaptic, pattern } from 'react-native-haptic-feedback';
+
+// iOS: plays my-effect.ahap
+// Android: plays the fallback pattern
+await playHaptic('my-effect.ahap', pattern('oO.O'));
+```
+
 ### `getSystemHapticStatus()`
 
-Android only: returns the device's current ringer mode and whether vibration is available.
+Returns the device's haptic availability and — on Android — current ringer mode.
 
 ```typescript
 RNHapticFeedback.getSystemHapticStatus(): Promise<SystemHapticStatus>
 
 interface SystemHapticStatus {
   vibrationEnabled: boolean;
-  ringerMode: 'silent' | 'vibrate' | 'normal';
+  /** Android: 'silent' | 'vibrate' | 'normal'. iOS: null (not exposed by the OS). */
+  ringerMode: 'silent' | 'vibrate' | 'normal' | null;
 }
 ```
 
@@ -246,19 +261,19 @@ import { TouchableHaptic } from "react-native-haptic-feedback";
 | `segmentFrequentTick`    | ✅ | ✅ | Android API 30+: `SEGMENT_FREQUENT_TICK`; fallback waveform on older |
 | `toggleOn`               | ✅ | ✅ | Android API 30+: `TOGGLE_ON`; fallback waveform on older |
 | `toggleOff`              | ✅ | ✅ | Android API 30+: `TOGGLE_OFF`; fallback waveform on older |
-| `clockTick`              | ✅ | ❌ | |
-| `contextClick`           | ✅ | ❌ | |
-| `keyboardPress`          | ✅ | ❌ | |
-| `keyboardRelease`        | ✅ | ❌ | |
-| `keyboardTap`            | ✅ | ❌ | |
-| `longPress`              | ✅ | ❌ | |
-| `textHandleMove`         | ✅ | ❌ | |
-| `virtualKey`             | ✅ | ❌ | |
-| `virtualKeyRelease`      | ✅ | ❌ | |
-| `effectClick`            | ✅ | ❌ | API 29+ |
-| `effectDoubleClick`      | ✅ | ❌ | API 29+ |
-| `effectHeavyClick`       | ✅ | ❌ | API 29+ |
-| `effectTick`             | ✅ | ❌ | API 29+ |
+| `clockTick`              | ✅ | ✅ | iOS: Core Haptics approximation |
+| `contextClick`           | ✅ | ✅ | iOS: Core Haptics approximation |
+| `keyboardPress`          | ✅ | ✅ | iOS: Core Haptics approximation |
+| `keyboardRelease`        | ✅ | ✅ | iOS: Core Haptics approximation |
+| `keyboardTap`            | ✅ | ✅ | iOS: Core Haptics approximation |
+| `longPress`              | ✅ | ✅ | iOS: Core Haptics approximation |
+| `textHandleMove`         | ✅ | ✅ | iOS: Core Haptics approximation |
+| `virtualKey`             | ✅ | ✅ | iOS: Core Haptics approximation |
+| `virtualKeyRelease`      | ✅ | ✅ | iOS: Core Haptics approximation |
+| `effectClick`            | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
+| `effectDoubleClick`      | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
+| `effectHeavyClick`       | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
+| `effectTick`             | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
 
 ---
 

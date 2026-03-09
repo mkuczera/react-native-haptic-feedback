@@ -136,6 +136,31 @@ RCT_EXPORT_MODULE();
             [self makeTransientEvent:0    intensity:0.6 sharpness:0.6],
             [self makeTransientEvent:0.08 intensity:0.3 sharpness:0.4],
         ];
+    } else if ([type isEqual:@"clockTick"]) {
+        return @[[self makeTransientEvent:0 intensity:0.25 sharpness:0.9]];
+    } else if ([type isEqual:@"contextClick"]) {
+        return @[[self makeTransientEvent:0 intensity:0.4 sharpness:0.5]];
+    } else if ([type isEqual:@"keyboardPress"] || [type isEqual:@"virtualKey"]) {
+        return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.7]];
+    } else if ([type isEqual:@"keyboardRelease"] || [type isEqual:@"virtualKeyRelease"]) {
+        return @[[self makeTransientEvent:0 intensity:0.2 sharpness:0.5]];
+    } else if ([type isEqual:@"keyboardTap"]) {
+        return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.7]];
+    } else if ([type isEqual:@"longPress"]) {
+        return @[[self makeTransientEvent:0 intensity:0.7 sharpness:0.3]];
+    } else if ([type isEqual:@"textHandleMove"]) {
+        return @[[self makeTransientEvent:0 intensity:0.15 sharpness:0.4]];
+    } else if ([type isEqual:@"effectClick"]) {
+        return @[[self makeTransientEvent:0 intensity:0.5 sharpness:0.6]];
+    } else if ([type isEqual:@"effectDoubleClick"]) {
+        return @[
+            [self makeTransientEvent:0    intensity:0.5 sharpness:0.6],
+            [self makeTransientEvent:0.05 intensity:0.5 sharpness:0.6],
+        ];
+    } else if ([type isEqual:@"effectHeavyClick"]) {
+        return @[[self makeTransientEvent:0 intensity:1.0 sharpness:0.7]];
+    } else if ([type isEqual:@"effectTick"]) {
+        return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.8]];
     } else {
         // selection and any unrecognised type
         return @[[self makeTransientEvent:0 intensity:0.2 sharpness:0.5]];
@@ -326,7 +351,7 @@ RCT_EXPORT_METHOD(getSystemHapticStatus:(RCTPromiseResolveBlock)resolve
     }
     resolve(@{
         @"vibrationEnabled": @(vibrationEnabled),
-        @"ringerMode": @"normal",
+        @"ringerMode": [NSNull null],
     });
 }
 

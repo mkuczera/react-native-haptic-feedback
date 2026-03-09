@@ -6,6 +6,7 @@ export { Patterns } from "./presets";
 export * from "./types";
 export { pattern };
 export { PATTERN_CHARS } from "./utils/pattern";
+export { playHaptic } from "./utils/playHaptic";
 export { TouchableHaptic } from "./components/TouchableHaptic";
 export type { TouchableHapticProps } from "./components/TouchableHaptic";
 export const { trigger, stop, isSupported, triggerPattern, playAHAP, getSystemHapticStatus } = RNHapticFeedback;

@@ -52,6 +52,43 @@ if (![...input].every(c => PATTERN_CHARS.has(c as PatternChar))) {
 pattern('oX'); // TypeError: pattern(): invalid character "X" at position 1
 ```
 
+#### `playHaptic` cross-platform bridge
+New utility that replaces the iOS-only `playAHAP` for cross-platform use:
+```typescript
+import { playHaptic, pattern } from 'react-native-haptic-feedback';
+
+// iOS: plays the .ahap file
+// Android: plays the fallback pattern
+await playHaptic('my-effect.ahap', pattern('oO.O'));
+```
+`playAHAP` remains available for iOS-specific use cases.
+
+#### All haptic types now work on both platforms
+The 13 types that previously had no iOS mapping (falling through to a generic fallback) now have sensible Core Haptics approximations:
+
+| Type | iOS mapping |
+|---|---|
+| `clockTick` | Sharp subtle tick (0.25/0.9) |
+| `contextClick` | Soft medium click (0.4/0.5) |
+| `keyboardPress` / `virtualKey` | Light crisp impact (0.3/0.7) |
+| `keyboardRelease` / `virtualKeyRelease` | Very light (0.2/0.5) |
+| `keyboardTap` | Light crisp impact (0.3/0.7) |
+| `longPress` | Heavy diffuse impact (0.7/0.3) |
+| `textHandleMove` | Very subtle movement (0.15/0.4) |
+| `effectClick` | Standard click (0.5/0.6) |
+| `effectDoubleClick` | Two clicks at 0ms + 50ms |
+| `effectHeavyClick` | Strong heavy impact (1.0/0.7) |
+| `effectTick` | Light sharp tick (0.3/0.8) |
+
+#### `getSystemHapticStatus` — honest iOS response
+`ringerMode` is now `null` on iOS (was hardcoded `"normal"`). iOS has no public API to read ringer state. The `SystemHapticStatus` type is updated accordingly:
+```typescript
+interface SystemHapticStatus {
+  vibrationEnabled: boolean;
+  ringerMode: 'silent' | 'vibrate' | 'normal' | null; // null on iOS
+}
+```
+
 ### Bug Fixes (since 3.0.0 draft)
 
 - **Android**: `VibrateWithHapticConstant` was passing `HapticFeedbackConstants` integers (e.g. `CLOCK_TICK = 4`) as millisecond durations — device would buzz for 4 ms. Fixed by replacing with a hidden 0×0 `View` that calls `view.performHapticFeedback(constant)` on the UI thread. All view-based haptic types now produce the correct system-defined feel.

@@ -54,5 +54,9 @@ export interface HapticEvent {
 export interface SystemHapticStatus {
   /** true if device has vibrator and is not in silent mode */
   vibrationEnabled: boolean;
-  ringerMode: 'silent' | 'vibrate' | 'normal';
+  /**
+   * Android: current ringer mode.
+   * iOS: always null — iOS does not expose ringer mode via public APIs.
+   */
+  ringerMode: 'silent' | 'vibrate' | 'normal' | null;
 }

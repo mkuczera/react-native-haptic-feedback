@@ -6,6 +6,7 @@
  */
 
 import { pattern as realPattern } from '../utils/pattern';
+import { playHaptic as realPlayHaptic } from '../utils/playHaptic';
 import { Patterns as realPatterns } from '../presets';
 
 export const trigger = jest.fn();
@@ -23,6 +24,7 @@ export const useHaptics = jest.fn().mockReturnValue({
   isSupported,
 });
 export const pattern = jest.fn().mockImplementation(realPattern);
+export const playHaptic = jest.fn().mockImplementation(realPlayHaptic);
 export const Patterns = realPatterns;
 
 const RNHapticFeedback = {

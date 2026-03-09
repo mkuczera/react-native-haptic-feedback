@@ -249,20 +249,14 @@ RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
             return;
         }
 
-        // Search in <bundle>/haptics/ then bundle root
-        NSArray<NSString *> *searchPaths = @[
-            [NSString stringWithFormat:@"haptics/%@", fileName],
-            fileName,
-        ];
-
-        NSURL *fileURL = nil;
-        for (NSString *path in searchPaths) {
-            NSString *fullPath = [[NSBundle mainBundle] pathForResource:path ofType:nil];
-            if (fullPath) {
-                fileURL = [NSURL fileURLWithPath:fullPath];
-                break;
-            }
+        // Search in <bundle>/haptics/ subdirectory first, then bundle root
+        NSString *fullPath = [[NSBundle mainBundle] pathForResource:fileName
+                                                             ofType:nil
+                                                        inDirectory:@"haptics"];
+        if (!fullPath) {
+            fullPath = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
         }
+        NSURL *fileURL = fullPath ? [NSURL fileURLWithPath:fullPath] : nil;
 
         if (!fileURL) {
             reject(@"file_not_found", [NSString stringWithFormat:@"AHAP file not found: %@", fileName], nil);

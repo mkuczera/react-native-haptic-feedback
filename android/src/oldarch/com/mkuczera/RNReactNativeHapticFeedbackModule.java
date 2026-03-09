@@ -28,7 +28,7 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
 
     @ReactMethod
     public void stop() {
-        RNReactNativeHapticFeedbackModuleImpl.stop();
+        RNReactNativeHapticFeedbackModuleImpl.stop(this.reactContext);
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)

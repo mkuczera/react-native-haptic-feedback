@@ -46,8 +46,9 @@ public class RNReactNativeHapticFeedbackModuleImpl {
       targetVibration.apply(v);
     }
 
-    public static void stop() {
-        // Android vibrations are fire-and-forget; nothing to cancel
+    public static void stop(ReactApplicationContext reactContext) {
+        Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+        if (v != null) v.cancel();
     }
 
     public static boolean isSupported(ReactApplicationContext reactContext) {

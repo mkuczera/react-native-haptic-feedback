@@ -29,7 +29,7 @@ public class RNReactNativeHapticFeedbackModule extends NativeHapticFeedbackSpec 
 
     @Override
     public void stop() {
-        RNReactNativeHapticFeedbackModuleImpl.stop();
+        RNReactNativeHapticFeedbackModuleImpl.stop(this.reactContext);
     }
 
     @Override

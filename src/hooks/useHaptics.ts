@@ -1,15 +1,20 @@
+import { useMemo } from "react";
 import RNHapticFeedback from "../hapticFeedback";
 import type { HapticOptions, HapticEvent, HapticFeedbackTypes } from "../types";
 
 /**
  * React hook that provides haptic feedback methods with optional default options.
+ * Returns a stable object — methods only change when the option values change.
  *
  * @example
  * const haptics = useHaptics({ enableVibrateFallback: true });
  * haptics.trigger('impactMedium');
  */
 export function useHaptics(defaultOptions?: HapticOptions) {
-  return {
+  const enableVibrateFallback = defaultOptions?.enableVibrateFallback;
+  const ignoreAndroidSystemSettings = defaultOptions?.ignoreAndroidSystemSettings;
+
+  return useMemo(() => ({
     trigger(
       type: keyof typeof HapticFeedbackTypes | HapticFeedbackTypes,
       opts?: HapticOptions,
@@ -28,5 +33,6 @@ export function useHaptics(defaultOptions?: HapticOptions) {
     isSupported(): boolean {
       return RNHapticFeedback.isSupported();
     },
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [enableVibrateFallback, ignoreAndroidSystemSettings]);
 }

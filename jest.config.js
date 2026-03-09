@@ -11,6 +11,10 @@ module.exports = {
     ],
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  moduleNameMapper: {
+    "^react$": "<rootDir>/example/node_modules/react",
+    "^react/jsx-runtime$": "<rootDir>/example/node_modules/react/jsx-runtime",
+  },
   modulePathIgnorePatterns: [
     "<rootDir>/example/node_modules",
     "<rootDir>/lib/",

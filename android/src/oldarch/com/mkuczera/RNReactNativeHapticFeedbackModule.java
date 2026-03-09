@@ -14,6 +14,7 @@ public class RNReactNativeHapticFeedbackModule extends ReactContextBaseJavaModul
     RNReactNativeHapticFeedbackModule(ReactApplicationContext context) {
         super(context);
         this.reactContext = context;
+        RNReactNativeHapticFeedbackModuleImpl.initHapticView(context.getCurrentActivity());
     }
 
     @Override

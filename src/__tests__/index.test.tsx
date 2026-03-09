@@ -175,8 +175,9 @@ describe("pattern()", () => {
     expect(events[2]!.time).toBe(100);
   });
 
-  it("unknown characters are ignored", () => {
-    expect(pattern("x?!")).toEqual([]);
+  it("throws TypeError for unknown characters", () => {
+    expect(() => pattern("x?!")).toThrow(TypeError);
+    expect(() => pattern("x?!")).toThrow(/invalid character/);
   });
 
   it("combined gaps accumulate", () => {

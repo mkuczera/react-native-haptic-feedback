@@ -21,12 +21,23 @@ export enum HapticFeedbackTypes {
   effectDoubleClick = "effectDoubleClick",
   effectHeavyClick = "effectHeavyClick",
   effectTick = "effectTick",
+  confirm = "confirm",
+  reject = "reject",
+  gestureStart = "gestureStart",
+  gestureEnd = "gestureEnd",
+  segmentTick = "segmentTick",
+  segmentFrequentTick = "segmentFrequentTick",
+  toggleOn = "toggleOn",
+  toggleOff = "toggleOff",
 }
 
 export interface HapticOptions {
   enableVibrateFallback?: boolean;
   ignoreAndroidSystemSettings?: boolean;
 }
+
+/** A single allowed character in a pattern notation string. */
+export type PatternChar = 'o' | 'O' | '.' | '-' | '=';
 
 export interface HapticEvent {
   /** Time offset from pattern start in milliseconds */

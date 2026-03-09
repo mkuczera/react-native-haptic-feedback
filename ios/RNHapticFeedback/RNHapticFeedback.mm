@@ -109,6 +109,33 @@ RCT_EXPORT_MODULE();
             [self makeTransientEvent:0.1  intensity:0.6 sharpness:0.4],
             [self makeTransientEvent:0.2  intensity:0.8 sharpness:0.5],
         ];
+    } else if ([type isEqual:@"confirm"]) {
+        return @[
+            [self makeTransientEvent:0    intensity:0.5 sharpness:0.5],
+            [self makeTransientEvent:0.1  intensity:1.0 sharpness:0.7],
+        ];
+    } else if ([type isEqual:@"reject"]) {
+        return @[
+            [self makeTransientEvent:0    intensity:1.0 sharpness:0.7],
+            [self makeTransientEvent:0.1  intensity:0.7 sharpness:0.5],
+            [self makeTransientEvent:0.2  intensity:0.4 sharpness:0.3],
+        ];
+    } else if ([type isEqual:@"gestureStart"]) {
+        return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.6]];
+    } else if ([type isEqual:@"gestureEnd"]) {
+        return @[[self makeTransientEvent:0 intensity:0.5 sharpness:0.6]];
+    } else if ([type isEqual:@"segmentTick"] || [type isEqual:@"segmentFrequentTick"]) {
+        return @[[self makeTransientEvent:0 intensity:0.2 sharpness:0.9]];
+    } else if ([type isEqual:@"toggleOn"]) {
+        return @[
+            [self makeTransientEvent:0    intensity:0.3 sharpness:0.4],
+            [self makeTransientEvent:0.08 intensity:0.6 sharpness:0.6],
+        ];
+    } else if ([type isEqual:@"toggleOff"]) {
+        return @[
+            [self makeTransientEvent:0    intensity:0.6 sharpness:0.6],
+            [self makeTransientEvent:0.08 intensity:0.3 sharpness:0.4],
+        ];
     } else {
         // selection and any unrecognised type
         return @[[self makeTransientEvent:0 intensity:0.2 sharpness:0.5]];

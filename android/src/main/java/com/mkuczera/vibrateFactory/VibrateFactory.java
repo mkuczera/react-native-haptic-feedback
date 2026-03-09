@@ -6,7 +6,6 @@ import java.util.HashMap;
 import android.os.Build;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
-import android.view.HapticFeedbackConstants;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -38,15 +37,25 @@ public class VibrateFactory {
             vibrateMap.put("soft",    new VibrateWithDuration(new long[]{0, 10}));
             vibrateMap.put("selection", new VibrateWithDuration(new long[]{0, 10}));
         }
-        vibrateMap.put("clockTick", new VibrateWithHapticConstant(HapticFeedbackConstants.CLOCK_TICK));
-        vibrateMap.put("contextClick", new VibrateWithHapticConstant(HapticFeedbackConstants.CONTEXT_CLICK));
-        vibrateMap.put("keyboardPress", new VibrateWithHapticConstant(HapticFeedbackConstants.KEYBOARD_PRESS));
-        vibrateMap.put("keyboardRelease", new VibrateWithHapticConstant(HapticFeedbackConstants.KEYBOARD_RELEASE));
-        vibrateMap.put("keyboardTap", new VibrateWithHapticConstant(HapticFeedbackConstants.KEYBOARD_TAP));
-        vibrateMap.put("longPress", new VibrateWithHapticConstant(HapticFeedbackConstants.LONG_PRESS));
-        vibrateMap.put("textHandleMove", new VibrateWithHapticConstant(HapticFeedbackConstants.TEXT_HANDLE_MOVE));
-        vibrateMap.put("virtualKey", new VibrateWithHapticConstant(HapticFeedbackConstants.VIRTUAL_KEY));
-        vibrateMap.put("virtualKeyRelease", new VibrateWithHapticConstant(HapticFeedbackConstants.VIRTUAL_KEY_RELEASE));
+        // Haptic-constant type fallbacks (used when hidden view not available)
+        vibrateMap.put("clockTick",             new VibrateWithDuration(new long[]{0, 15}));
+        vibrateMap.put("contextClick",          new VibrateWithDuration(new long[]{0, 20}));
+        vibrateMap.put("keyboardPress",         new VibrateWithDuration(new long[]{0, 20}));
+        vibrateMap.put("keyboardRelease",       new VibrateWithDuration(new long[]{0, 10}));
+        vibrateMap.put("keyboardTap",           new VibrateWithDuration(new long[]{0, 20}));
+        vibrateMap.put("longPress",             new VibrateWithDuration(new long[]{0, 40}));
+        vibrateMap.put("textHandleMove",        new VibrateWithDuration(new long[]{0, 10}));
+        vibrateMap.put("virtualKey",            new VibrateWithDuration(new long[]{0, 20}));
+        vibrateMap.put("virtualKeyRelease",     new VibrateWithDuration(new long[]{0, 10}));
+        // New API 30+ types — fallback waveforms for pre-30 devices
+        vibrateMap.put("confirm",              new VibrateWithDuration(new long[]{0, 40, 60, 20}));
+        vibrateMap.put("reject",               new VibrateWithDuration(new long[]{0, 60, 40, 30}));
+        vibrateMap.put("gestureStart",         new VibrateWithDuration(new long[]{0, 15}));
+        vibrateMap.put("gestureEnd",           new VibrateWithDuration(new long[]{0, 20}));
+        vibrateMap.put("segmentTick",          new VibrateWithDuration(new long[]{0, 10}));
+        vibrateMap.put("segmentFrequentTick",  new VibrateWithDuration(new long[]{0, 8}));
+        vibrateMap.put("toggleOn",             new VibrateWithDuration(new long[]{0, 15, 30, 25}));
+        vibrateMap.put("toggleOff",            new VibrateWithDuration(new long[]{0, 25, 30, 15}));
         vibrateMap.put("effectClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_CLICK));
         vibrateMap.put("effectDoubleClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_DOUBLE_CLICK));
         vibrateMap.put("effectHeavyClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_HEAVY_CLICK));

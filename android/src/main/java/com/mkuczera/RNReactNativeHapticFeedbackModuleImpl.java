@@ -1,49 +1,92 @@
 package com.mkuczera;
 
+import android.app.Activity;
+import android.os.Build;
 import android.os.Vibrator;
 import android.content.Context;
-import android.provider.Settings;
 import android.media.AudioManager;
+import android.view.HapticFeedbackConstants;
+import android.view.View;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import com.mkuczera.vibrateFactory.VibrateFactory;
 import com.mkuczera.vibrateFactory.Vibrate;
 
-import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.UiThreadUtil;
 
 public class RNReactNativeHapticFeedbackModuleImpl {
 
     public static final String NAME = "RNHapticFeedback";
 
+    private static WeakReference<View> sHapticView = new WeakReference<>(null);
+
+    private static final Map<String, Integer> VIEW_HAPTIC_MAP = new HashMap<>();
+    static {
+        VIEW_HAPTIC_MAP.put("clockTick",         HapticFeedbackConstants.CLOCK_TICK);
+        VIEW_HAPTIC_MAP.put("contextClick",      HapticFeedbackConstants.CONTEXT_CLICK);
+        VIEW_HAPTIC_MAP.put("keyboardPress",     HapticFeedbackConstants.KEYBOARD_PRESS);
+        VIEW_HAPTIC_MAP.put("keyboardRelease",   HapticFeedbackConstants.KEYBOARD_RELEASE);
+        VIEW_HAPTIC_MAP.put("keyboardTap",       HapticFeedbackConstants.KEYBOARD_TAP);
+        VIEW_HAPTIC_MAP.put("longPress",         HapticFeedbackConstants.LONG_PRESS);
+        VIEW_HAPTIC_MAP.put("textHandleMove",    HapticFeedbackConstants.TEXT_HANDLE_MOVE);
+        VIEW_HAPTIC_MAP.put("virtualKey",        HapticFeedbackConstants.VIRTUAL_KEY);
+        VIEW_HAPTIC_MAP.put("virtualKeyRelease", HapticFeedbackConstants.VIRTUAL_KEY_RELEASE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            VIEW_HAPTIC_MAP.put("confirm",              HapticFeedbackConstants.CONFIRM);
+            VIEW_HAPTIC_MAP.put("reject",               HapticFeedbackConstants.REJECT);
+            VIEW_HAPTIC_MAP.put("gestureStart",         HapticFeedbackConstants.GESTURE_START);
+            VIEW_HAPTIC_MAP.put("gestureEnd",           HapticFeedbackConstants.GESTURE_END);
+            VIEW_HAPTIC_MAP.put("segmentTick",          HapticFeedbackConstants.SEGMENT_TICK);
+            VIEW_HAPTIC_MAP.put("segmentFrequentTick",  HapticFeedbackConstants.SEGMENT_FREQUENT_TICK);
+            VIEW_HAPTIC_MAP.put("toggleOn",             HapticFeedbackConstants.TOGGLE_ON);
+            VIEW_HAPTIC_MAP.put("toggleOff",            HapticFeedbackConstants.TOGGLE_OFF);
+        }
+    }
+
+    public static void initHapticView(final Activity activity) {
+        if (activity == null || sHapticView.get() != null) return;
+        UiThreadUtil.runOnUiThread(() -> {
+            View v = new View(activity);
+            v.setHapticFeedbackEnabled(true);
+            ((android.view.ViewGroup) activity.getWindow().getDecorView())
+                .addView(v, new android.view.ViewGroup.LayoutParams(0, 0));
+            sHapticView = new WeakReference<>(v);
+        });
+    }
+
     public static boolean isVibrationEnabled(Context context) {
-      Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-      AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-      boolean hasVibrator = vibrator != null && vibrator.hasVibrator();
-      boolean isVolumeOn = audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT;
-      boolean isVibrateMode = audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE;
+        boolean hasVibrator = vibrator != null && vibrator.hasVibrator();
+        boolean isVolumeOn = audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT;
+        boolean isVibrateMode = audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE;
 
-      return hasVibrator && (isVolumeOn || isVibrateMode);
-   }
+        return hasVibrator && (isVolumeOn || isVibrateMode);
+    }
 
     public static void trigger(ReactApplicationContext reactContext, String type, ReadableMap options) {
-      boolean ignoreAndroidSystemSettings = options.getBoolean("ignoreAndroidSystemSettings");
-      boolean isVibrationEnabled = isVibrationEnabled(reactContext);
+        boolean ignoreAndroidSystemSettings = options.getBoolean("ignoreAndroidSystemSettings");
+        if (!ignoreAndroidSystemSettings && !isVibrationEnabled(reactContext)) return;
 
-      if (ignoreAndroidSystemSettings == false && !isVibrationEnabled) return;
-      Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
-      Vibrate targetVibration = VibrateFactory.getVibration(type);
+        final Integer hapticConstant = VIEW_HAPTIC_MAP.get(type);
+        final View view = sHapticView.get();
+        if (hapticConstant != null && view != null) {
+            UiThreadUtil.runOnUiThread(() -> view.performHapticFeedback(hapticConstant));
+            return;
+        }
 
-      if (v == null || targetVibration == null) return;
-
-      targetVibration.apply(v);
+        Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrate targetVibration = VibrateFactory.getVibration(type);
+        if (v == null || targetVibration == null) return;
+        targetVibration.apply(v);
     }
 
     public static void stop(ReactApplicationContext reactContext) {

@@ -313,6 +313,42 @@ All existing `trigger()` call-sites continue to work without changes. The new `c
 
 ---
 
+## Comparison with other libraries
+
+| Feature | **react-native-haptic-feedback** | [expo-haptics] | [react-native-nitro-haptics] | [@candlefinance/haptics] | [expo-ahap] |
+|---|:---:|:---:|:---:|:---:|:---:|
+| iOS (Core Haptics) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Android | ✅ | ✅ | ✅ | ⚠️ basic | ❌ |
+| Web | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Haptic types (count) | **27+** | 10 | 10 | 10 | — |
+| Same types on both platforms | ✅ | ✅ | ✅ | ⚠️ | ❌ |
+| Custom pattern API | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Pattern notation string | ✅ `oO.O` | ❌ | ❌ | ✅ | ❌ |
+| AHAP file playback | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Cross-platform `playHaptic` | ✅ | ❌ | ❌ | ❌ | ❌ |
+| `useHaptics` React hook | ✅ | ❌ | ❌ | ❌ | ❌ |
+| `TouchableHaptic` component | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Global enable / disable | ✅ | ❌ | ❌ | ❌ | ❌ |
+| System haptic status query | ✅ | ❌ | ❌ | ❌ | ❌ |
+| TypeScript (full) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Compile-time pattern check | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Built-in Jest mock | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Old + New Architecture | ✅ | ✅ | ❌ New only | ✅ | ✅ |
+
+[expo-haptics]: https://docs.expo.dev/versions/latest/sdk/haptics/
+[react-native-nitro-haptics]: https://github.com/oblador/react-native-nitro-haptics
+[@candlefinance/haptics]: https://github.com/candlefinance/haptics
+[expo-ahap]: https://github.com/EvanBacon/expo-ahap
+
+**When to choose something else:**
+
+- **expo-haptics** — you only need the basic 3 impact/notification/selection categories and want official Expo SDK + web support.
+- **react-native-nitro-haptics** — you are on New Architecture only and want the lowest possible latency via Nitro modules.
+- **@candlefinance/haptics** — you need AHAP playback combined with a pattern notation API and primarily target iOS.
+- **expo-ahap** — you only need to play `.ahap` files and nothing else.
+
+---
+
 ## Acknowledgements
 
 - [**expo-ahap**](https://github.com/EvanBacon/expo-ahap) by [@EvanBacon](https://github.com/EvanBacon) — the `AhapType` TypeScript definitions exported by this library are modelled after the types in expo-ahap.

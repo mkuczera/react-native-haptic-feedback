@@ -39,6 +39,5 @@ export function useHaptics(defaultOptions?: HapticOptions) {
     getSystemHapticStatus: RNHapticFeedback.getSystemHapticStatus,
     /** @platform ios */
     playAHAP: RNHapticFeedback.playAHAP,
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [enableVibrateFallback, ignoreAndroidSystemSettings]);
 }

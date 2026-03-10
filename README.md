@@ -81,7 +81,7 @@ RNHapticFeedback.trigger(type: HapticFeedbackTypes | string, options?: HapticOpt
 
 | Option | Default | Description |
 |---|---|---|
-| `enableVibrateFallback` | `false` | iOS: use `AudioServicesPlaySystemSound` if Core Haptics not supported |
+| `enableVibrateFallback` | `false` | iOS: play `AudioServicesPlaySystemSound` as a last resort on devices with no Taptic Engine (e.g. iPod touch). Has no effect on devices that have a Taptic Engine — those use UIKit generators automatically. |
 | `ignoreAndroidSystemSettings` | `false` | Android: trigger even if vibration is disabled in system settings |
 
 ### `stop()`
@@ -280,6 +280,56 @@ import { TouchableHaptic } from "react-native-haptic-feedback";
 | `effectDoubleClick`      | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
 | `effectHeavyClick`       | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
 | `effectTick`             | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
+
+---
+
+## Platform internals
+
+Understanding how each haptic type is rendered helps when diagnosing unexpected behaviour on specific devices.
+
+### iOS — three-tier fallback chain
+
+Every `trigger()` call on iOS walks this chain and stops at the first tier that succeeds:
+
+| Tier | Hardware requirement | What fires |
+|---|---|---|
+| **1 — Core Haptics** | iPhone 8+ / iPad Pro (iOS 13+) | `CHHapticEngine` — full per-type patterns with custom intensity & sharpness |
+| **2 — UIKit generators** | Taptic Engine (iPhone 6s, 7, SE 1st gen on iOS 13+) | `UIImpactFeedbackGenerator` / `UINotificationFeedbackGenerator` / `UISelectionFeedbackGenerator` — per-type, semantically mapped |
+| **3 — Audio vibration** | Any device | `AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)` — **only fires if `enableVibrateFallback: true`** |
+
+Tier 3 exists for devices with no Taptic Engine at all (e.g. iPod touch 7th gen). On any device with a Taptic Engine, Tier 2 handles it and Tier 3 is unnecessary.
+
+**UIKit semantic mapping (Tier 2):**
+
+| UIKit generator | Types |
+|---|---|
+| `UINotificationFeedbackGenerator(.success)` | `notificationSuccess` |
+| `UINotificationFeedbackGenerator(.warning)` | `notificationWarning` |
+| `UINotificationFeedbackGenerator(.error)` | `notificationError`, `reject` |
+| `UIImpactFeedbackGenerator(.light)` | `impactLight`, `soft`, `effectTick`, `clockTick`, `gestureStart`, `segmentTick`, `segmentFrequentTick`, `textHandleMove` |
+| `UIImpactFeedbackGenerator(.medium)` | `impactMedium`, `confirm`, `toggleOn`, `toggleOff`, `effectClick`, `effectDoubleClick` and all other types |
+| `UIImpactFeedbackGenerator(.heavy)` | `impactHeavy`, `rigid`, `effectHeavyClick`, `longPress` |
+| `UISelectionFeedbackGenerator` | `selection`, `keyboardPress`, `keyboardRelease`, `keyboardTap`, `virtualKey`, `virtualKeyRelease`, `gestureEnd`, `contextClick` |
+
+### Android — two-tier fallback chain
+
+| Tier | API level | What fires |
+|---|---|---|
+| **1 — `performHapticFeedback`** | All (via `HapticFeedbackConstants`) | System-quality haptic constant through a hidden 0×0 View — respects user system settings unless `ignoreAndroidSystemSettings: true` |
+| **2 — Vibrator API** | API 21+ | `VibrationEffect.createWaveform` (API 26+) or raw waveform; API 31+ uses `VibrationEffect.Composition` primitives for richer quality |
+
+Tier 1 is skipped when `ignoreAndroidSystemSettings: true` (because `performHapticFeedback` cannot override system settings), falling directly to Tier 2.
+
+**Android API-level progression:**
+
+| API | Improvement |
+|---|---|
+| 21 | Raw waveform vibration |
+| 26 | `VibrationEffect.createWaveform` with per-step amplitudes |
+| 29 | `VibrationEffect.createPredefined` for `effect*` types |
+| 30 | `HapticFeedbackConstants` for `confirm`, `reject`, `gesture*`, `segment*` |
+| 31 | `VibrationEffect.Composition` primitives (richer impact feel) |
+| 34 | `HapticFeedbackConstants` for `toggleOn`, `toggleOff` |
 
 ---
 

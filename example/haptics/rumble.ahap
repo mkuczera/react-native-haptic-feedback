@@ -1,0 +1,31 @@
+{
+  "Version": 1.0,
+  "Metadata": {
+    "Project": "react-native-haptic-feedback",
+    "Description": "Rumble — continuous vibration that fades out, demonstrates ParameterCurve"
+  },
+  "Pattern": [
+    {
+      "Event": {
+        "EventType": "HapticContinuous",
+        "Time": 0.0,
+        "EventDuration": 0.8,
+        "EventParameters": [
+          { "ParameterID": "HapticIntensity", "ParameterValue": 1.0 },
+          { "ParameterID": "HapticSharpness", "ParameterValue": 0.1 }
+        ]
+      }
+    },
+    {
+      "ParameterCurve": {
+        "ParameterID": "HapticIntensityControl",
+        "Time": 0.0,
+        "ParameterCurveControlPoints": [
+          { "Time": 0.0, "ParameterValue": 1.0 },
+          { "Time": 0.4, "ParameterValue": 0.8 },
+          { "Time": 0.8, "ParameterValue": 0.0 }
+        ]
+      }
+    }
+  ]
+}

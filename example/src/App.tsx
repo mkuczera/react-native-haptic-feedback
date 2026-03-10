@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -17,6 +18,7 @@ import HapticFeedback, {
   TouchableHaptic,
   pattern,
   Patterns,
+  playHaptic,
 } from 'react-native-haptic-feedback';
 import type { HapticOptions, SystemHapticStatus } from 'react-native-haptic-feedback';
 
@@ -90,6 +92,29 @@ const HAPTIC_GROUPS: HapticGroup[] = [
       { label: 'Toggle On',        type: HapticFeedbackTypes.toggleOn },
       { label: 'Toggle Off',       type: HapticFeedbackTypes.toggleOff },
     ],
+  },
+];
+
+// AHAP test files — included in example/haptics/ and bundled via app.json resources.ios
+// playHaptic uses the file on iOS and falls back to the pattern on Android.
+const AHAP_FILES = [
+  {
+    name: 'heartbeat',
+    file: 'heartbeat.ahap',
+    fallback: pattern('oO'),
+    description: 'lub-dub double pulse',
+  },
+  {
+    name: 'rumble',
+    file: 'rumble.ahap',
+    fallback: pattern('O=O'),
+    description: 'continuous fade-out',
+  },
+  {
+    name: 'celebration',
+    file: 'celebration.ahap',
+    fallback: pattern('o.o.o.O'),
+    description: 'ascending burst',
   },
 ];
 
@@ -216,7 +241,9 @@ export default function App(): React.JSX.Element {
                 label={status.vibrationEnabled ? '✓ Vibration on' : '✗ Vibration off'}
                 color={status.vibrationEnabled ? '#22c55e' : '#ef4444'}
               />
-              <Badge label={`Ringer: ${status.ringerMode}`} color="#6366f1" />
+              {status.ringerMode !== null && (
+                <Badge label={`Ringer: ${status.ringerMode}`} color="#6366f1" />
+              )}
             </View>
           ) : (
             <Text style={[styles.hint, { color: textSecondary }]}>
@@ -267,6 +294,31 @@ export default function App(): React.JSX.Element {
               >
                 <Text style={styles.chipText}>{name}</Text>
                 <Text style={styles.chipSub}>{PRESET_NOTATIONS[name]}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </SectionCard>
+
+        {/* ── AHAP Files (iOS · fallback on Android) ── */}
+        <SectionCard title="AHAP Files  ·  iOS only" bg={cardBg} titleColor={textSecondary}>
+          <Text style={[styles.hint, { color: textSecondary, marginBottom: 10 }]}>
+            {Platform.OS === 'ios'
+              ? 'Playing .ahap files from the bundle haptics/ folder.'
+              : 'Android: fallback patterns are used instead of .ahap files.'}
+          </Text>
+          <View style={styles.chipWrap}>
+            {AHAP_FILES.map(({ name, file, fallback, description }) => (
+              <Pressable
+                key={name}
+                style={({ pressed }) => [
+                  styles.chip,
+                  styles.chipAhap,
+                  pressed && styles.chipPressed,
+                ]}
+                onPress={() => playHaptic(file, fallback, DEFAULT_OPTIONS)}
+              >
+                <Text style={styles.chipText}>{name}</Text>
+                <Text style={styles.chipSub}>{description}</Text>
               </Pressable>
             ))}
           </View>
@@ -471,6 +523,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   chipPreset: { backgroundColor: '#8b5cf6' },
+  chipAhap: { backgroundColor: '#f97316' },
   chipPressed: { opacity: 0.65 },
   chipText: { color: '#fff', fontSize: 13, fontWeight: '600' },
   chipSub: { color: 'rgba(255,255,255,0.75)', fontSize: 10, fontFamily: 'monospace', marginTop: 1 },

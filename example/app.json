@@ -9,7 +9,7 @@
   ],
   "resources": {
     "android": ["dist/res", "dist/main.android.jsbundle"],
-    "ios": ["dist/assets", "dist/main.ios.jsbundle"]
+    "ios": ["dist/assets", "dist/main.ios.jsbundle", "haptics"]
   },
   "android": {
     "package": "test.example"

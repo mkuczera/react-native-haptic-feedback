@@ -48,13 +48,15 @@ export type AssertValidPattern<S extends string> =
  */
 export function pattern<S extends string>(notation: S & AssertValidPattern<S>): HapticEvent[] {
   // Runtime validation
+  let pos = 0;
   for (const ch of notation) {
     if (!PATTERN_CHARS.has(ch as PatternChar)) {
       throw new TypeError(
-        `pattern(): invalid character "${ch}" at position ${[...notation].indexOf(ch)}. ` +
+        `pattern(): invalid character "${ch}" at position ${pos}. ` +
         `Allowed characters are: o O . - =`,
       );
     }
+    pos++;
   }
 
   const events: HapticEvent[] = [];

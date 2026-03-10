@@ -22,6 +22,7 @@ export async function playHaptic(
   fallback: HapticEvent[],
   options?: HapticOptions,
 ): Promise<void> {
+  if (!RNHapticFeedback.isEnabled()) return;
   if (Platform.OS === 'ios') {
     return RNHapticFeedback.playAHAP(ahapFile);
   }

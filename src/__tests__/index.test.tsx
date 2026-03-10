@@ -263,4 +263,137 @@ describe("useHaptics", () => {
       expect.objectContaining({ enableVibrateFallback: true }),
     );
   });
+
+  it("exposes setEnabled and isEnabled", () => {
+    const haptics = useHaptics();
+    expect(typeof haptics.setEnabled).toBe("function");
+    expect(typeof haptics.isEnabled).toBe("function");
+  });
+
+  it("exposes getSystemHapticStatus", () => {
+    const haptics = useHaptics();
+    expect(typeof haptics.getSystemHapticStatus).toBe("function");
+  });
+
+  it("exposes playAHAP", () => {
+    const haptics = useHaptics();
+    expect(typeof haptics.playAHAP).toBe("function");
+  });
 });
+
+// ─── setEnabled / isEnabled ──────────────────────────────────────────────────
+
+describe("setEnabled / isEnabled", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    RNHapticFeedback.setEnabled(true);
+  });
+
+  afterEach(() => {
+    RNHapticFeedback.setEnabled(true);
+  });
+
+  it("isEnabled() returns true by default", () => {
+    expect(RNHapticFeedback.isEnabled()).toBe(true);
+  });
+
+  it("setEnabled(false) makes isEnabled() return false", () => {
+    RNHapticFeedback.setEnabled(false);
+    expect(RNHapticFeedback.isEnabled()).toBe(false);
+  });
+
+  it("setEnabled(true) re-enables after disable", () => {
+    RNHapticFeedback.setEnabled(false);
+    RNHapticFeedback.setEnabled(true);
+    expect(RNHapticFeedback.isEnabled()).toBe(true);
+  });
+
+  it("trigger skips native when disabled", () => {
+    RNHapticFeedback.setEnabled(false);
+    RNHapticFeedback.trigger("impactMedium");
+    expect(NativeHapticFeedbackMock.trigger).not.toHaveBeenCalled();
+  });
+
+  it("triggerPattern skips native when disabled", () => {
+    RNHapticFeedback.setEnabled(false);
+    RNHapticFeedback.triggerPattern([{ time: 0, type: "transient" as const, intensity: 0.5, sharpness: 0.5 }]);
+    expect(NativeHapticFeedbackMock.triggerPattern).not.toHaveBeenCalled();
+  });
+
+  it("playAHAP skips native when disabled", async () => {
+    RNHapticFeedback.setEnabled(false);
+    await RNHapticFeedback.playAHAP("test.ahap");
+    expect(NativeHapticFeedbackMock.playAHAP).not.toHaveBeenCalled();
+  });
+
+  it("trigger resumes after re-enabling", () => {
+    RNHapticFeedback.setEnabled(false);
+    RNHapticFeedback.setEnabled(true);
+    RNHapticFeedback.trigger("impactMedium");
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalled();
+  });
+});
+
+// ─── error handling (native throws) ─────────────────────────────────────────
+
+describe("hapticFeedback error handling", () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+  afterEach(() => {
+    (console.warn as jest.Mock).mockRestore();
+  });
+
+  it("trigger catches native errors silently", () => {
+    NativeHapticFeedbackMock.trigger.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    expect(() => RNHapticFeedback.trigger("impactMedium")).not.toThrow();
+  });
+
+  it("stop catches native errors silently", () => {
+    NativeHapticFeedbackMock.stop.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    expect(() => RNHapticFeedback.stop()).not.toThrow();
+  });
+
+  it("isSupported returns false when native throws", () => {
+    NativeHapticFeedbackMock.isSupported.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    expect(RNHapticFeedback.isSupported()).toBe(false);
+  });
+
+  it("triggerPattern catches native errors silently", () => {
+    NativeHapticFeedbackMock.triggerPattern.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    expect(() => RNHapticFeedback.triggerPattern([])).not.toThrow();
+  });
+
+  it("playAHAP resolves (does not reject) when native throws", async () => {
+    NativeHapticFeedbackMock.playAHAP.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    await expect(RNHapticFeedback.playAHAP("test.ahap")).resolves.toBeUndefined();
+  });
+
+  it("getSystemHapticStatus returns fallback when native rejects", async () => {
+    NativeHapticFeedbackMock.getSystemHapticStatus.mockRejectedValueOnce(new Error("native unavailable"));
+    const status = await RNHapticFeedback.getSystemHapticStatus();
+    expect(status).toEqual({ vibrationEnabled: false, ringerMode: null });
+  });
+});
+
+// ─── pattern() position bug ──────────────────────────────────────────────────
+
+describe("pattern() error position", () => {
+  it("reports the correct position of the first invalid char", () => {
+    try {
+      pattern("oox" as string);
+    } catch (e) {
+      expect((e as TypeError).message).toMatch(/position 2/);
+    }
+  });
+
+  it("reports the correct position when invalid char appears twice (second occurrence)", () => {
+    try {
+      pattern("oxo" as string);
+    } catch (e) {
+      // 'x' is at index 1, not 0
+      expect((e as TypeError).message).toMatch(/position 1/);
+    }
+  });
+});
+

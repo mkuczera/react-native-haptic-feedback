@@ -26,6 +26,8 @@ export const useHaptics = jest.fn().mockReturnValue({
   isSupported,
   setEnabled,
   isEnabled,
+  getSystemHapticStatus,
+  playAHAP,
 });
 export const pattern = jest.fn().mockImplementation(realPattern);
 export const playHaptic = jest.fn().mockImplementation(realPlayHaptic);

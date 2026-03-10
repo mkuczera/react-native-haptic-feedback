@@ -6,6 +6,8 @@ global.__DEV__ = true;
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
   useMemo: (fn) => fn(),
+  // Return the callback directly so hooks work when components are called as plain functions in tests
+  useCallback: (fn) => fn,
 }));
 
 jest.mock("react-native/Libraries/BatchedBridge/NativeModules", () => ({

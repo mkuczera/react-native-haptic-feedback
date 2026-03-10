@@ -1,11 +1,20 @@
 import { pattern } from "./utils/pattern";
 import type { HapticEvent } from "./types";
 
+/** Union of all built-in preset names. */
+export type PatternName =
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'heartbeat'
+  | 'tripleClick'
+  | 'notification';
+
 /**
  * Named pattern presets for common haptic sequences.
  * Use with `RNHapticFeedback.triggerPattern(Patterns.success)`.
  */
-export const Patterns: Record<string, HapticEvent[]> = {
+export const Patterns: Record<PatternName, HapticEvent[]> = {
   /** Soft then strong — "good job" feel */
   success: pattern('oO.O'),
 

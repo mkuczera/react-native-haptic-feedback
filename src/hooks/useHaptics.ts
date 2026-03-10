@@ -33,6 +33,9 @@ export function useHaptics(defaultOptions?: HapticOptions) {
     isSupported(): boolean {
       return RNHapticFeedback.isSupported();
     },
+
+    setEnabled: RNHapticFeedback.setEnabled,
+    isEnabled: RNHapticFeedback.isEnabled,
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [enableVibrateFallback, ignoreAndroidSystemSettings]);
 }

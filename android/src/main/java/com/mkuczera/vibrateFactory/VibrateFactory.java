@@ -1,7 +1,9 @@
 package com.mkuczera.vibrateFactory;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.os.Build;
 import android.os.Vibrator;
@@ -70,18 +72,28 @@ public class VibrateFactory {
     public static void vibratePattern(Vibrator v, ReadableArray events) {
         if (events == null || events.size() == 0) return;
 
-        // Build parallel timing/amplitude arrays from the events
+        // Copy to list and sort by time so out-of-order input still produces correct gaps
+        int rawCount = events.size();
+        List<ReadableMap> sorted = new ArrayList<>(rawCount);
+        for (int i = 0; i < rawCount; i++) {
+            ReadableMap evt = events.getMap(i);
+            if (evt != null) sorted.add(evt);
+        }
+        sorted.sort((a, b) -> Double.compare(
+            a.hasKey("time") ? a.getDouble("time") : 0,
+            b.hasKey("time") ? b.getDouble("time") : 0
+        ));
+
+        // Build parallel timing/amplitude arrays from the sorted events
         // We interleave off-then-on durations for createWaveform
-        // Collect each event as (offsetMs, durationMs, amplitude)
-        int count = events.size();
+        int count = sorted.size();
         long[] timings = new long[count * 2];
         int[] amplitudes = new int[count * 2];
 
         long prevEnd = 0;
         int idx = 0;
 
-        for (int i = 0; i < count; i++) {
-            ReadableMap evt = events.getMap(i);
+        for (ReadableMap evt : sorted) {
             if (evt == null) continue;
 
             long timeMs = evt.hasKey("time") ? (long) evt.getDouble("time") : 0;

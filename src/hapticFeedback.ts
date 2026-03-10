@@ -7,13 +7,30 @@ const defaultOptions: Required<HapticOptions> = {
   ignoreAndroidSystemSettings: false,
 };
 
+let _enabled = true;
+
 const RNHapticFeedback = {
+  /**
+   * Enable or disable all haptic feedback library-wide.
+   * Useful for respecting a user's in-app haptics preference.
+   * The setting is in-memory only — persist it yourself if needed across sessions.
+   */
+  setEnabled(value: boolean): void {
+    _enabled = value;
+  },
+
+  /** Returns whether haptic feedback is currently enabled. */
+  isEnabled(): boolean {
+    return _enabled;
+  },
+
   trigger(
     type:
       | keyof typeof HapticFeedbackTypes
       | HapticFeedbackTypes = HapticFeedbackTypes.selection,
     options: HapticOptions = {},
   ): void {
+    if (!_enabled) return;
     try {
       NativeHapticFeedback.trigger(type, { ...defaultOptions, ...options });
     } catch {
@@ -38,6 +55,7 @@ const RNHapticFeedback = {
   },
 
   triggerPattern(events: HapticEvent[], options: HapticOptions = {}): void {
+    if (!_enabled) return;
     try {
       NativeHapticFeedback.triggerPattern(events, { ...defaultOptions, ...options });
     } catch {
@@ -56,6 +74,7 @@ const RNHapticFeedback = {
    * @platform ios
    */
   playAHAP(fileName: string): Promise<void> {
+    if (!_enabled) return Promise.resolve();
     try {
       return NativeHapticFeedback.playAHAP(fileName);
     } catch {

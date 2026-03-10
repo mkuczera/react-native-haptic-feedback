@@ -17,11 +17,15 @@ export const playAHAP = jest.fn().mockResolvedValue(undefined);
 export const getSystemHapticStatus = jest
   .fn()
   .mockResolvedValue({ vibrationEnabled: true, ringerMode: 'normal' });
+export const setEnabled = jest.fn();
+export const isEnabled = jest.fn().mockReturnValue(true);
 export const useHaptics = jest.fn().mockReturnValue({
   trigger,
   triggerPattern,
   stop,
   isSupported,
+  setEnabled,
+  isEnabled,
 });
 export const pattern = jest.fn().mockImplementation(realPattern);
 export const playHaptic = jest.fn().mockImplementation(realPlayHaptic);
@@ -34,6 +38,8 @@ const RNHapticFeedback = {
   triggerPattern,
   playAHAP,
   getSystemHapticStatus,
+  setEnabled,
+  isEnabled,
 };
 
 export default RNHapticFeedback;

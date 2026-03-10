@@ -8,7 +8,9 @@ import android.media.AudioManager;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.mkuczera.vibrateFactory.VibrateFactory;
 import com.mkuczera.vibrateFactory.Vibrate;
@@ -39,12 +41,16 @@ public class RNReactNativeHapticFeedbackModuleImpl {
         VIEW_HAPTIC_MAP.put("virtualKey",        HapticFeedbackConstants.VIRTUAL_KEY);
         VIEW_HAPTIC_MAP.put("virtualKeyRelease", HapticFeedbackConstants.VIRTUAL_KEY_RELEASE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // API 30 (Android 11)
             VIEW_HAPTIC_MAP.put("confirm",              HapticFeedbackConstants.CONFIRM);
             VIEW_HAPTIC_MAP.put("reject",               HapticFeedbackConstants.REJECT);
             VIEW_HAPTIC_MAP.put("gestureStart",         HapticFeedbackConstants.GESTURE_START);
             VIEW_HAPTIC_MAP.put("gestureEnd",           HapticFeedbackConstants.GESTURE_END);
             VIEW_HAPTIC_MAP.put("segmentTick",          HapticFeedbackConstants.SEGMENT_TICK);
             VIEW_HAPTIC_MAP.put("segmentFrequentTick",  HapticFeedbackConstants.SEGMENT_FREQUENT_TICK);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // API 34 (Android 14)
             VIEW_HAPTIC_MAP.put("toggleOn",             HapticFeedbackConstants.TOGGLE_ON);
             VIEW_HAPTIC_MAP.put("toggleOff",            HapticFeedbackConstants.TOGGLE_OFF);
         }
@@ -78,7 +84,9 @@ public class RNReactNativeHapticFeedbackModuleImpl {
 
         final Integer hapticConstant = VIEW_HAPTIC_MAP.get(type);
         final View view = sHapticView.get();
-        if (hapticConstant != null && view != null) {
+        // performHapticFeedback always obeys system settings and cannot be forced.
+        // Only use the view path when we are NOT overriding system settings.
+        if (!ignoreAndroidSystemSettings && hapticConstant != null && view != null) {
             UiThreadUtil.runOnUiThread(() -> view.performHapticFeedback(hapticConstant));
             return;
         }

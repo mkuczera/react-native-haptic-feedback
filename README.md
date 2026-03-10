@@ -285,7 +285,7 @@ jest.mock('react-native-haptic-feedback');
 
 // All methods are automatically mocked:
 // trigger, stop, isSupported (→ true), triggerPattern, playAHAP (→ Promise.resolve()),
-// getSystemHapticStatus (→ { vibrationEnabled: true, ringerMode: 'normal' }),
+// getSystemHapticStatus (→ { vibrationEnabled: true, ringerMode: 'normal' } on Android, ringerMode: null on iOS),
 // useHaptics, pattern, Patterns
 ```
 
@@ -310,6 +310,13 @@ cd ios && pod install
 ```
 
 All existing `trigger()` call-sites continue to work without changes. The new `confirm`, `reject`, `gestureStart/End`, `segmentTick/FrequentTick`, `toggleOn/Off` types are additive.
+
+---
+
+## Acknowledgements
+
+- [**expo-ahap**](https://github.com/EvanBacon/expo-ahap) by [@EvanBacon](https://github.com/EvanBacon) — the `AhapType` TypeScript definitions exported by this library are modelled after the types in expo-ahap.
+- All [contributors](https://github.com/mkuczera/react-native-haptic-feedback/graphs/contributors) who submitted issues and pull requests.
 
 ---
 

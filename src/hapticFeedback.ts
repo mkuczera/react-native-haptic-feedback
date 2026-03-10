@@ -45,6 +45,16 @@ const RNHapticFeedback = {
     }
   },
 
+  /**
+   * Play an Apple Haptic and Audio Pattern (AHAP) file by name.
+   *
+   * Place `.ahap` files in `<bundle>/haptics/` or the bundle root.
+   * Resolves immediately on Android (AHAP is an Apple-only format).
+   *
+   * For cross-platform usage, prefer `playHaptic(ahapFile, fallback)`.
+   *
+   * @platform ios
+   */
   playAHAP(fileName: string): Promise<void> {
     try {
       return NativeHapticFeedback.playAHAP(fileName);
@@ -57,7 +67,7 @@ const RNHapticFeedback = {
     try {
       return await NativeHapticFeedback.getSystemHapticStatus() as SystemHapticStatus;
     } catch {
-      return { vibrationEnabled: false, ringerMode: 'normal' };
+      return { vibrationEnabled: false, ringerMode: null };
     }
   },
 };

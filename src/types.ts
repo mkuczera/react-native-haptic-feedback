@@ -51,6 +51,104 @@ export interface HapticEvent {
   sharpness?: number;
 }
 
+// ─── AHAP types (iOS only) ────────────────────────────────────────────────────
+// These mirror the Apple Haptic and Audio Pattern format used by CHHapticEngine.
+// See: https://developer.apple.com/documentation/corehaptics/representing_haptic_patterns_in_ahap_files
+
+/** @platform ios */
+export type AhapEventParameterID =
+  | 'HapticIntensity'
+  | 'HapticSharpness'
+  | 'AttackTime'
+  | 'DecayTime'
+  | 'ReleaseTime'
+  | 'Sustained'
+  | 'AudioVolume'
+  | 'AudioPitch'
+  | 'AudioPan'
+  | 'AudioBrightness';
+
+/** @platform ios */
+export type AhapDynamicParameterID =
+  | 'HapticIntensityControl'
+  | 'HapticSharpnessControl'
+  | 'HapticAttackTimeControl'
+  | 'HapticDecayTimeControl'
+  | 'HapticReleaseTimeControl'
+  | 'AudioVolumeControl'
+  | 'AudioPanControl'
+  | 'AudioBrightnessControl'
+  | 'AudioPitchControl'
+  | 'AudioAttackTimeControl'
+  | 'AudioDecayTimeControl'
+  | 'AudioReleaseTimeControl';
+
+/** @platform ios */
+export interface AhapEventParameterValue {
+  ParameterID: AhapEventParameterID;
+  ParameterValue: number;
+}
+
+/** @platform ios */
+export interface AhapParameterCurveControlPoint {
+  Time: number;
+  ParameterValue: number;
+}
+
+/** A single event entry in an AHAP Pattern array. @platform ios */
+export type AhapEventPattern =
+  | {
+      Event: {
+        EventType: 'HapticTransient';
+        Time: number;
+        EventParameters: AhapEventParameterValue[];
+      };
+    }
+  | {
+      Event: {
+        EventType: 'HapticContinuous';
+        Time: number;
+        EventDuration: number;
+        EventParameters: AhapEventParameterValue[];
+      };
+    }
+  | {
+      Event: {
+        EventType: 'AudioCustom';
+        Time: number;
+        EventWaveformPath: string;
+        EventParameters: AhapEventParameterValue[];
+      };
+    };
+
+/** A parameter curve entry in an AHAP Pattern array. @platform ios */
+export interface AhapParameterCurvePattern {
+  ParameterCurve: {
+    ParameterID: AhapDynamicParameterID;
+    Time: number;
+    ParameterCurveControlPoints: AhapParameterCurveControlPoint[];
+  };
+}
+
+/**
+ * An Apple Haptic and Audio Pattern (AHAP) object.
+ * Can be passed to `playAHAP` as an alternative to a file name (iOS only).
+ *
+ * @platform ios
+ * @see https://developer.apple.com/documentation/corehaptics/representing_haptic_patterns_in_ahap_files
+ */
+export interface AhapType {
+  Version?: 1.0;
+  Metadata?: {
+    Project?: string;
+    Created?: string;
+    Description?: string;
+  };
+  Pattern: (AhapEventPattern | AhapParameterCurvePattern)[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface SystemHapticStatus {
   /** true if device has vibrator and is not in silent mode */
   vibrationEnabled: boolean;

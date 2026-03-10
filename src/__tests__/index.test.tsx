@@ -6,7 +6,7 @@ import RNHapticFeedback, {
   playAHAP,
   getSystemHapticStatus,
 } from "../index";
-import { HapticFeedbackTypes } from "../types";
+import { HapticFeedbackTypes, isRingerSilent } from "../types";
 import { pattern } from "../utils/pattern";
 import { Patterns } from "../presets";
 import { useHaptics } from "../index";
@@ -394,6 +394,26 @@ describe("pattern() error position", () => {
       // 'x' is at index 1, not 0
       expect((e as TypeError).message).toMatch(/position 1/);
     }
+  });
+});
+
+// ─── isRingerSilent ───────────────────────────────────────────────────────────
+
+describe("isRingerSilent", () => {
+  it("returns false when ringerMode is null (iOS)", () => {
+    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: null })).toBe(false);
+  });
+
+  it("returns true when ringerMode is 'silent' (Android)", () => {
+    expect(isRingerSilent({ vibrationEnabled: false, ringerMode: 'silent' })).toBe(true);
+  });
+
+  it("returns false when ringerMode is 'vibrate'", () => {
+    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: 'vibrate' })).toBe(false);
+  });
+
+  it("returns false when ringerMode is 'normal'", () => {
+    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: 'normal' })).toBe(false);
   });
 });
 

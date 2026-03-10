@@ -158,3 +158,16 @@ export interface SystemHapticStatus {
    */
   ringerMode: 'silent' | 'vibrate' | 'normal' | null;
 }
+
+/**
+ * Returns true if the ringer is in silent mode.
+ * On iOS `ringerMode` is always `null` (not exposed by the OS), so this
+ * returns `false` — treat silence as unknown, not as silent.
+ *
+ * @example
+ * const status = await getSystemHapticStatus();
+ * if (isRingerSilent(status)) showSilentBadge();
+ */
+export function isRingerSilent(status: SystemHapticStatus): boolean {
+  return status.ringerMode === 'silent';
+}

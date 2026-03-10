@@ -58,10 +58,18 @@ public class VibrateFactory {
         vibrateMap.put("segmentFrequentTick",  new VibrateWithDuration(new long[]{0, 8}));
         vibrateMap.put("toggleOn",             new VibrateWithDuration(new long[]{0, 15, 30, 25}));
         vibrateMap.put("toggleOff",            new VibrateWithDuration(new long[]{0, 25, 30, 15}));
-        vibrateMap.put("effectClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_CLICK));
-        vibrateMap.put("effectDoubleClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_DOUBLE_CLICK));
-        vibrateMap.put("effectHeavyClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_HEAVY_CLICK));
-        vibrateMap.put("effectTick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_TICK));
+        // effect* types require API 29 (createPredefined); fall back to durations on older devices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            vibrateMap.put("effectClick",       new VibrateWithCreatePredefined(VibrationEffect.EFFECT_CLICK));
+            vibrateMap.put("effectDoubleClick", new VibrateWithCreatePredefined(VibrationEffect.EFFECT_DOUBLE_CLICK));
+            vibrateMap.put("effectHeavyClick",  new VibrateWithCreatePredefined(VibrationEffect.EFFECT_HEAVY_CLICK));
+            vibrateMap.put("effectTick",        new VibrateWithCreatePredefined(VibrationEffect.EFFECT_TICK));
+        } else {
+            vibrateMap.put("effectClick",       new VibrateWithDuration(new long[]{0, 20}));
+            vibrateMap.put("effectDoubleClick", new VibrateWithDuration(new long[]{0, 20, 40, 20}));
+            vibrateMap.put("effectHeavyClick",  new VibrateWithDuration(new long[]{0, 50}));
+            vibrateMap.put("effectTick",        new VibrateWithDuration(new long[]{0, 15}));
+        }
     }
 
     public static Vibrate getVibration(String type) {

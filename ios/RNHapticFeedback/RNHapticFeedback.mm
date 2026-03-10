@@ -167,6 +167,43 @@ RCT_EXPORT_MODULE();
     }
 }
 
+// MARK: - UIKit fallback (Taptic Engine devices without Core Haptics, e.g. iPhone 6s/7/SE 1st gen)
+
+- (void)playUIKitHaptic:(NSString *)type
+{
+    if ([type isEqual:@"notificationSuccess"]) {
+        UINotificationFeedbackGenerator *g = [UINotificationFeedbackGenerator new];
+        [g notificationOccurred:UINotificationFeedbackTypeSuccess];
+    } else if ([type isEqual:@"notificationWarning"]) {
+        UINotificationFeedbackGenerator *g = [UINotificationFeedbackGenerator new];
+        [g notificationOccurred:UINotificationFeedbackTypeWarning];
+    } else if ([type isEqual:@"notificationError"] || [type isEqual:@"reject"]) {
+        UINotificationFeedbackGenerator *g = [UINotificationFeedbackGenerator new];
+        [g notificationOccurred:UINotificationFeedbackTypeError];
+    } else if ([type isEqual:@"impactLight"] || [type isEqual:@"soft"]
+               || [type isEqual:@"effectTick"] || [type isEqual:@"clockTick"]
+               || [type isEqual:@"gestureStart"] || [type isEqual:@"segmentTick"]
+               || [type isEqual:@"segmentFrequentTick"] || [type isEqual:@"textHandleMove"]) {
+        UIImpactFeedbackGenerator *g = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+        [g impactOccurred];
+    } else if ([type isEqual:@"impactHeavy"] || [type isEqual:@"rigid"]
+               || [type isEqual:@"effectHeavyClick"] || [type isEqual:@"longPress"]) {
+        UIImpactFeedbackGenerator *g = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
+        [g impactOccurred];
+    } else if ([type isEqual:@"selection"] || [type isEqual:@"keyboardPress"]
+               || [type isEqual:@"keyboardRelease"] || [type isEqual:@"keyboardTap"]
+               || [type isEqual:@"virtualKey"] || [type isEqual:@"virtualKeyRelease"]
+               || [type isEqual:@"gestureEnd"] || [type isEqual:@"contextClick"]) {
+        UISelectionFeedbackGenerator *g = [UISelectionFeedbackGenerator new];
+        [g selectionChanged];
+    } else {
+        // impactMedium, confirm, toggleOn, toggleOff, effectClick, effectDoubleClick,
+        // effectHeavyClick and any unrecognised type
+        UIImpactFeedbackGenerator *g = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+        [g impactOccurred];
+    }
+}
+
 - (void)playEvents:(NSArray<CHHapticEvent *> *)events API_AVAILABLE(ios(13.0))
 {
     [self initEngine];
@@ -197,13 +234,17 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 #endif
     if (@available(iOS 13.0, *)) {
         if ([CHHapticEngine capabilitiesForHardware].supportsHaptics) {
-            NSArray<CHHapticEvent *> *events = [self eventsForType:type];
-            if (events) {
-                [self playEvents:events];
-                return;
-            }
+            // Best path: Core Haptics — per-type patterns on iPhone 8+ / iPad Pro
+            [self playEvents:[self eventsForType:type]];
+            return;
         }
     }
+    // Intermediate fallback: UIKit feedback generators — per-type on devices with
+    // a Taptic Engine but without Core Haptics (iPhone 6s, 7, SE 1st gen on iOS 13+).
+    // Silent no-op on devices with no Taptic Engine at all (e.g. iPod touch).
+    [self playUIKitHaptic:type];
+    // Last-resort fallback for devices with no Taptic Engine.
+    // Only fires if the caller explicitly opts in via enableVibrateFallback: true.
     if (enableVibrateFallback) {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }

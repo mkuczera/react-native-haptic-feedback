@@ -176,8 +176,9 @@ describe("pattern()", () => {
   });
 
   it("throws TypeError for unknown characters", () => {
-    expect(() => pattern("x?!")).toThrow(TypeError);
-    expect(() => pattern("x?!")).toThrow(/invalid character/);
+    // Cast to string to bypass compile-time check — we're testing runtime behaviour
+    expect(() => pattern("x?!" as string)).toThrow(TypeError);
+    expect(() => pattern("x?!" as string)).toThrow(/invalid character/);
   });
 
   it("combined gaps accumulate", () => {

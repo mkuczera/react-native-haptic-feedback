@@ -2,6 +2,12 @@
 
 The most complete haptic feedback library for React Native — Core Haptics on iOS, rich Composition API on Android, custom patterns, and a developer-friendly hook.
 
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/mkuczera?label=Sponsor&logo=GitHub)](https://github.com/sponsors/mkuczera)
+[![npm](https://img.shields.io/npm/v/react-native-haptic-feedback)](https://www.npmjs.com/package/react-native-haptic-feedback)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-haptic-feedback)](https://www.npmjs.com/package/react-native-haptic-feedback)
+
+If this library saves you time, consider [sponsoring its development](https://github.com/sponsors/mkuczera). ⭐
+
 ## Contributions Welcome
 
 [![Contributors](https://contrib.rocks/image?repo=mkuczera/react-native-haptic-feedback)](https://github.com/mkuczera/react-native-haptic-feedback/graphs/contributors)

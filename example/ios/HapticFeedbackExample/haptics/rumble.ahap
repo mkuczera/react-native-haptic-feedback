@@ -1,0 +1,7 @@
+{
+  "Version": 1.0,
+  "Pattern": [
+    {"Event": {"EventType": "HapticContinuous", "Time": 0.0, "EventDuration": 0.6, "EventParameters": [{"ParameterID": "HapticIntensity", "ParameterValue": 1.0}, {"ParameterID": "HapticSharpness", "ParameterValue": 0.1}]}},
+    {"ParameterCurve": {"ParameterID": "HapticIntensityControl", "Time": 0.0, "ParameterCurveControlPoints": [{"Time": 0.0, "ParameterValue": 1.0}, {"Time": 0.6, "ParameterValue": 0.0}]}}
+  ]
+}

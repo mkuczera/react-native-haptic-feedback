@@ -2,7 +2,6 @@
 #import <CoreHaptics/CoreHaptics.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-API_AVAILABLE(ios(13.0))
 @interface RNHapticFeedback()
 @property (nonatomic, strong) CHHapticEngine *engine;
 @property (nonatomic, strong) id<CHHapticPatternPlayer> hapticPlayer;
@@ -25,7 +24,7 @@ RCT_EXPORT_MODULE();
 
 // MARK: - Engine lifecycle
 
-- (void)initEngine API_AVAILABLE(ios(13.0))
+- (void)initEngine
 {
     if (_engine) return;
 
@@ -67,7 +66,7 @@ RCT_EXPORT_MODULE();
 
 - (CHHapticEvent *)makeTransientEvent:(NSTimeInterval)time
                             intensity:(float)intensity
-                            sharpness:(float)sharpness API_AVAILABLE(ios(13.0))
+                            sharpness:(float)sharpness
 {
     CHHapticEventParameter *intensityParam = [[CHHapticEventParameter alloc]
         initWithParameterID:CHHapticEventParameterIDHapticIntensity
@@ -81,7 +80,7 @@ RCT_EXPORT_MODULE();
         relativeTime:time];
 }
 
-- (NSArray<CHHapticEvent *> *)eventsForType:(NSString *)type API_AVAILABLE(ios(13.0))
+- (NSArray<CHHapticEvent *> *)eventsForType:(NSString *)type
 {
     if ([type isEqual:@"impactLight"]) {
         return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.3]];
@@ -204,7 +203,7 @@ RCT_EXPORT_MODULE();
     }
 }
 
-- (void)playEvents:(NSArray<CHHapticEvent *> *)events API_AVAILABLE(ios(13.0))
+- (void)playEvents:(NSArray<CHHapticEvent *> *)events
 {
     [self initEngine];
     if (!_engine) return;
@@ -232,12 +231,10 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 {
     BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"] boolValue];
 #endif
-    if (@available(iOS 13.0, *)) {
-        if ([CHHapticEngine capabilitiesForHardware].supportsHaptics) {
-            // Best path: Core Haptics — per-type patterns on iPhone 8+ / iPad Pro
-            [self playEvents:[self eventsForType:type]];
-            return;
-        }
+    if ([CHHapticEngine capabilitiesForHardware].supportsHaptics) {
+        // Best path: Core Haptics — per-type patterns on iPhone 8+ / iPad Pro
+        [self playEvents:[self eventsForType:type]];
+        return;
     }
     // Intermediate fallback: UIKit feedback generators — per-type on devices with
     // a Taptic Engine but without Core Haptics (iPhone 6s, 7, SE 1st gen on iOS 13+).
@@ -251,34 +248,26 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
 
 RCT_EXPORT_METHOD(stop)
 {
-    if (@available(iOS 13.0, *)) {
-        if (_hapticPlayer) {
-            NSError *error = nil;
-            [_hapticPlayer cancelAndReturnError:&error];
-            _hapticPlayer = nil;
-        }
-        if (_engine) {
-            [_engine stopWithCompletionHandler:nil];
-            _engine = nil;
-        }
+    if (_hapticPlayer) {
+        NSError *error = nil;
+        [_hapticPlayer cancelAndReturnError:&error];
+        _hapticPlayer = nil;
+    }
+    if (_engine) {
+        [_engine stopWithCompletionHandler:nil];
+        _engine = nil;
     }
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
 - (BOOL)isSupported
 {
-    if (@available(iOS 13.0, *)) {
-        return [CHHapticEngine capabilitiesForHardware].supportsHaptics;
-    }
-    return NO;
+    return [CHHapticEngine capabilitiesForHardware].supportsHaptics;
 }
 #else
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isSupported)
 {
-    if (@available(iOS 13.0, *)) {
-        return @([CHHapticEngine capabilitiesForHardware].supportsHaptics);
-    }
-    return @NO;
+    return @([CHHapticEngine capabilitiesForHardware].supportsHaptics);
 }
 #endif
 
@@ -291,46 +280,44 @@ RCT_EXPORT_METHOD(triggerPattern:(NSArray *)events options:(NSDictionary *)optio
 {
     BOOL enableVibrateFallback = [[options objectForKey:@"enableVibrateFallback"] boolValue];
 #endif
-    if (@available(iOS 13.0, *)) {
-        if (![CHHapticEngine capabilitiesForHardware].supportsHaptics) {
-            if (enableVibrateFallback) {
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-            }
-            return;
+    if (![CHHapticEngine capabilitiesForHardware].supportsHaptics) {
+        if (enableVibrateFallback) {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
+        return;
+    }
 
-        NSMutableArray<CHHapticEvent *> *hapticEvents = [NSMutableArray array];
-        for (NSDictionary *evt in events) {
-            NSTimeInterval time = [evt[@"time"] doubleValue] / 1000.0;
-            float intensity = evt[@"intensity"] ? [evt[@"intensity"] floatValue] : 0.5f;
-            float sharpness = evt[@"sharpness"] ? [evt[@"sharpness"] floatValue] : 0.5f;
-            NSString *type = evt[@"type"] ?: @"transient";
+    NSMutableArray<CHHapticEvent *> *hapticEvents = [NSMutableArray array];
+    for (NSDictionary *evt in events) {
+        NSTimeInterval time = [evt[@"time"] doubleValue] / 1000.0;
+        float intensity = evt[@"intensity"] ? [evt[@"intensity"] floatValue] : 0.5f;
+        float sharpness = evt[@"sharpness"] ? [evt[@"sharpness"] floatValue] : 0.5f;
+        NSString *type = evt[@"type"] ?: @"transient";
 
-            CHHapticEventParameter *intensityParam = [[CHHapticEventParameter alloc]
-                initWithParameterID:CHHapticEventParameterIDHapticIntensity value:intensity];
-            CHHapticEventParameter *sharpnessParam = [[CHHapticEventParameter alloc]
-                initWithParameterID:CHHapticEventParameterIDHapticSharpness value:sharpness];
+        CHHapticEventParameter *intensityParam = [[CHHapticEventParameter alloc]
+            initWithParameterID:CHHapticEventParameterIDHapticIntensity value:intensity];
+        CHHapticEventParameter *sharpnessParam = [[CHHapticEventParameter alloc]
+            initWithParameterID:CHHapticEventParameterIDHapticSharpness value:sharpness];
 
-            CHHapticEvent *hapticEvent;
-            if ([type isEqual:@"continuous"]) {
-                NSTimeInterval duration = evt[@"duration"] ? [evt[@"duration"] doubleValue] / 1000.0 : 0.1;
-                hapticEvent = [[CHHapticEvent alloc]
-                    initWithEventType:CHHapticEventTypeHapticContinuous
-                    parameters:@[intensityParam, sharpnessParam]
-                    relativeTime:time
-                    duration:duration];
-            } else {
-                hapticEvent = [[CHHapticEvent alloc]
-                    initWithEventType:CHHapticEventTypeHapticTransient
-                    parameters:@[intensityParam, sharpnessParam]
-                    relativeTime:time];
-            }
-            [hapticEvents addObject:hapticEvent];
+        CHHapticEvent *hapticEvent;
+        if ([type isEqual:@"continuous"]) {
+            NSTimeInterval duration = evt[@"duration"] ? [evt[@"duration"] doubleValue] / 1000.0 : 0.1;
+            hapticEvent = [[CHHapticEvent alloc]
+                initWithEventType:CHHapticEventTypeHapticContinuous
+                parameters:@[intensityParam, sharpnessParam]
+                relativeTime:time
+                duration:duration];
+        } else {
+            hapticEvent = [[CHHapticEvent alloc]
+                initWithEventType:CHHapticEventTypeHapticTransient
+                parameters:@[intensityParam, sharpnessParam]
+                relativeTime:time];
         }
+        [hapticEvents addObject:hapticEvent];
+    }
 
-        if (hapticEvents.count > 0) {
-            [self playEvents:hapticEvents];
-        }
+    if (hapticEvents.count > 0) {
+        [self playEvents:hapticEvents];
     }
 }
 
@@ -344,34 +331,30 @@ RCT_EXPORT_METHOD(playAHAP:(NSString *)fileName
                   rejecter:(RCTPromiseRejectBlock)reject)
 #endif
 {
-    if (@available(iOS 13.0, *)) {
-        [self initEngine];
-        if (!_engine) {
-            reject(@"engine_unavailable", @"CHHapticEngine could not be initialised", nil);
-            return;
-        }
+    [self initEngine];
+    if (!_engine) {
+        reject(@"engine_unavailable", @"CHHapticEngine could not be initialised", nil);
+        return;
+    }
 
-        // Search in <bundle>/haptics/ subdirectory first, then bundle root
-        NSString *fullPath = [[NSBundle mainBundle] pathForResource:fileName
-                                                             ofType:nil
-                                                        inDirectory:@"haptics"];
-        if (!fullPath) {
-            fullPath = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
-        }
-        NSURL *fileURL = fullPath ? [NSURL fileURLWithPath:fullPath] : nil;
+    // Search in <bundle>/haptics/ subdirectory first, then bundle root
+    NSString *fullPath = [[NSBundle mainBundle] pathForResource:fileName
+                                                         ofType:nil
+                                                    inDirectory:@"haptics"];
+    if (!fullPath) {
+        fullPath = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
+    }
+    NSURL *fileURL = fullPath ? [NSURL fileURLWithPath:fullPath] : nil;
 
-        if (!fileURL) {
-            reject(@"file_not_found", [NSString stringWithFormat:@"AHAP file not found: %@", fileName], nil);
-            return;
-        }
+    if (!fileURL) {
+        reject(@"file_not_found", [NSString stringWithFormat:@"AHAP file not found: %@", fileName], nil);
+        return;
+    }
 
-        NSError *error = nil;
-        [_engine playPatternFromURL:fileURL error:&error];
-        if (error) {
-            reject(@"playback_error", error.localizedDescription, error);
-        } else {
-            resolve(nil);
-        }
+    NSError *error = nil;
+    [_engine playPatternFromURL:fileURL error:&error];
+    if (error) {
+        reject(@"playback_error", error.localizedDescription, error);
     } else {
         resolve(nil);
     }
@@ -385,10 +368,7 @@ RCT_EXPORT_METHOD(getSystemHapticStatus:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 #endif
 {
-    BOOL vibrationEnabled = NO;
-    if (@available(iOS 13.0, *)) {
-        vibrationEnabled = [CHHapticEngine capabilitiesForHardware].supportsHaptics;
-    }
+    BOOL vibrationEnabled = [CHHapticEngine capabilitiesForHardware].supportsHaptics;
     resolve(@{
         @"vibrationEnabled": @(vibrationEnabled),
         @"ringerMode": [NSNull null],

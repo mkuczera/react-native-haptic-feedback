@@ -1,6 +1,6 @@
-import { Platform } from 'react-native';
-import RNHapticFeedback from '../hapticFeedback';
-import type { HapticEvent, HapticOptions } from '../types';
+import { Platform } from "react-native";
+import RNHapticFeedback from "../hapticFeedback";
+import type { HapticEvent, HapticOptions } from "../types";
 
 /**
  * Cross-platform haptic file playback.
@@ -23,7 +23,7 @@ export async function playHaptic(
   options?: HapticOptions,
 ): Promise<void> {
   if (!RNHapticFeedback.isEnabled()) return;
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === "ios") {
     return RNHapticFeedback.playAHAP(ahapFile);
   }
   return RNHapticFeedback.triggerPattern(fallback, options);

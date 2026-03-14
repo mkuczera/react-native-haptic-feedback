@@ -1,4 +1,4 @@
-import NativeHapticFeedback from './codegenSpec/NativeHapticFeedback';
+import NativeHapticFeedback from "./codegenSpec/NativeHapticFeedback";
 import { HapticFeedbackTypes } from "./types";
 import type { HapticOptions, HapticEvent, SystemHapticStatus } from "./types";
 
@@ -58,7 +58,10 @@ const RNHapticFeedback = {
   triggerPattern(events: HapticEvent[], options: HapticOptions = {}): void {
     if (!_enabled) return;
     try {
-      NativeHapticFeedback.triggerPattern(events, { ...defaultOptions, ...options });
+      NativeHapticFeedback.triggerPattern(events, {
+        ...defaultOptions,
+        ...options,
+      });
     } catch (e) {
       console.warn("RNReactNativeHapticFeedback: triggerPattern failed –", e);
     }
@@ -85,7 +88,7 @@ const RNHapticFeedback = {
 
   async getSystemHapticStatus(): Promise<SystemHapticStatus> {
     try {
-      return await NativeHapticFeedback.getSystemHapticStatus() as SystemHapticStatus;
+      return (await NativeHapticFeedback.getSystemHapticStatus()) as SystemHapticStatus;
     } catch {
       return { vibrationEnabled: false, ringerMode: null };
     }

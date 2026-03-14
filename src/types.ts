@@ -37,12 +37,12 @@ export interface HapticOptions {
 }
 
 /** A single allowed character in a pattern notation string. */
-export type PatternChar = 'o' | 'O' | '.' | '-' | '=';
+export type PatternChar = "o" | "O" | "." | "-" | "=";
 
 export interface HapticEvent {
   /** Time offset from pattern start in milliseconds */
   time: number;
-  type?: 'transient' | 'continuous';
+  type?: "transient" | "continuous";
   /** Duration in milliseconds, for continuous events only */
   duration?: number;
   /** 0.0–1.0 */
@@ -57,31 +57,31 @@ export interface HapticEvent {
 
 /** @platform ios */
 export type AhapEventParameterID =
-  | 'HapticIntensity'
-  | 'HapticSharpness'
-  | 'AttackTime'
-  | 'DecayTime'
-  | 'ReleaseTime'
-  | 'Sustained'
-  | 'AudioVolume'
-  | 'AudioPitch'
-  | 'AudioPan'
-  | 'AudioBrightness';
+  | "HapticIntensity"
+  | "HapticSharpness"
+  | "AttackTime"
+  | "DecayTime"
+  | "ReleaseTime"
+  | "Sustained"
+  | "AudioVolume"
+  | "AudioPitch"
+  | "AudioPan"
+  | "AudioBrightness";
 
 /** @platform ios */
 export type AhapDynamicParameterID =
-  | 'HapticIntensityControl'
-  | 'HapticSharpnessControl'
-  | 'HapticAttackTimeControl'
-  | 'HapticDecayTimeControl'
-  | 'HapticReleaseTimeControl'
-  | 'AudioVolumeControl'
-  | 'AudioPanControl'
-  | 'AudioBrightnessControl'
-  | 'AudioPitchControl'
-  | 'AudioAttackTimeControl'
-  | 'AudioDecayTimeControl'
-  | 'AudioReleaseTimeControl';
+  | "HapticIntensityControl"
+  | "HapticSharpnessControl"
+  | "HapticAttackTimeControl"
+  | "HapticDecayTimeControl"
+  | "HapticReleaseTimeControl"
+  | "AudioVolumeControl"
+  | "AudioPanControl"
+  | "AudioBrightnessControl"
+  | "AudioPitchControl"
+  | "AudioAttackTimeControl"
+  | "AudioDecayTimeControl"
+  | "AudioReleaseTimeControl";
 
 /** @platform ios */
 export interface AhapEventParameterValue {
@@ -99,14 +99,14 @@ export interface AhapParameterCurveControlPoint {
 export type AhapEventPattern =
   | {
       Event: {
-        EventType: 'HapticTransient';
+        EventType: "HapticTransient";
         Time: number;
         EventParameters: AhapEventParameterValue[];
       };
     }
   | {
       Event: {
-        EventType: 'HapticContinuous';
+        EventType: "HapticContinuous";
         Time: number;
         EventDuration: number;
         EventParameters: AhapEventParameterValue[];
@@ -114,7 +114,7 @@ export type AhapEventPattern =
     }
   | {
       Event: {
-        EventType: 'AudioCustom';
+        EventType: "AudioCustom";
         Time: number;
         EventWaveformPath: string;
         EventParameters: AhapEventParameterValue[];
@@ -156,7 +156,7 @@ export interface SystemHapticStatus {
    * Android: current ringer mode.
    * iOS: always null — iOS does not expose ringer mode via public APIs.
    */
-  ringerMode: 'silent' | 'vibrate' | 'normal' | null;
+  ringerMode: "silent" | "vibrate" | "normal" | null;
 }
 
 /**
@@ -169,5 +169,5 @@ export interface SystemHapticStatus {
  * if (isRingerSilent(status)) showSilentBadge();
  */
 export function isRingerSilent(status: SystemHapticStatus): boolean {
-  return status.ringerMode === 'silent';
+  return status.ringerMode === "silent";
 }

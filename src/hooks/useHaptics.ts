@@ -13,36 +13,47 @@ import type { HapticOptions, HapticEvent, HapticFeedbackTypes } from "../types";
  */
 export function useHaptics(defaultOptions?: HapticOptions) {
   const enableVibrateFallback = defaultOptions?.enableVibrateFallback;
-  const ignoreAndroidSystemSettings = defaultOptions?.ignoreAndroidSystemSettings;
+  const ignoreAndroidSystemSettings =
+    defaultOptions?.ignoreAndroidSystemSettings;
 
-  return useMemo(() => ({
-    trigger(
-      type: keyof typeof HapticFeedbackTypes | HapticFeedbackTypes,
-      opts?: HapticOptions,
-    ): void {
-      RNHapticFeedback.trigger(type, { ...defaultOptions, ...opts });
-    },
+  return useMemo(
+    () => ({
+      trigger(
+        type: keyof typeof HapticFeedbackTypes | HapticFeedbackTypes,
+        opts?: HapticOptions,
+      ): void {
+        RNHapticFeedback.trigger(type, { ...defaultOptions, ...opts });
+      },
 
-    triggerPattern(events: HapticEvent[], opts?: HapticOptions): void {
-      RNHapticFeedback.triggerPattern(events, { ...defaultOptions, ...opts });
-    },
+      triggerPattern(events: HapticEvent[], opts?: HapticOptions): void {
+        RNHapticFeedback.triggerPattern(events, { ...defaultOptions, ...opts });
+      },
 
-    stop(): void {
-      RNHapticFeedback.stop();
-    },
+      stop(): void {
+        RNHapticFeedback.stop();
+      },
 
-    isSupported(): boolean {
-      return RNHapticFeedback.isSupported();
-    },
+      isSupported(): boolean {
+        return RNHapticFeedback.isSupported();
+      },
 
-    playHaptic(ahapFile: string, fallback: HapticEvent[], opts?: HapticOptions): Promise<void> {
-      return playHapticUtil(ahapFile, fallback, { ...defaultOptions, ...opts });
-    },
+      playHaptic(
+        ahapFile: string,
+        fallback: HapticEvent[],
+        opts?: HapticOptions,
+      ): Promise<void> {
+        return playHapticUtil(ahapFile, fallback, {
+          ...defaultOptions,
+          ...opts,
+        });
+      },
 
-    setEnabled: RNHapticFeedback.setEnabled,
-    isEnabled: RNHapticFeedback.isEnabled,
-    getSystemHapticStatus: RNHapticFeedback.getSystemHapticStatus,
-    /** @platform ios */
-    playAHAP: RNHapticFeedback.playAHAP,
-  }), [enableVibrateFallback, ignoreAndroidSystemSettings]);
+      setEnabled: RNHapticFeedback.setEnabled,
+      isEnabled: RNHapticFeedback.isEnabled,
+      getSystemHapticStatus: RNHapticFeedback.getSystemHapticStatus,
+      /** @platform ios */
+      playAHAP: RNHapticFeedback.playAHAP,
+    }),
+    [enableVibrateFallback, ignoreAndroidSystemSettings],
+  );
 }

@@ -11,7 +11,8 @@ import { pattern } from "../utils/pattern";
 import { Patterns } from "../presets";
 import { useHaptics } from "../index";
 
-const NativeHapticFeedbackMock = require("../codegenSpec/NativeHapticFeedback").default;
+const NativeHapticFeedbackMock =
+  require("../codegenSpec/NativeHapticFeedback").default;
 
 // ─── trigger ────────────────────────────────────────────────────────────────
 
@@ -41,7 +42,10 @@ describe("trigger", () => {
     };
     RNHapticFeedback.trigger(HapticFeedbackTypes.selection, options);
 
-    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith("selection", options);
+    expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
+      "selection",
+      options,
+    );
   });
 
   it("accepts a string type key", () => {
@@ -88,7 +92,9 @@ describe("isSupported", () => {
 
 describe("triggerPattern", () => {
   it("calls native triggerPattern with events array", () => {
-    const events = [{ time: 0, type: "transient" as const, intensity: 0.5, sharpness: 0.5 }];
+    const events = [
+      { time: 0, type: "transient" as const, intensity: 0.5, sharpness: 0.5 },
+    ];
     RNHapticFeedback.triggerPattern(events);
     expect(NativeHapticFeedbackMock.triggerPattern).toHaveBeenCalledWith(
       events,
@@ -97,7 +103,9 @@ describe("triggerPattern", () => {
   });
 
   it("named export calls native triggerPattern", () => {
-    const events = [{ time: 100, type: "transient" as const, intensity: 1.0, sharpness: 0.8 }];
+    const events = [
+      { time: 100, type: "transient" as const, intensity: 1.0, sharpness: 0.8 },
+    ];
     triggerPattern(events, { enableVibrateFallback: true });
     expect(NativeHapticFeedbackMock.triggerPattern).toHaveBeenCalledWith(
       events,
@@ -111,7 +119,9 @@ describe("triggerPattern", () => {
 describe("playAHAP", () => {
   it("calls native playAHAP with filename", async () => {
     await RNHapticFeedback.playAHAP("custom.ahap");
-    expect(NativeHapticFeedbackMock.playAHAP).toHaveBeenCalledWith("custom.ahap");
+    expect(NativeHapticFeedbackMock.playAHAP).toHaveBeenCalledWith(
+      "custom.ahap",
+    );
   });
 
   it("named export resolves", async () => {
@@ -144,12 +154,22 @@ describe("pattern()", () => {
 
   it("'o' produces a soft transient at time 0", () => {
     const [evt] = pattern("o");
-    expect(evt).toMatchObject({ time: 0, type: "transient", intensity: 0.4, sharpness: 0.4 });
+    expect(evt).toMatchObject({
+      time: 0,
+      type: "transient",
+      intensity: 0.4,
+      sharpness: 0.4,
+    });
   });
 
   it("'O' produces a strong transient at time 0", () => {
     const [evt] = pattern("O");
-    expect(evt).toMatchObject({ time: 0, type: "transient", intensity: 1.0, sharpness: 0.8 });
+    expect(evt).toMatchObject({
+      time: 0,
+      type: "transient",
+      intensity: 1.0,
+      sharpness: 0.8,
+    });
   });
 
   it("'.' advances cursor by 150ms", () => {
@@ -170,7 +190,7 @@ describe("pattern()", () => {
   it("'oO.O' produces 3 events with correct times", () => {
     const events = pattern("oO.O");
     expect(events).toHaveLength(3);
-    expect(events[0]!.time).toBe(0);   // o at 0, cursor → 100
+    expect(events[0]!.time).toBe(0); // o at 0, cursor → 100
     expect(events[1]!.time).toBe(100); // O at 100, cursor → 200
     expect(events[2]!.time).toBe(350); // . +150 → 350, O at 350
   });
@@ -236,7 +256,9 @@ describe("useHaptics", () => {
 
   it("per-call options override defaultOptions", () => {
     const haptics = useHaptics({ enableVibrateFallback: true });
-    haptics.trigger(HapticFeedbackTypes.impactHeavy, { enableVibrateFallback: false });
+    haptics.trigger(HapticFeedbackTypes.impactHeavy, {
+      enableVibrateFallback: false,
+    });
     expect(NativeHapticFeedbackMock.trigger).toHaveBeenCalledWith(
       "impactHeavy",
       expect.objectContaining({ enableVibrateFallback: false }),
@@ -321,7 +343,9 @@ describe("setEnabled / isEnabled", () => {
 
   it("triggerPattern skips native when disabled", () => {
     RNHapticFeedback.setEnabled(false);
-    RNHapticFeedback.triggerPattern([{ time: 0, type: "transient" as const, intensity: 0.5, sharpness: 0.5 }]);
+    RNHapticFeedback.triggerPattern([
+      { time: 0, type: "transient" as const, intensity: 0.5, sharpness: 0.5 },
+    ]);
     expect(NativeHapticFeedbackMock.triggerPattern).not.toHaveBeenCalled();
   });
 
@@ -349,39 +373,53 @@ describe("setEnabled / isEnabled", () => {
 
 describe("hapticFeedback error handling", () => {
   beforeEach(() => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, "warn").mockImplementation(() => {});
   });
   afterEach(() => {
     (console.warn as jest.Mock).mockRestore();
   });
 
   it("trigger catches native errors silently", () => {
-    NativeHapticFeedbackMock.trigger.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    NativeHapticFeedbackMock.trigger.mockImplementationOnce(() => {
+      throw new Error("native unavailable");
+    });
     expect(() => RNHapticFeedback.trigger("impactMedium")).not.toThrow();
   });
 
   it("stop catches native errors silently", () => {
-    NativeHapticFeedbackMock.stop.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    NativeHapticFeedbackMock.stop.mockImplementationOnce(() => {
+      throw new Error("native unavailable");
+    });
     expect(() => RNHapticFeedback.stop()).not.toThrow();
   });
 
   it("isSupported returns false when native throws", () => {
-    NativeHapticFeedbackMock.isSupported.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    NativeHapticFeedbackMock.isSupported.mockImplementationOnce(() => {
+      throw new Error("native unavailable");
+    });
     expect(RNHapticFeedback.isSupported()).toBe(false);
   });
 
   it("triggerPattern catches native errors silently", () => {
-    NativeHapticFeedbackMock.triggerPattern.mockImplementationOnce(() => { throw new Error("native unavailable"); });
+    NativeHapticFeedbackMock.triggerPattern.mockImplementationOnce(() => {
+      throw new Error("native unavailable");
+    });
     expect(() => RNHapticFeedback.triggerPattern([])).not.toThrow();
   });
 
   it("playAHAP resolves (does not reject) when native throws", async () => {
-    NativeHapticFeedbackMock.playAHAP.mockImplementationOnce(() => { throw new Error("native unavailable"); });
-    await expect(RNHapticFeedback.playAHAP("test.ahap")).resolves.toBeUndefined();
+    NativeHapticFeedbackMock.playAHAP.mockImplementationOnce(() => {
+      throw new Error("native unavailable");
+    });
+    await expect(
+      RNHapticFeedback.playAHAP("test.ahap"),
+    ).resolves.toBeUndefined();
   });
 
   it("getSystemHapticStatus returns fallback when native rejects", async () => {
-    NativeHapticFeedbackMock.getSystemHapticStatus.mockRejectedValueOnce(new Error("native unavailable"));
+    NativeHapticFeedbackMock.getSystemHapticStatus.mockRejectedValueOnce(
+      new Error("native unavailable"),
+    );
     const status = await RNHapticFeedback.getSystemHapticStatus();
     expect(status).toEqual({ vibrationEnabled: false, ringerMode: null });
   });
@@ -414,19 +452,26 @@ describe("pattern() error position", () => {
 
 describe("isRingerSilent", () => {
   it("returns false when ringerMode is null (iOS)", () => {
-    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: null })).toBe(false);
+    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: null })).toBe(
+      false,
+    );
   });
 
   it("returns true when ringerMode is 'silent' (Android)", () => {
-    expect(isRingerSilent({ vibrationEnabled: false, ringerMode: 'silent' })).toBe(true);
+    expect(
+      isRingerSilent({ vibrationEnabled: false, ringerMode: "silent" }),
+    ).toBe(true);
   });
 
   it("returns false when ringerMode is 'vibrate'", () => {
-    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: 'vibrate' })).toBe(false);
+    expect(
+      isRingerSilent({ vibrationEnabled: true, ringerMode: "vibrate" }),
+    ).toBe(false);
   });
 
   it("returns false when ringerMode is 'normal'", () => {
-    expect(isRingerSilent({ vibrationEnabled: true, ringerMode: 'normal' })).toBe(false);
+    expect(
+      isRingerSilent({ vibrationEnabled: true, ringerMode: "normal" }),
+    ).toBe(false);
   });
 });
-

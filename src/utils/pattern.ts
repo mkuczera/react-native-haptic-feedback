@@ -16,8 +16,8 @@ export const PATTERN_CHARS: ReadonlySet<PatternChar> = new Set([
 type IsValidPattern<S extends string> = S extends ""
   ? true
   : S extends `${PatternChar}${infer Rest}`
-  ? IsValidPattern<Rest>
-  : false;
+    ? IsValidPattern<Rest>
+    : false;
 
 /**
  * Use as a constraint on the `pattern()` argument to get compile-time errors for
@@ -35,8 +35,8 @@ type IsValidPattern<S extends string> = S extends ""
 export type AssertValidPattern<S extends string> = string extends S
   ? S
   : IsValidPattern<S> extends true
-  ? S
-  : never;
+    ? S
+    : never;
 
 /**
  * Minimum time advance (ms) after a transient haptic event. The Taptic Engine

@@ -1,5 +1,5 @@
-import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
+import type { TurboModule } from "react-native";
+import { TurboModuleRegistry } from "react-native";
 
 export interface Spec extends TurboModule {
   trigger(
@@ -19,7 +19,10 @@ export interface Spec extends TurboModule {
       intensity?: number;
       sharpness?: number;
     }>,
-    options?: { enableVibrateFallback?: boolean; ignoreAndroidSystemSettings?: boolean },
+    options?: {
+      enableVibrateFallback?: boolean;
+      ignoreAndroidSystemSettings?: boolean;
+    },
   ): void;
   playAHAP(fileName: string): Promise<void>;
   getSystemHapticStatus(): Promise<object>;

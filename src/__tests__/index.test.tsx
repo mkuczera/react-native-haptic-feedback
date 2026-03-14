@@ -279,6 +279,11 @@ describe("useHaptics", () => {
     const haptics = useHaptics();
     expect(typeof haptics.playAHAP).toBe("function");
   });
+
+  it("exposes playHaptic", () => {
+    const haptics = useHaptics();
+    expect(typeof haptics.playHaptic).toBe("function");
+  });
 });
 
 // ─── setEnabled / isEnabled ──────────────────────────────────────────────────
@@ -324,6 +329,12 @@ describe("setEnabled / isEnabled", () => {
     RNHapticFeedback.setEnabled(false);
     await RNHapticFeedback.playAHAP("test.ahap");
     expect(NativeHapticFeedbackMock.playAHAP).not.toHaveBeenCalled();
+  });
+
+  it("stop skips native when disabled", () => {
+    RNHapticFeedback.setEnabled(false);
+    RNHapticFeedback.stop();
+    expect(NativeHapticFeedbackMock.stop).not.toHaveBeenCalled();
   });
 
   it("trigger resumes after re-enabling", () => {
@@ -380,6 +391,7 @@ describe("hapticFeedback error handling", () => {
 
 describe("pattern() error position", () => {
   it("reports the correct position of the first invalid char", () => {
+    expect.assertions(1);
     try {
       pattern("oox" as string);
     } catch (e) {
@@ -388,6 +400,7 @@ describe("pattern() error position", () => {
   });
 
   it("reports the correct position when invalid char appears twice (second occurrence)", () => {
+    expect.assertions(1);
     try {
       pattern("oxo" as string);
     } catch (e) {

@@ -39,6 +39,7 @@ const RNHapticFeedback = {
   },
 
   stop(): void {
+    if (!_enabled) return;
     try {
       NativeHapticFeedback.stop();
     } catch {

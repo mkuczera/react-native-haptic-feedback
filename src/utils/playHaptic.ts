@@ -26,5 +26,5 @@ export async function playHaptic(
   if (Platform.OS === 'ios') {
     return RNHapticFeedback.playAHAP(ahapFile);
   }
-  RNHapticFeedback.triggerPattern(fallback, options);
+  return RNHapticFeedback.triggerPattern(fallback, options);
 }

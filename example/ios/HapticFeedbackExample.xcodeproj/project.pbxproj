@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-HapticFeedbackExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-HapticFeedbackExample.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		353BC193244682E77C03C3EB /* heartbeat.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 48CBF08A52662904FCCCD0CD /* heartbeat.ahap */; };
+		3FA5E8052F65A70800ADD034 /* rumble.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 3FA5E8022F65A70800ADD034 /* rumble.ahap */; };
+		3FA5E8062F65A70800ADD034 /* heartbeat.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 3FA5E8032F65A70800ADD034 /* heartbeat.ahap */; };
+		3FA5E8072F65A70800ADD034 /* celebration.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 3FA5E8042F65A70800ADD034 /* celebration.ahap */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F4C9CF72DE214D23EC46A522 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
-		F51AEC313C72B78E3C480D28 /* rumble.ahap in Resources */ = {isa = PBXBuildFile; fileRef = DB2F775C036126C3BB7C2AFD /* rumble.ahap */; };
-		FB0FB2ABBDD6B2057C121D38 /* celebration.ahap in Resources */ = {isa = PBXBuildFile; fileRef = BADF61505E68A75A83E4F6C3 /* celebration.ahap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +23,9 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = HapticFeedbackExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = HapticFeedbackExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-HapticFeedbackExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticFeedbackExample.debug.xcconfig"; path = "Target Support Files/Pods-HapticFeedbackExample/Pods-HapticFeedbackExample.debug.xcconfig"; sourceTree = "<group>"; };
+		3FA5E8022F65A70800ADD034 /* rumble.ahap */ = {isa = PBXFileReference; lastKnownFileType = text; name = rumble.ahap; path = HapticFeedbackExample/haptics/rumble.ahap; sourceTree = "<group>"; };
+		3FA5E8032F65A70800ADD034 /* heartbeat.ahap */ = {isa = PBXFileReference; lastKnownFileType = text; name = heartbeat.ahap; path = HapticFeedbackExample/haptics/heartbeat.ahap; sourceTree = "<group>"; };
+		3FA5E8042F65A70800ADD034 /* celebration.ahap */ = {isa = PBXFileReference; lastKnownFileType = text; name = celebration.ahap; path = HapticFeedbackExample/haptics/celebration.ahap; sourceTree = "<group>"; };
 		48CBF08A52662904FCCCD0CD /* heartbeat.ahap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = heartbeat.ahap; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-HapticFeedbackExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticFeedbackExample.release.xcconfig"; path = "Target Support Files/Pods-HapticFeedbackExample/Pods-HapticFeedbackExample.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-HapticFeedbackExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HapticFeedbackExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,6 +80,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				3FA5E8042F65A70800ADD034 /* celebration.ahap */,
+				3FA5E8032F65A70800ADD034 /* heartbeat.ahap */,
+				3FA5E8022F65A70800ADD034 /* rumble.ahap */,
 				13B07FAE1A68108700A75B9A /* HapticFeedbackExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -103,7 +109,6 @@
 				DB2F775C036126C3BB7C2AFD /* rumble.ahap */,
 				BADF61505E68A75A83E4F6C3 /* celebration.ahap */,
 			);
-			name = haptics;
 			path = haptics;
 			sourceTree = "<group>";
 		};
@@ -176,12 +181,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FA5E8052F65A70800ADD034 /* rumble.ahap in Resources */,
+				3FA5E8062F65A70800ADD034 /* heartbeat.ahap in Resources */,
+				3FA5E8072F65A70800ADD034 /* celebration.ahap in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F4C9CF72DE214D23EC46A522 /* PrivacyInfo.xcprivacy in Resources */,
-				353BC193244682E77C03C3EB /* heartbeat.ahap in Resources */,
-				F51AEC313C72B78E3C480D28 /* rumble.ahap in Resources */,
-				FB0FB2ABBDD6B2057C121D38 /* celebration.ahap in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

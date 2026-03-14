@@ -1,6 +1,7 @@
 package com.mkuczera.vibrateFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +9,14 @@ import java.util.Map;
 import android.os.Build;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
 
 public class VibrateFactory {
+    private static final String TAG = "RNHapticFeedback";
     static Map<String, Vibrate> vibrateMap = new HashMap<>();
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -87,7 +90,7 @@ public class VibrateFactory {
             ReadableMap evt = events.getMap(i);
             if (evt != null) sorted.add(evt);
         }
-        sorted.sort((a, b) -> Double.compare(
+        Collections.sort(sorted, (a, b) -> Double.compare(
             a.hasKey("time") ? a.getDouble("time") : 0,
             b.hasKey("time") ? b.getDouble("time") : 0
         ));
@@ -135,6 +138,8 @@ public class VibrateFactory {
             } else {
                 v.vibrate(finalTimings, -1);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.w(TAG, "vibratePattern failed", e);
+        }
     }
 }

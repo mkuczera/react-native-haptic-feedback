@@ -3,8 +3,10 @@ package com.mkuczera.vibrateFactory;
 import android.os.Build;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.util.Log;
 
 public class VibrateWithDuration implements Vibrate {
+    private static final String TAG = "RNHapticFeedback";
     long durations[] = {};
 
     public VibrateWithDuration(long[] durations) {
@@ -21,6 +23,8 @@ public class VibrateWithDuration implements Vibrate {
                     v.vibrate(this.durations, -1);
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.w(TAG, "VibrateWithDuration failed", e);
+        }
     }
 }

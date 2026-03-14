@@ -10,11 +10,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native/new-app-screen": "0.84.1",
     "react": "19.2.3",
     "react-native": "0.84.1",
-    "@react-native/new-app-screen": "0.84.1",
-    "react-native-safe-area-context": "^5.5.2",
-    "react-native-haptic-feedback": "file:.."
+    "react-native-haptic-feedback": "file:../",
+    "react-native-safe-area-context": "^5.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

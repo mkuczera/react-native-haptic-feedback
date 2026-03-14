@@ -1,19 +1,2 @@
-# If any package.json was changed, verify yarn.lock is also up to date.
-# This prevents CI failures from a stale lockfile.
-if git diff --cached --name-only | grep -q "package\.json"; then
-  if ! yarn install --immutable 2>/dev/null; then
-    echo ""
-    echo "ERROR: yarn.lock is out of sync with package.json."
-    echo "Run 'yarn install' and stage the updated yarn.lock before committing."
-    echo ""
-    exit 1
-  fi
-fi
-
-# Run typecheck on every commit to catch type errors before CI.
-if ! yarn typecheck 2>&1; then
-  echo ""
-  echo "ERROR: TypeScript type check failed. Fix the errors above before committing."
-  echo ""
-  exit 1
-fi
+npx lint-staged
+npm run typecheck

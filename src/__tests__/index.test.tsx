@@ -152,14 +152,14 @@ describe("pattern()", () => {
     expect(evt).toMatchObject({ time: 0, type: "transient", intensity: 1.0, sharpness: 0.8 });
   });
 
-  it("'.' advances cursor by 100ms", () => {
+  it("'.' advances cursor by 150ms", () => {
     const events = pattern(".O");
-    expect(events[0]!.time).toBe(100);
+    expect(events[0]!.time).toBe(150);
   });
 
-  it("'-' advances cursor by 300ms", () => {
+  it("'-' advances cursor by 400ms", () => {
     const events = pattern("-O");
-    expect(events[0]!.time).toBe(300);
+    expect(events[0]!.time).toBe(400);
   });
 
   it("'=' advances cursor by 1000ms", () => {
@@ -170,9 +170,9 @@ describe("pattern()", () => {
   it("'oO.O' produces 3 events with correct times", () => {
     const events = pattern("oO.O");
     expect(events).toHaveLength(3);
-    expect(events[0]!.time).toBe(0);   // o at 0, cursor → 50
-    expect(events[1]!.time).toBe(50);  // O at 50, cursor → 100
-    expect(events[2]!.time).toBe(200); // . +100 → 200, O at 200
+    expect(events[0]!.time).toBe(0);   // o at 0, cursor → 100
+    expect(events[1]!.time).toBe(100); // O at 100, cursor → 200
+    expect(events[2]!.time).toBe(350); // . +150 → 350, O at 350
   });
 
   it("throws TypeError for unknown characters", () => {
@@ -182,8 +182,8 @@ describe("pattern()", () => {
   });
 
   it("combined gaps accumulate", () => {
-    const events = pattern(".-O"); // 100 + 300 = 400
-    expect(events[0]!.time).toBe(400);
+    const events = pattern(".-O"); // 150 + 400 = 550
+    expect(events[0]!.time).toBe(550);
   });
 });
 

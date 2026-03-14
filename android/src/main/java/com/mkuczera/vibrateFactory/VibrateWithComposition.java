@@ -3,6 +3,7 @@ package com.mkuczera.vibrateFactory;
 import android.os.Build;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -12,6 +13,7 @@ import androidx.annotation.RequiresApi;
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class VibrateWithComposition implements Vibrate {
 
+    private static final String TAG = "RNHapticFeedback";
     private final int primitiveId;
     private final float scale;
 
@@ -30,6 +32,8 @@ public class VibrateWithComposition implements Vibrate {
                     .compose();
                 v.vibrate(effect);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.w(TAG, "VibrateWithComposition failed", e);
+        }
     }
 }

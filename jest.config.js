@@ -17,6 +17,7 @@ module.exports = {
   },
   modulePathIgnorePatterns: [
     "<rootDir>/lib/",
+    "<rootDir>/example/",
   ],
   transformIgnorePatterns: [
     "node_modules/(?!(react-native|my-project|react-native-button)/)",

@@ -8,20 +8,8 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version-file: .nvmrc
-
-    - name: Cache dependencies
-      id: yarn-cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          **/node_modules
-          .yarn/install-state.gz
-        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          ${{ runner.os }}-yarn-
+        cache: npm
 
     - name: Install dependencies
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
-      run: yarn install --immutable
+      run: npm ci
       shell: bash

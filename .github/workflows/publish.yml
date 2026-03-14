@@ -8,7 +8,6 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # Only run for stable tags, not nitro pre-release tags (v*-nitro)
     if: "!endsWith(github.ref_name, '-nitro')"
     permissions:
       contents: write
@@ -29,14 +28,17 @@ jobs:
             exit 1
           fi
 
-      - name: Run tests
-        run: yarn test --maxWorkers=2
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
 
       - name: Typecheck
-        run: yarn typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npx jest --maxWorkers=2
 
       - name: Build package
-        run: yarn build
+        run: npm run build
 
       - name: Setup Node.js for npm publish
         uses: actions/setup-node@v4

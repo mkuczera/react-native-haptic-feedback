@@ -35,9 +35,9 @@ RCT_EXPORT_MODULE();
         return;
     }
 
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof__(self) weakSelf = self;
     _engine.stoppedHandler = ^(CHHapticEngineStoppedReason reason) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        __strong __typeof__(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 strongSelf.engine = nil;
@@ -47,7 +47,7 @@ RCT_EXPORT_MODULE();
     };
 
     _engine.resetHandler = ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
+        __strong __typeof__(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSError *startError = nil;
@@ -260,9 +260,9 @@ RCT_EXPORT_METHOD(stop)
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
-- (BOOL)isSupported
+- (NSNumber *)isSupported
 {
-    return [CHHapticEngine capabilitiesForHardware].supportsHaptics;
+    return @([CHHapticEngine capabilitiesForHardware].supportsHaptics);
 }
 #else
 RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, isSupported)

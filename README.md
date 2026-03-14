@@ -126,9 +126,74 @@ Play an Apple Haptic and Audio Pattern (`.ahap`) file. iOS only — resolves imm
 RNHapticFeedback.playAHAP(fileName: string): Promise<void>
 ```
 
-Place `.ahap` files in `<bundle>/haptics/` or the bundle root. Pass the file name without path prefix.
+Pass the file name (e.g. `"heartbeat.ahap"`) without any path prefix. The native code searches for the file in two locations, in order:
+
+1. A `haptics/` subdirectory inside the app bundle
+2. The bundle root
 
 For cross-platform usage, prefer `playHaptic` below.
+
+#### Setting up AHAP files in Xcode
+
+AHAP files must be added to the iOS app bundle — they are **not** bundled by Metro or CocoaPods. Follow these steps:
+
+1. **Create a `haptics/` folder** inside your Xcode project directory (e.g. `ios/YourApp/haptics/`).
+
+2. **Place your `.ahap` files** in that folder:
+
+```
+ios/YourApp/haptics/
+├── heartbeat.ahap
+├── rumble.ahap
+└── celebration.ahap
+```
+
+3. **Add the files to Xcode:**
+   - Open your `.xcworkspace` in Xcode
+   - Right-click your app target in the project navigator → **Add Files to "YourApp"**
+   - Select the `.ahap` files (or the entire `haptics/` folder)
+   - Make sure **"Copy items if needed"** is unchecked (files are already in the project directory)
+   - Make sure your **app target is checked** under "Add to targets"
+
+4. **Verify they appear in Build Phases:**
+   - Select your app target → **Build Phases** → **Copy Bundle Resources**
+   - All `.ahap` files should be listed there. If not, click **+** and add them.
+
+Once added, the files are bundled into the app at build time and `playAHAP("heartbeat.ahap")` will find them.
+
+#### AHAP file format
+
+An `.ahap` file is a JSON document describing haptic events. Here's a minimal example:
+
+```json
+{
+  "Version": 1.0,
+  "Pattern": [
+    {
+      "Event": {
+        "EventType": "HapticTransient",
+        "Time": 0.0,
+        "EventParameters": [
+          { "ParameterID": "HapticIntensity", "ParameterValue": 0.5 },
+          { "ParameterID": "HapticSharpness", "ParameterValue": 0.3 }
+        ]
+      }
+    },
+    {
+      "Event": {
+        "EventType": "HapticTransient",
+        "Time": 0.15,
+        "EventParameters": [
+          { "ParameterID": "HapticIntensity", "ParameterValue": 1.0 },
+          { "ParameterID": "HapticSharpness", "ParameterValue": 0.5 }
+        ]
+      }
+    }
+  ]
+}
+```
+
+See Apple's [Representing Haptic Patterns in AHAP Files](https://developer.apple.com/documentation/corehaptics/representing_haptic_patterns_in_ahap_files) for the full specification. You can also design patterns visually using the **Haptic Sampler** section in Xcode's Core Haptics tools.
 
 ### `playHaptic(ahapFile, fallback, options?)`
 
@@ -137,10 +202,12 @@ Cross-platform wrapper for AHAP playback. Plays the `.ahap` file on iOS and fall
 ```typescript
 import { playHaptic, pattern } from 'react-native-haptic-feedback';
 
-// iOS: plays my-effect.ahap
-// Android: plays the fallback pattern
+// iOS: plays my-effect.ahap via Core Haptics
+// Android: plays the fallback pattern via Vibrator API
 await playHaptic('my-effect.ahap', pattern('oO.O'));
 ```
+
+This is the recommended approach for cross-platform apps — design your haptic in an `.ahap` file for the best iOS experience, and provide a `pattern()` fallback for Android.
 
 ### `getSystemHapticStatus()`
 
@@ -156,19 +223,49 @@ interface SystemHapticStatus {
 }
 ```
 
+Use the `isRingerSilent` helper to check for silent mode:
+
+```typescript
+import { getSystemHapticStatus, isRingerSilent } from "react-native-haptic-feedback";
+
+const status = await getSystemHapticStatus();
+if (isRingerSilent(status)) {
+  // Android: ringer is silent — show a visual indicator instead
+}
+// iOS: ringerMode is always null (not exposed by the OS), so isRingerSilent returns false
+```
+
+### `setEnabled(value)` / `isEnabled()`
+
+Library-wide kill switch. When disabled, all `trigger`, `triggerPattern`, `playAHAP`, `playHaptic`, and `stop` calls become no-ops.
+
+```typescript
+import RNHapticFeedback from "react-native-haptic-feedback";
+
+// Respect user's in-app haptics preference
+RNHapticFeedback.setEnabled(userPreference.hapticsEnabled);
+
+// Check current state
+if (RNHapticFeedback.isEnabled()) { /* ... */ }
+```
+
+The setting is in-memory only — persist it yourself (e.g. AsyncStorage) if it should survive app restarts.
+
 ---
 
 ## Pattern Notation Helper
 
 Build `HapticEvent[]` from a compact string notation:
 
-| Character | Meaning |
-|---|---|
-| `o` | Soft transient (intensity 0.4, sharpness 0.4) |
-| `O` | Strong transient (intensity 1.0, sharpness 0.8) |
-| `.` | 100 ms gap |
-| `-` | 300 ms gap |
-| `=` | 1000 ms gap |
+| Character | Meaning | Time advance | Total `O_O` spacing |
+|---|---|---|---|
+| `o` | Soft transient (intensity 0.4, sharpness 0.4) | 100 ms | — |
+| `O` | Strong transient (intensity 1.0, sharpness 0.8) | 100 ms | — |
+| `.` | Short gap | +150 ms | 250 ms |
+| `-` | Medium gap | +400 ms | 500 ms |
+| `=` | Long gap | +1000 ms | 1100 ms |
+
+Consecutive haptic events (`OO`) are spaced 100 ms apart — the minimum interval the Taptic Engine (iOS) and vibrator motors (Android) can render as distinct pulses. Gap characters add progressively more space on top: `.` for a short beat (250 ms), `-` for a half-second pause, `=` for a full second rest.
 
 ```typescript
 import { pattern, PATTERN_CHARS } from "react-native-haptic-feedback";
@@ -178,9 +275,25 @@ RNHapticFeedback.triggerPattern(pattern('oO.O'));
 // → soft, strong, 100ms pause, strong
 ```
 
-`pattern()` throws a `TypeError` if the string contains any character not in `PATTERN_CHARS`. Use `PATTERN_CHARS` for programmatic validation:
+`pattern()` throws a `TypeError` at runtime if the string contains any character not in `PATTERN_CHARS`.
+
+**Compile-time validation:** When you pass a string literal, TypeScript catches invalid characters before runtime:
 
 ```typescript
+import type { AssertValidPattern } from "react-native-haptic-feedback";
+
+pattern('oO.O');    // ✅ compiles
+pattern('oXO');     // ✗ TypeScript error — 'X' is not a valid PatternChar
+```
+
+This works automatically — no extra setup needed. If the argument is a runtime `string` variable (not a literal), validation happens at runtime via `TypeError` instead.
+
+**Programmatic validation** — use `PATTERN_CHARS` to check user input before calling `pattern()`:
+
+```typescript
+import { PATTERN_CHARS } from "react-native-haptic-feedback";
+import type { PatternChar } from "react-native-haptic-feedback";
+
 const valid = [...input].every(c => PATTERN_CHARS.has(c as PatternChar));
 ```
 
@@ -356,6 +469,7 @@ jest.mock('react-native-haptic-feedback');
 3. The internal `DeviceUtils` class is removed — if you referenced it directly, remove those imports.
 4. `enableVibrateFallback` on devices without Core Haptics now calls `kSystemSoundID_Vibrate` instead of the UIKit generator path.
 5. `pattern()` now throws a `TypeError` for invalid characters instead of silently ignoring them.
+6. **`pattern()` timing changed** — haptic events now advance the cursor by 100 ms (was 50 ms) to ensure each event is a distinct pulse on hardware. Gap characters also adjusted: `.` = 150 ms (was 100), `-` = 400 ms (was 300), `=` = 1000 ms (unchanged). If you have code that depends on exact `HapticEvent.time` values from `pattern()`, update your expectations.
 
 ### Upgrade steps
 

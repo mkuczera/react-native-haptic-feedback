@@ -41,9 +41,6 @@
     "!**/__fixtures__",
     "!**/.*"
   ],
-  "workspaces": [
-    "example"
-  ],
   "author": "Michael Kuczera",
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -76,6 +73,7 @@
     }
   },
   "devDependencies": {
+    "react": "^18.0.0",
     "@babel/core": "^7",
     "@babel/preset-env": "^7",
     "@babel/preset-react": "^7",

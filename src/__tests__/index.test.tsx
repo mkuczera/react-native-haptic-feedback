@@ -170,9 +170,9 @@ describe("pattern()", () => {
   it("'oO.O' produces 3 events with correct times", () => {
     const events = pattern("oO.O");
     expect(events).toHaveLength(3);
-    expect(events[0]!.time).toBe(0);
-    expect(events[1]!.time).toBe(0);
-    expect(events[2]!.time).toBe(100);
+    expect(events[0]!.time).toBe(0);   // o at 0, cursor → 50
+    expect(events[1]!.time).toBe(50);  // O at 50, cursor → 100
+    expect(events[2]!.time).toBe(200); // . +100 → 200, O at 200
   });
 
   it("throws TypeError for unknown characters", () => {

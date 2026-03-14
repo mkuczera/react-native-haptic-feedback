@@ -66,9 +66,11 @@ export function pattern<S extends string>(notation: S & AssertValidPattern<S>): 
     switch (ch) {
       case 'o':
         events.push({ time: cursor, type: 'transient', intensity: 0.4, sharpness: 0.4 });
+        cursor += 50;
         break;
       case 'O':
         events.push({ time: cursor, type: 'transient', intensity: 1.0, sharpness: 0.8 });
+        cursor += 50;
         break;
       case '.':
         cursor += 100;

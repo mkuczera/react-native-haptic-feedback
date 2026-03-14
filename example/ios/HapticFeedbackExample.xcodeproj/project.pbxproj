@@ -9,8 +9,12 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-HapticFeedbackExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-HapticFeedbackExample.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		353BC193244682E77C03C3EB /* heartbeat.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 48CBF08A52662904FCCCD0CD /* heartbeat.ahap */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F4C9CF72DE214D23EC46A522 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		F51AEC313C72B78E3C480D28 /* rumble.ahap in Resources */ = {isa = PBXBuildFile; fileRef = DB2F775C036126C3BB7C2AFD /* rumble.ahap */; };
+		FB0FB2ABBDD6B2057C121D38 /* celebration.ahap in Resources */ = {isa = PBXBuildFile; fileRef = BADF61505E68A75A83E4F6C3 /* celebration.ahap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,10 +23,13 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = HapticFeedbackExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = HapticFeedbackExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-HapticFeedbackExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticFeedbackExample.debug.xcconfig"; path = "Target Support Files/Pods-HapticFeedbackExample/Pods-HapticFeedbackExample.debug.xcconfig"; sourceTree = "<group>"; };
+		48CBF08A52662904FCCCD0CD /* heartbeat.ahap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = heartbeat.ahap; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-HapticFeedbackExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticFeedbackExample.release.xcconfig"; path = "Target Support Files/Pods-HapticFeedbackExample/Pods-HapticFeedbackExample.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-HapticFeedbackExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HapticFeedbackExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = HapticFeedbackExample/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = HapticFeedbackExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BADF61505E68A75A83E4F6C3 /* celebration.ahap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = celebration.ahap; sourceTree = "<group>"; };
+		DB2F775C036126C3BB7C2AFD /* rumble.ahap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; path = rumble.ahap; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -46,6 +53,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				AB1F9B4CC84532976F8169F5 /* haptics */,
 			);
 			name = HapticFeedbackExample;
 			sourceTree = "<group>";
@@ -86,6 +94,17 @@
 				13B07F961A680F5B00A75B9A /* HapticFeedbackExample.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AB1F9B4CC84532976F8169F5 /* haptics */ = {
+			isa = PBXGroup;
+			children = (
+				48CBF08A52662904FCCCD0CD /* heartbeat.ahap */,
+				DB2F775C036126C3BB7C2AFD /* rumble.ahap */,
+				BADF61505E68A75A83E4F6C3 /* celebration.ahap */,
+			);
+			name = haptics;
+			path = haptics;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -159,6 +178,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F4C9CF72DE214D23EC46A522 /* PrivacyInfo.xcprivacy in Resources */,
+				353BC193244682E77C03C3EB /* heartbeat.ahap in Resources */,
+				F51AEC313C72B78E3C480D28 /* rumble.ahap in Resources */,
+				FB0FB2ABBDD6B2057C121D38 /* celebration.ahap in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +281,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MX783T4VSP;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HapticFeedbackExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -288,6 +312,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MX783T4VSP;
 				INFOPLIST_FILE = HapticFeedbackExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -370,6 +395,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -377,8 +406,13 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -435,6 +469,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -442,8 +480,12 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
+					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

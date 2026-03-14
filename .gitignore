@@ -64,4 +64,5 @@ buck-out/
 lib/
 
 
-local-rn-version-examples/coverage/
+coverage/
+local-rn-version-examples/

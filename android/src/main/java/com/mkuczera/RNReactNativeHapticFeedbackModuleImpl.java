@@ -83,12 +83,32 @@ public class RNReactNativeHapticFeedbackModuleImpl {
         if (!ignoreAndroidSystemSettings && !isVibrationEnabled(reactContext)) return;
 
         final Integer hapticConstant = VIEW_HAPTIC_MAP.get(type);
-        final View view = sHapticView.get();
         // performHapticFeedback always obeys system settings and cannot be forced.
         // Only use the view path when we are NOT overriding system settings.
-        if (!ignoreAndroidSystemSettings && hapticConstant != null && view != null) {
-            UiThreadUtil.runOnUiThread(() -> view.performHapticFeedback(hapticConstant));
-            return;
+        if (!ignoreAndroidSystemSettings && hapticConstant != null) {
+            final View view = sHapticView.get();
+            if (view != null) {
+                UiThreadUtil.runOnUiThread(() -> view.performHapticFeedback(hapticConstant));
+                return;
+            }
+            // View not initialised yet (activity was null at module construction time).
+            // Retry lazily: create the view and fire the haptic in one UI-thread pass.
+            final Activity lazyActivity = reactContext.getCurrentActivity();
+            if (lazyActivity != null) {
+                UiThreadUtil.runOnUiThread(() -> {
+                    if (sHapticView.get() == null) {
+                        View v = new View(lazyActivity);
+                        v.setHapticFeedbackEnabled(true);
+                        ((android.view.ViewGroup) lazyActivity.getWindow().getDecorView())
+                            .addView(v, new android.view.ViewGroup.LayoutParams(0, 0));
+                        sHapticView = new WeakReference<>(v);
+                    }
+                    View ready = sHapticView.get();
+                    if (ready != null) ready.performHapticFeedback(hapticConstant);
+                });
+                return;
+            }
+            // Activity still unavailable — fall through to vibrator
         }
 
         Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);

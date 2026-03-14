@@ -10,6 +10,7 @@ export default [
   {
     ignores: [
       "lib/*",
+      "coverage/*",
       "node_modules/*",
       "example/*",
       "setupTests.js",

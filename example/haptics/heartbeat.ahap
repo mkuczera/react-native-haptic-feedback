@@ -1,0 +1,29 @@
+{
+  "Version": 1.0,
+  "Metadata": {
+    "Project": "react-native-haptic-feedback",
+    "Description": "Heartbeat — classic lub-dub double pulse"
+  },
+  "Pattern": [
+    {
+      "Event": {
+        "EventType": "HapticTransient",
+        "Time": 0.0,
+        "EventParameters": [
+          { "ParameterID": "HapticIntensity", "ParameterValue": 0.6 },
+          { "ParameterID": "HapticSharpness", "ParameterValue": 0.2 }
+        ]
+      }
+    },
+    {
+      "Event": {
+        "EventType": "HapticTransient",
+        "Time": 0.18,
+        "EventParameters": [
+          { "ParameterID": "HapticIntensity", "ParameterValue": 1.0 },
+          { "ParameterID": "HapticSharpness", "ParameterValue": 0.2 }
+        ]
+      }
+    }
+  ]
+}

@@ -9,6 +9,20 @@ export interface Spec extends TurboModule {
       ignoreAndroidSystemSettings?: boolean;
     },
   ): void;
+  stop(): void;
+  isSupported(): boolean;
+  triggerPattern(
+    events: ReadonlyArray<{
+      time: number;
+      type?: string;
+      duration?: number;
+      intensity?: number;
+      sharpness?: number;
+    }>,
+    options?: { enableVibrateFallback?: boolean; ignoreAndroidSystemSettings?: boolean },
+  ): void;
+  playAHAP(fileName: string): Promise<void>;
+  getSystemHapticStatus(): Promise<object>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("RNHapticFeedback");

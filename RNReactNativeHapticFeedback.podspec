@@ -12,11 +12,11 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author             = { "author" => "m.kuczera@gmail.com" }
-  s.platform     = :ios, "12.4"
+  s.platform     = :ios, "13.0"
   s.source       = { :git => "https://github.com/mkuczera/react-native-haptic-feedback.git", :tag => "v#{s.version.to_s}" }
   s.source_files  = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
-  s.frameworks   = 'AudioToolbox'
+  s.frameworks   = 'CoreHaptics', 'AudioToolbox'
 
 
   # This guard prevent to install the dependencies when we run `pod install` in the old architecture.

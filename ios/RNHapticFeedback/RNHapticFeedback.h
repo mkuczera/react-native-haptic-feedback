@@ -9,20 +9,5 @@
 #endif
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-
-typedef NS_ENUM(NSInteger, FeedbackType) {
-    selection,
-    impactLight,
-    impactMedium,
-    impactHeavy,
-    rigid,
-    soft,
-    notificationSuccess,
-    notificationWarning,
-    notificationError
-};
-
-- (Boolean)supportsHaptic;
 
 @end

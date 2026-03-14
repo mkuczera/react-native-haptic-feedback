@@ -42,7 +42,7 @@ jobs:
         run: npm run typecheck
 
       - name: Install example dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
         working-directory: example
 
       - name: Typecheck example
@@ -109,7 +109,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Install example dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
         working-directory: example
 
       - name: Make Gradlew executable
@@ -142,7 +142,7 @@ jobs:
             ${{ runner.os }}-cocoapods-
 
       - name: Install example dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
         working-directory: example
 
       - name: Install cocoapods

@@ -27,7 +27,7 @@ public class RNReactNativeHapticFeedbackModuleImpl {
 
     public static final String NAME = "RNHapticFeedback";
 
-    private static WeakReference<View> sHapticView = new WeakReference<>(null);
+    private static volatile WeakReference<View> sHapticView = new WeakReference<>(null);
 
     private static final Map<String, Integer> VIEW_HAPTIC_MAP = new HashMap<>();
     static {

@@ -11,7 +11,16 @@ export interface Spec extends TurboModule {
   ): void;
   stop(): void;
   isSupported(): boolean;
-  triggerPattern(events: ReadonlyArray<object>, options?: { enableVibrateFallback?: boolean; ignoreAndroidSystemSettings?: boolean }): void;
+  triggerPattern(
+    events: ReadonlyArray<{
+      time: number;
+      type?: string;
+      duration?: number;
+      intensity?: number;
+      sharpness?: number;
+    }>,
+    options?: { enableVibrateFallback?: boolean; ignoreAndroidSystemSettings?: boolean },
+  ): void;
   playAHAP(fileName: string): Promise<void>;
   getSystemHapticStatus(): Promise<object>;
 }

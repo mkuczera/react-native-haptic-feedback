@@ -33,8 +33,8 @@ const RNHapticFeedback = {
     if (!_enabled) return;
     try {
       NativeHapticFeedback.trigger(type, { ...defaultOptions, ...options });
-    } catch {
-      console.warn("RNReactNativeHapticFeedback is not available");
+    } catch (e) {
+      console.warn("RNReactNativeHapticFeedback: trigger failed –", e);
     }
   },
 
@@ -42,8 +42,8 @@ const RNHapticFeedback = {
     if (!_enabled) return;
     try {
       NativeHapticFeedback.stop();
-    } catch {
-      console.warn("RNReactNativeHapticFeedback is not available");
+    } catch (e) {
+      console.warn("RNReactNativeHapticFeedback: stop failed –", e);
     }
   },
 
@@ -59,8 +59,8 @@ const RNHapticFeedback = {
     if (!_enabled) return;
     try {
       NativeHapticFeedback.triggerPattern(events, { ...defaultOptions, ...options });
-    } catch {
-      console.warn("RNReactNativeHapticFeedback is not available");
+    } catch (e) {
+      console.warn("RNReactNativeHapticFeedback: triggerPattern failed –", e);
     }
   },
 

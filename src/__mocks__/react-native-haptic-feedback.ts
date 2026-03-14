@@ -19,6 +19,8 @@ export const getSystemHapticStatus = jest
   .mockResolvedValue({ vibrationEnabled: true, ringerMode: 'normal' });
 export const setEnabled = jest.fn();
 export const isEnabled = jest.fn().mockReturnValue(true);
+export const pattern = jest.fn().mockImplementation(realPattern);
+export const playHaptic = jest.fn().mockImplementation(realPlayHaptic);
 export const useHaptics = jest.fn().mockReturnValue({
   trigger,
   triggerPattern,
@@ -28,9 +30,8 @@ export const useHaptics = jest.fn().mockReturnValue({
   isEnabled,
   getSystemHapticStatus,
   playAHAP,
+  playHaptic,
 });
-export const pattern = jest.fn().mockImplementation(realPattern);
-export const playHaptic = jest.fn().mockImplementation(realPlayHaptic);
 export const Patterns = realPatterns;
 
 const RNHapticFeedback = {

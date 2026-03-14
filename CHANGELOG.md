@@ -1,5 +1,40 @@
 # Changelog
 
+## [3.0.0-next.1] - 2026-03-10
+
+### New Features
+
+#### `useHaptics` exposes `playHaptic`
+The hook now includes a `playHaptic` method that wraps the cross-platform utility with merged `defaultOptions`:
+```typescript
+const haptics = useHaptics({ enableVibrateFallback: true });
+await haptics.playHaptic('effect.ahap', pattern('oO.O'));
+```
+
+#### Compile-time pattern validation
+`AssertValidPattern<S>` is exported for advanced type-level validation of pattern strings:
+```typescript
+import type { AssertValidPattern } from 'react-native-haptic-feedback';
+// S resolves to never at compile time when the string contains invalid chars
+```
+
+#### `isRingerSilent` utility
+Pure helper exported from `types` for checking Android ringer state without a platform conditional:
+```typescript
+import { isRingerSilent } from 'react-native-haptic-feedback';
+const status = await RNHapticFeedback.getSystemHapticStatus();
+if (isRingerSilent(status)) { /* ringer is off */ }
+```
+
+### Bug Fixes
+
+- **iOS — `enableVibrateFallback` double-fire**: On iPhone 6s / 7 / SE 1st gen (Taptic Engine present, Core Haptics unavailable), setting `enableVibrateFallback: true` previously caused both UIKit feedback generators AND `AudioServicesPlaySystemSound` to fire, producing two consecutive haptic pulses. AudioServices is no longer called on the UIKit path — UIKit already handles all iPhones capable of running iOS 13+.
+- **iOS — UIKit fallback restored**: All 30 haptic types now map to appropriate UIKit generators (`UINotificationFeedbackGenerator`, `UIImpactFeedbackGenerator`, `UISelectionFeedbackGenerator`) on devices that have a Taptic Engine but not Core Haptics. This restores the per-type semantic that was present in v2.
+- **Android — `effect*` types silent below API 29**: `effectClick`, `effectDoubleClick`, `effectHeavyClick`, and `effectTick` used `VibrationEffect.EFFECT_*` constants which require API 29 (Android Q). On older devices these were silent no-ops. Fixed with duration-based `VibrateWithDuration` fallbacks for API < 29.
+- **`pattern()` position tracking**: `indexOf` was used to find the position of invalid characters, which returned the position of the first occurrence even when a later char was invalid. Fixed with an explicit counter.
+
+---
+
 ## [3.0.0-next.0] - 2026-03-09
 
 This is a pre-release for battle testing. Install with `npm install react-native-haptic-feedback@next`.

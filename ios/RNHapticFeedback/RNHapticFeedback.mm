@@ -242,12 +242,11 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
     // Intermediate fallback: UIKit feedback generators — per-type on devices with
     // a Taptic Engine but without Core Haptics (iPhone 6s, 7, SE 1st gen on iOS 13+).
     // Silent no-op on devices with no Taptic Engine at all (e.g. iPod touch).
+    // Note: enableVibrateFallback is NOT triggered here. On iOS 13+ all iPhones
+    // capable of running this SDK have a Taptic Engine, so UIKit already handles them.
+    // Adding AudioServicesPlaySystemSound here would cause a double-fire on 6s/7.
     [self playUIKitHaptic:type];
-    // Last-resort fallback for devices with no Taptic Engine.
-    // Only fires if the caller explicitly opts in via enableVibrateFallback: true.
-    if (enableVibrateFallback) {
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-    }
+    (void)enableVibrateFallback; // consumed; not used on UIKit path
 }
 
 RCT_EXPORT_METHOD(stop)

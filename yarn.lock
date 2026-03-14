@@ -2754,19 +2754,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7":
-  version: 7.28.6
-  resolution: "@babel/runtime@npm:7.28.6"
-  checksum: 42d8a868c2fc2e9a77927945a6daa7ec03c7ea49e611e0d15442933cdabb12f20e3a6849c729259076c10a4247adec229331d1f94c2d0073ea0979d7853e29fd
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.8.4":
   version: 7.25.0
   resolution: "@babel/runtime@npm:7.25.0"
   dependencies:
     regenerator-runtime: ^0.14.0
   checksum: 4a2a374a58eb01aaa65c5762606e90b3a1f448e0c637d42278b6cc0b42a9f5399b5f381ba9f237ee087da2860d14dd2d1de7bddcbe18be6a3cafba97e44bed64
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.28.6":
+  version: 7.28.6
+  resolution: "@babel/runtime@npm:7.28.6"
+  checksum: 42d8a868c2fc2e9a77927945a6daa7ec03c7ea49e611e0d15442933cdabb12f20e3a6849c729259076c10a4247adec229331d1f94c2d0073ea0979d7853e29fd
   languageName: node
   linkType: hard
 
@@ -4712,7 +4712,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7
     "@babel/preset-env": ^7
-    "@babel/runtime": ^7
+    "@babel/runtime": ^7.28.6
     "@react-native/babel-preset": 0.74.86
     "@react-native/eslint-config": ^0.74
     "@react-native/metro-config": 0.74.86
@@ -10364,7 +10364,7 @@ __metadata:
     "@babel/core": ^7
     "@babel/preset-env": ^7
     "@babel/preset-react": ^7
-    "@babel/runtime": ^7
+    "@babel/runtime": ^7.28.6
     "@eslint/js": ^9
     "@react-native/eslint-config": ^0.74
     "@types/jest": ^29

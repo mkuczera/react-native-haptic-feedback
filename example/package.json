@@ -23,7 +23,7 @@
   "devDependencies": {
     "@babel/core": "^7",
     "@babel/preset-env": "^7",
-    "@babel/runtime": "^7",
+    "@babel/runtime": "^7.28.6",
     "@react-native/babel-preset": "0.74.86",
     "@react-native/eslint-config": "^0.74",
     "@react-native/metro-config": "0.74.86",

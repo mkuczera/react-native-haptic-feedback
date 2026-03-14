@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import RNHapticFeedback from "../hapticFeedback";
+import { playHaptic as playHapticUtil } from "../utils/playHaptic";
 import type { HapticOptions, HapticEvent, HapticFeedbackTypes } from "../types";
 
 /**
@@ -32,6 +33,10 @@ export function useHaptics(defaultOptions?: HapticOptions) {
 
     isSupported(): boolean {
       return RNHapticFeedback.isSupported();
+    },
+
+    playHaptic(ahapFile: string, fallback: HapticEvent[], opts?: HapticOptions): Promise<void> {
+      return playHapticUtil(ahapFile, fallback, { ...defaultOptions, ...opts });
     },
 
     setEnabled: RNHapticFeedback.setEnabled,

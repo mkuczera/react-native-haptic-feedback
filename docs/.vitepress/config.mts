@@ -73,7 +73,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © Michael Kuczera',
+      copyright: 'Copyright © Michael Kuczera · <a href="/react-native-haptic-feedback/privacy">Privacy Policy</a>',
     },
 
     search: { provider: 'local' },

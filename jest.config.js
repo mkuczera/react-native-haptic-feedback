@@ -11,10 +11,11 @@ module.exports = {
     ],
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  modulePathIgnorePatterns: [
-    "<rootDir>/example/node_modules",
-    "<rootDir>/lib/",
-  ],
+  moduleNameMapper: {
+    "^react$": "<rootDir>/node_modules/react",
+    "^react/jsx-runtime$": "<rootDir>/node_modules/react/jsx-runtime",
+  },
+  modulePathIgnorePatterns: ["<rootDir>/lib/", "<rootDir>/example/"],
   transformIgnorePatterns: [
     "node_modules/(?!(react-native|my-project|react-native-button)/)",
   ],

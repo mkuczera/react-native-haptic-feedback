@@ -1,13 +1,11 @@
 {
-    "extends": "@react-native/typescript-config/tsconfig.json",
-    "compilerOptions": {
-        "jsx": "react-native",
-        "lib": ["dom", "esnext"],
-        "baseUrl": ".",
-        "paths": {
-            "react-native-haptic-feedback": ["../src"]
-        },
-        "resolveJsonModule": true,
-        "esModuleInterop": true
+  "extends": "@react-native/typescript-config/strict",
+  "compilerOptions": {
+    "types": ["jest"],
+    "paths": {
+      "react-native-haptic-feedback": ["../src/index.ts"]
     }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"]
 }

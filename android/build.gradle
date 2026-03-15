@@ -1,15 +1,15 @@
-def DEFAULT_COMPILE_SDK_VERSION             = 34
-def DEFAULT_TARGET_SDK_VERSION              = 34
-def DEFAULT_MIN_SDK_VERSION                 = 21
+def DEFAULT_COMPILE_SDK_VERSION = 35
+def DEFAULT_MIN_SDK_VERSION    = 23
+def DEFAULT_TARGET_SDK_VERSION = 35
 
 buildscript {
     repositories {
         google()
-        gradlePluginPortal()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:8.+'
     }
 }
 
@@ -18,44 +18,7 @@ def safeExtGet(prop, fallback) {
 }
 
 def isNewArchitectureEnabled() {
-   return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
-}
-
-def resolveReactNativeDirectory() {
-    def reactNativeLocation = safeExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
-    if (reactNativeLocation != null) {
-        return file(reactNativeLocation)
-    }
-
-    // monorepo workaround
-    // react-native can be hoisted or in project's own node_modules
-    def reactNativeFromProjectNodeModules = file("${rootProject.projectDir}/../node_modules/react-native")
-    if (reactNativeFromProjectNodeModules.exists()) {
-        return reactNativeFromProjectNodeModules
-    }
-
-    def reactNativeFromNodeModulesWithHapticFeedback = file("${projectDir}/../../react-native")
-    if (reactNativeFromNodeModulesWithHapticFeedback.exists()) {
-        return reactNativeFromNodeModulesWithHapticFeedback
-    }
-
-    throw new Exception(
-            "[react-native-haptic-feedback] Unable to resolve react-native location in " +
-                    "node_modules. You should add project extension property (in app/build.gradle) " +
-                    "`REACT_NATIVE_NODE_MODULES_DIR` with path to react-native."
-    )
-}
-
-def getReactNativeMinorVersion() {
-    def REACT_NATIVE_DIR = resolveReactNativeDirectory()
-
-    def reactProperties = new Properties()
-    file("$REACT_NATIVE_DIR/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
-
-    def REACT_NATIVE_VERSION = reactProperties.getProperty("VERSION_NAME")
-    def REACT_NATIVE_MINOR_VERSION = REACT_NATIVE_VERSION.startsWith("0.0.0-") ? 1000 : REACT_NATIVE_VERSION.split("\\.")[1].toInteger()
-
-    return REACT_NATIVE_MINOR_VERSION
+    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
 apply plugin: 'com.android.library'
@@ -64,24 +27,17 @@ if (isNewArchitectureEnabled()) {
 }
 
 android {
-    def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
-    if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
-      namespace "com.mkuczera"
+    namespace "com.mkuczera"
+
+    buildFeatures {
+        buildConfig = true
     }
 
-    if (agpVersion.tokenize('.')[0].toInteger() >= 8) {
-        buildFeatures {
-            buildConfig = true
-        }
-    }
-
-    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+    compileSdk safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
 
     defaultConfig {
-        minSdkVersion rootProject.hasProperty('minSdkVersion') ? rootProject.minSdkVersion : DEFAULT_MIN_SDK_VERSION
-        targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
-        versionCode 1
-        versionName "1.0"
+        minSdk safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
+        targetSdk safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     }
 
@@ -95,24 +51,16 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         abortOnError false
     }
 }
 
 repositories {
-    maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-        url "$projectDir/../node_modules/react-native/android"
-    }
     mavenCentral()
     google()
 }
 
 dependencies {
-  if (isNewArchitectureEnabled() && getReactNativeMinorVersion() < 71) {
-    implementation project(":ReactAndroid")
-  } else {
-    implementation 'com.facebook.react:react-native:+'
-  }
+    implementation 'com.facebook.react:react-android:+'
 }

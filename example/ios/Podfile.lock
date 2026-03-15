@@ -1854,7 +1854,7 @@ PODS:
     - React-utils (= 0.84.1)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.84.1)
-  - RNReactNativeHapticFeedback (3.0.0-next.0):
+  - RNReactNativeHapticFeedback (3.0.0-next.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2183,7 +2183,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 797de5178718324c6eba3327b07f9a423fbd5787
   ReactCommon: 07572bf9e687c8a52fbe4a3641e9e3a1a477c78e
   ReactNativeDependencies: ba8f663eff75e5c797ba1bed030af4991fa4cbf5
-  RNReactNativeHapticFeedback: e7f4db3bab84160300ed7bef687e90afe140be51
+  RNReactNativeHapticFeedback: 8d394e6250ce96aa4a5728ca29754c4071194409
   Yoga: c0b3f2c7e8d3e327e450223a2414ca3fa296b9a2
 
 PODFILE CHECKSUM: f9d39efd6a087e9442b27ea3803d20ff708d0664

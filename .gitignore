@@ -41,6 +41,7 @@ caches/
 daemon/
 native/
 wrapper/
+!**/gradle/wrapper/
 
 # BUCK
 buck-out/

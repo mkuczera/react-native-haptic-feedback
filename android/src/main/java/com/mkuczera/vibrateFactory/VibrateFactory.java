@@ -23,7 +23,7 @@ public class VibrateFactory {
             // API 31+: high-quality Composition primitives
             vibrateMap.put("impactLight",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK, 0.3f));
             vibrateMap.put("impactMedium",   new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_CLICK, 0.6f));
-            vibrateMap.put("impactHeavy",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_HEAVY_CLICK, 1.0f));
+            vibrateMap.put("impactHeavy",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_THUD, 1.0f));
             vibrateMap.put("rigid",          new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_CLICK, 0.9f));
             vibrateMap.put("soft",           new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK, 0.3f));
             vibrateMap.put("selection",      new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK, 0.4f));

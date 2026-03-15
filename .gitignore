@@ -57,3 +57,7 @@ lib/
 
 coverage/
 local-rn-version-examples/
+
+# VitePress build output
+docs/.vitepress/dist
+docs/.vitepress/cache

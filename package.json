@@ -23,7 +23,10 @@
     "test": "jest",
     "build": "bob build",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "react-native",
@@ -98,8 +101,8 @@
     "eslint-plugin-prettier": "^5",
     "globals": "^15",
     "husky": "^9.1.7",
-    "lint-staged": "^15",
     "jest": "^29.7.0",
+    "lint-staged": "^15",
     "prettier": "^3",
     "react": "^18.0.0",
     "react-native": "^0.74.7",
@@ -108,7 +111,8 @@
     "tslib": "^2",
     "turbo": "^2",
     "typescript": "^5",
-    "typescript-eslint": "^8"
+    "typescript-eslint": "^8",
+    "vitepress": "^1.6.4"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

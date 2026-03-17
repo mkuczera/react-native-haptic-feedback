@@ -7,10 +7,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.mkuczera.vibrateFactory.VibrateFactory;
 import com.mkuczera.vibrateFactory.Vibrate;
@@ -26,8 +23,6 @@ import com.facebook.react.bridge.UiThreadUtil;
 public class RNReactNativeHapticFeedbackModuleImpl {
 
     public static final String NAME = "RNHapticFeedback";
-
-    private static volatile WeakReference<View> sHapticView = new WeakReference<>(null);
 
     private static final Map<String, Integer> VIEW_HAPTIC_MAP = new HashMap<>();
     static {
@@ -51,20 +46,13 @@ public class RNReactNativeHapticFeedbackModuleImpl {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             // API 34 (Android 14)
-            VIEW_HAPTIC_MAP.put("toggleOn",             HapticFeedbackConstants.TOGGLE_ON);
-            VIEW_HAPTIC_MAP.put("toggleOff",            HapticFeedbackConstants.TOGGLE_OFF);
+            VIEW_HAPTIC_MAP.put("toggleOn",                    HapticFeedbackConstants.TOGGLE_ON);
+            VIEW_HAPTIC_MAP.put("toggleOff",                   HapticFeedbackConstants.TOGGLE_OFF);
+            VIEW_HAPTIC_MAP.put("dragStart",                   HapticFeedbackConstants.DRAG_START);
+            VIEW_HAPTIC_MAP.put("gestureThresholdActivate",    HapticFeedbackConstants.GESTURE_THRESHOLD_ACTIVATE);
+            VIEW_HAPTIC_MAP.put("gestureThresholdDeactivate",  HapticFeedbackConstants.GESTURE_THRESHOLD_DEACTIVATE);
+            VIEW_HAPTIC_MAP.put("noHaptics",                   HapticFeedbackConstants.NO_HAPTICS);
         }
-    }
-
-    public static void initHapticView(final Activity activity) {
-        if (activity == null || sHapticView.get() != null) return;
-        UiThreadUtil.runOnUiThread(() -> {
-            View v = new View(activity);
-            v.setHapticFeedbackEnabled(true);
-            ((android.view.ViewGroup) activity.getWindow().getDecorView())
-                .addView(v, new android.view.ViewGroup.LayoutParams(0, 0));
-            sHapticView = new WeakReference<>(v);
-        });
     }
 
     public static boolean isVibrationEnabled(Context context) {
@@ -84,31 +72,15 @@ public class RNReactNativeHapticFeedbackModuleImpl {
 
         final Integer hapticConstant = VIEW_HAPTIC_MAP.get(type);
         // performHapticFeedback always obeys system settings and cannot be forced.
-        // Only use the view path when we are NOT overriding system settings.
+        // Only use the decorView path when we are NOT overriding system settings.
         if (!ignoreAndroidSystemSettings && hapticConstant != null) {
-            final View view = sHapticView.get();
-            if (view != null) {
-                UiThreadUtil.runOnUiThread(() -> view.performHapticFeedback(hapticConstant));
+            final Activity activity = reactContext.getCurrentActivity();
+            if (activity != null) {
+                final View decorView = activity.getWindow().getDecorView();
+                UiThreadUtil.runOnUiThread(() -> decorView.performHapticFeedback(hapticConstant));
                 return;
             }
-            // View not initialised yet (activity was null at module construction time).
-            // Retry lazily: create the view and fire the haptic in one UI-thread pass.
-            final Activity lazyActivity = reactContext.getCurrentActivity();
-            if (lazyActivity != null) {
-                UiThreadUtil.runOnUiThread(() -> {
-                    if (sHapticView.get() == null) {
-                        View v = new View(lazyActivity);
-                        v.setHapticFeedbackEnabled(true);
-                        ((android.view.ViewGroup) lazyActivity.getWindow().getDecorView())
-                            .addView(v, new android.view.ViewGroup.LayoutParams(0, 0));
-                        sHapticView = new WeakReference<>(v);
-                    }
-                    View ready = sHapticView.get();
-                    if (ready != null) ready.performHapticFeedback(hapticConstant);
-                });
-                return;
-            }
-            // Activity still unavailable — fall through to vibrator
+            // Activity unavailable — fall through to vibrator
         }
 
         Vibrator v = (Vibrator) reactContext.getSystemService(Context.VIBRATOR_SERVICE);

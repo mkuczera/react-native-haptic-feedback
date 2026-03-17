@@ -4,9 +4,9 @@
 
 The library uses **`CHHapticEngine`** (Core Haptics) on all supported devices. UIKit feedback generators (`UIImpactFeedbackGenerator`, etc.) are no longer used.
 
-### Lazy initialisation
+### Initialisation & pre-warming
 
-The engine is created on the first haptic call and restarted automatically via its `resetHandler`. You do not need to manage its lifecycle.
+The engine is created eagerly at module init (inside `setBridge:`), so the first haptic call fires with no latency. If the engine is unavailable at init time it is created lazily on the first call instead. The engine restarts automatically via its `resetHandler`. You do not need to manage its lifecycle.
 
 ### Minimum iOS version
 

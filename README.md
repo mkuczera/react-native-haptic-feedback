@@ -18,17 +18,18 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Requirements
 
-| Platform | Minimum version |
-|---|---|
-| iOS | 13.0 (Core Haptics) |
-| Android | API 21 |
-| React Native | 0.71.0 |
+| Platform     | Minimum version     |
+| ------------ | ------------------- |
+| iOS          | 13.0 (Core Haptics) |
+| Android      | API 21              |
+| React Native | 0.71.0              |
 
 ---
 
 ## Installation
 
 **Stable (v2):**
+
 ```bash
 npm install react-native-haptic-feedback
 # or
@@ -36,6 +37,7 @@ yarn add react-native-haptic-feedback
 ```
 
 **Pre-release (v3 — battle testing):**
+
 ```bash
 npm install react-native-haptic-feedback@next
 # or
@@ -55,7 +57,7 @@ RNHapticFeedback.trigger("impactMedium");
 
 // With options
 RNHapticFeedback.trigger("notificationSuccess", {
-  enableVibrateFallback: true,   // iOS: vibrate if Core Haptics unavailable
+  enableVibrateFallback: true, // iOS: vibrate if Core Haptics unavailable
   ignoreAndroidSystemSettings: false,
 });
 ```
@@ -79,10 +81,10 @@ Play a predefined haptic type.
 RNHapticFeedback.trigger(type: HapticFeedbackTypes | string, options?: HapticOptions): void
 ```
 
-| Option | Default | Description |
-|---|---|---|
-| `enableVibrateFallback` | `false` | iOS: play `AudioServicesPlaySystemSound` as a last resort on devices with no Taptic Engine (e.g. iPod touch). Has no effect on devices that have a Taptic Engine — those use UIKit generators automatically. |
-| `ignoreAndroidSystemSettings` | `false` | Android: trigger even if vibration is disabled in system settings |
+| Option                        | Default | Description                                                                                                                                                                                                  |
+| ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `enableVibrateFallback`       | `false` | iOS: play `AudioServicesPlaySystemSound` as a last resort on devices with no Taptic Engine (e.g. iPod touch). Has no effect on devices that have a Taptic Engine — those use UIKit generators automatically. |
+| `ignoreAndroidSystemSettings` | `false` | Android: trigger even if vibration is disabled in system settings                                                                                                                                            |
 
 ### `stop()`
 
@@ -110,11 +112,11 @@ RNHapticFeedback.triggerPattern(events: HapticEvent[], options?: HapticOptions):
 
 ```typescript
 interface HapticEvent {
-  time: number;        // ms from pattern start
-  type?: 'transient' | 'continuous';
-  duration?: number;   // ms — for continuous events only
-  intensity?: number;  // 0.0–1.0
-  sharpness?: number;  // 0.0–1.0
+  time: number; // ms from pattern start
+  type?: "transient" | "continuous";
+  duration?: number; // ms — for continuous events only
+  intensity?: number; // 0.0–1.0
+  sharpness?: number; // 0.0–1.0
 }
 ```
 
@@ -200,11 +202,11 @@ See Apple's [Representing Haptic Patterns in AHAP Files](https://developer.apple
 Cross-platform wrapper for AHAP playback. Plays the `.ahap` file on iOS and falls back to a `triggerPattern` call on Android.
 
 ```typescript
-import { playHaptic, pattern } from 'react-native-haptic-feedback';
+import { playHaptic, pattern } from "react-native-haptic-feedback";
 
 // iOS: plays my-effect.ahap via Core Haptics
 // Android: plays the fallback pattern via Vibrator API
-await playHaptic('my-effect.ahap', pattern('oO.O'));
+await playHaptic("my-effect.ahap", pattern("oO.O"));
 ```
 
 This is the recommended approach for cross-platform apps — design your haptic in an `.ahap` file for the best iOS experience, and provide a `pattern()` fallback for Android.
@@ -226,7 +228,10 @@ interface SystemHapticStatus {
 Use the `isRingerSilent` helper to check for silent mode:
 
 ```typescript
-import { getSystemHapticStatus, isRingerSilent } from "react-native-haptic-feedback";
+import {
+  getSystemHapticStatus,
+  isRingerSilent,
+} from "react-native-haptic-feedback";
 
 const status = await getSystemHapticStatus();
 if (isRingerSilent(status)) {
@@ -246,7 +251,9 @@ import RNHapticFeedback from "react-native-haptic-feedback";
 RNHapticFeedback.setEnabled(userPreference.hapticsEnabled);
 
 // Check current state
-if (RNHapticFeedback.isEnabled()) { /* ... */ }
+if (RNHapticFeedback.isEnabled()) {
+  /* ... */
+}
 ```
 
 The setting is in-memory only — persist it yourself (e.g. AsyncStorage) if it should survive app restarts.
@@ -257,13 +264,13 @@ The setting is in-memory only — persist it yourself (e.g. AsyncStorage) if it 
 
 Build `HapticEvent[]` from a compact string notation:
 
-| Character | Meaning | Time advance | Total `O_O` spacing |
-|---|---|---|---|
-| `o` | Soft transient (intensity 0.4, sharpness 0.4) | 100 ms | — |
-| `O` | Strong transient (intensity 1.0, sharpness 0.8) | 100 ms | — |
-| `.` | Short gap | +150 ms | 250 ms |
-| `-` | Medium gap | +400 ms | 500 ms |
-| `=` | Long gap | +1000 ms | 1100 ms |
+| Character | Meaning                                         | Time advance | Total `O_O` spacing |
+| --------- | ----------------------------------------------- | ------------ | ------------------- |
+| `o`       | Soft transient (intensity 0.4, sharpness 0.4)   | 100 ms       | —                   |
+| `O`       | Strong transient (intensity 1.0, sharpness 0.8) | 100 ms       | —                   |
+| `.`       | Short gap                                       | +150 ms      | 250 ms              |
+| `-`       | Medium gap                                      | +400 ms      | 500 ms              |
+| `=`       | Long gap                                        | +1000 ms     | 1100 ms             |
 
 Consecutive haptic events (`OO`) are spaced 100 ms apart — the minimum interval the Taptic Engine (iOS) and vibrator motors (Android) can render as distinct pulses. Gap characters add progressively more space on top: `.` for a short beat (250 ms), `-` for a half-second pause, `=` for a full second rest.
 
@@ -271,7 +278,7 @@ Consecutive haptic events (`OO`) are spaced 100 ms apart — the minimum interva
 import { pattern, PATTERN_CHARS } from "react-native-haptic-feedback";
 import type { PatternChar } from "react-native-haptic-feedback";
 
-RNHapticFeedback.triggerPattern(pattern('oO.O'));
+RNHapticFeedback.triggerPattern(pattern("oO.O"));
 // → soft, strong, 100ms pause, strong
 ```
 
@@ -282,8 +289,8 @@ RNHapticFeedback.triggerPattern(pattern('oO.O'));
 ```typescript
 import type { AssertValidPattern } from "react-native-haptic-feedback";
 
-pattern('oO.O');    // ✅ compiles
-pattern('oXO');     // ✗ TypeScript error — 'X' is not a valid PatternChar
+pattern("oO.O"); // ✅ compiles
+pattern("oXO"); // ✗ TypeScript error — 'X' is not a valid PatternChar
 ```
 
 This works automatically — no extra setup needed. If the argument is a runtime `string` variable (not a literal), validation happens at runtime via `TypeError` instead.
@@ -294,7 +301,7 @@ This works automatically — no extra setup needed. If the argument is a runtime
 import { PATTERN_CHARS } from "react-native-haptic-feedback";
 import type { PatternChar } from "react-native-haptic-feedback";
 
-const valid = [...input].every(c => PATTERN_CHARS.has(c as PatternChar));
+const valid = [...input].every((c) => PATTERN_CHARS.has(c as PatternChar));
 ```
 
 ---
@@ -338,11 +345,11 @@ The hook accepts default options that are merged with per-call overrides.
 
 A drop-in `Pressable` wrapper that automatically triggers haptic feedback. Accepts all standard `PressableProps` plus three extra props:
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `hapticType` | `HapticFeedbackTypes` | `impactMedium` | Feedback type to play |
-| `hapticTrigger` | `'onPressIn' \| 'onPress' \| 'onLongPress'` | `onPressIn` | Which event triggers haptics |
-| `hapticOptions` | `HapticOptions` | — | Options forwarded to `trigger()` |
+| Prop            | Type                                        | Default        | Description                      |
+| --------------- | ------------------------------------------- | -------------- | -------------------------------- |
+| `hapticType`    | `HapticFeedbackTypes`                       | `impactMedium` | Feedback type to play            |
+| `hapticTrigger` | `'onPressIn' \| 'onPress' \| 'onLongPress'` | `onPressIn`    | Which event triggers haptics     |
+| `hapticOptions` | `HapticOptions`                             | —              | Options forwarded to `trigger()` |
 
 ```typescript
 import { TouchableHaptic } from "react-native-haptic-feedback";
@@ -361,38 +368,38 @@ import { TouchableHaptic } from "react-native-haptic-feedback";
 
 ## Available Feedback Types
 
-|       Type               |  Android  |   iOS   | Notes |
-| :----------------------: | :-------: | :-----: |---|
-| `impactLight`            | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` |
-| `impactMedium`           | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` |
-| `impactHeavy`            | ✅ | ✅ | API 31+: `PRIMITIVE_HEAVY_CLICK` |
-| `rigid`                  | ✅ | ✅ | API 31+: `PRIMITIVE_CLICK` (scale 0.9) |
-| `soft`                   | ✅ | ✅ | API 31+: `PRIMITIVE_TICK` (scale 0.3) |
-| `notificationSuccess`    | ✅ | ✅ | |
-| `notificationWarning`    | ✅ | ✅ | |
-| `notificationError`      | ✅ | ✅ | |
-| `selection`              | ✅ | ✅ | |
-| `confirm`                | ✅ | ✅ | Android API 30+: `CONFIRM`; fallback waveform on older |
-| `reject`                 | ✅ | ✅ | Android API 30+: `REJECT`; fallback waveform on older |
-| `gestureStart`           | ✅ | ✅ | Android API 30+: `GESTURE_START`; fallback waveform on older |
-| `gestureEnd`             | ✅ | ✅ | Android API 30+: `GESTURE_END`; fallback waveform on older |
-| `segmentTick`            | ✅ | ✅ | Android API 30+: `SEGMENT_TICK`; fallback waveform on older |
-| `segmentFrequentTick`    | ✅ | ✅ | Android API 30+: `SEGMENT_FREQUENT_TICK`; fallback waveform on older |
-| `toggleOn`               | ✅ | ✅ | Android API 30+: `TOGGLE_ON`; fallback waveform on older |
-| `toggleOff`              | ✅ | ✅ | Android API 30+: `TOGGLE_OFF`; fallback waveform on older |
-| `clockTick`              | ✅ | ✅ | iOS: Core Haptics approximation |
-| `contextClick`           | ✅ | ✅ | iOS: Core Haptics approximation |
-| `keyboardPress`          | ✅ | ✅ | iOS: Core Haptics approximation |
-| `keyboardRelease`        | ✅ | ✅ | iOS: Core Haptics approximation |
-| `keyboardTap`            | ✅ | ✅ | iOS: Core Haptics approximation |
-| `longPress`              | ✅ | ✅ | iOS: Core Haptics approximation |
-| `textHandleMove`         | ✅ | ✅ | iOS: Core Haptics approximation |
-| `virtualKey`             | ✅ | ✅ | iOS: Core Haptics approximation |
-| `virtualKeyRelease`      | ✅ | ✅ | iOS: Core Haptics approximation |
-| `effectClick`            | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
-| `effectDoubleClick`      | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
-| `effectHeavyClick`       | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
-| `effectTick`             | ✅ | ✅ | Android API 29+; iOS: Core Haptics approximation |
+|         Type          | Android | iOS | Notes                                                                |
+| :-------------------: | :-----: | :-: | -------------------------------------------------------------------- |
+|     `impactLight`     |   ✅    | ✅  | API 31+: `PRIMITIVE_TICK`                                            |
+|    `impactMedium`     |   ✅    | ✅  | API 31+: `PRIMITIVE_CLICK`                                           |
+|     `impactHeavy`     |   ✅    | ✅  | API 31+: `PRIMITIVE_HEAVY_CLICK`                                     |
+|        `rigid`        |   ✅    | ✅  | API 31+: `PRIMITIVE_CLICK` (scale 0.9)                               |
+|        `soft`         |   ✅    | ✅  | API 31+: `PRIMITIVE_TICK` (scale 0.3)                                |
+| `notificationSuccess` |   ✅    | ✅  |                                                                      |
+| `notificationWarning` |   ✅    | ✅  |                                                                      |
+|  `notificationError`  |   ✅    | ✅  |                                                                      |
+|      `selection`      |   ✅    | ✅  |                                                                      |
+|       `confirm`       |   ✅    | ✅  | Android API 30+: `CONFIRM`; fallback waveform on older               |
+|       `reject`        |   ✅    | ✅  | Android API 30+: `REJECT`; fallback waveform on older                |
+|    `gestureStart`     |   ✅    | ✅  | Android API 30+: `GESTURE_START`; fallback waveform on older         |
+|     `gestureEnd`      |   ✅    | ✅  | Android API 30+: `GESTURE_END`; fallback waveform on older           |
+|     `segmentTick`     |   ✅    | ✅  | Android API 30+: `SEGMENT_TICK`; fallback waveform on older          |
+| `segmentFrequentTick` |   ✅    | ✅  | Android API 30+: `SEGMENT_FREQUENT_TICK`; fallback waveform on older |
+|      `toggleOn`       |   ✅    | ✅  | Android API 30+: `TOGGLE_ON`; fallback waveform on older             |
+|      `toggleOff`      |   ✅    | ✅  | Android API 30+: `TOGGLE_OFF`; fallback waveform on older            |
+|      `clockTick`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|    `contextClick`     |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|    `keyboardPress`    |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|   `keyboardRelease`   |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|     `keyboardTap`     |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|      `longPress`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|   `textHandleMove`    |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|     `virtualKey`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|  `virtualKeyRelease`  |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|     `effectClick`     |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|  `effectDoubleClick`  |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|  `effectHeavyClick`   |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|     `effectTick`      |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
 
 ---
 
@@ -404,45 +411,45 @@ Understanding how each haptic type is rendered helps when diagnosing unexpected 
 
 Every `trigger()` call on iOS walks this chain and stops at the first tier that succeeds:
 
-| Tier | Hardware requirement | What fires |
-|---|---|---|
-| **1 — Core Haptics** | iPhone 8+ / iPad Pro (iOS 13+) | `CHHapticEngine` — full per-type patterns with custom intensity & sharpness |
+| Tier                     | Hardware requirement                                | What fires                                                                                                                       |
+| ------------------------ | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **1 — Core Haptics**     | iPhone 8+ / iPad Pro (iOS 13+)                      | `CHHapticEngine` — full per-type patterns with custom intensity & sharpness                                                      |
 | **2 — UIKit generators** | Taptic Engine (iPhone 6s, 7, SE 1st gen on iOS 13+) | `UIImpactFeedbackGenerator` / `UINotificationFeedbackGenerator` / `UISelectionFeedbackGenerator` — per-type, semantically mapped |
-| **3 — Audio vibration** | Any device | `AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)` — **only fires if `enableVibrateFallback: true`** |
+| **3 — Audio vibration**  | Any device                                          | `AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)` — **only fires if `enableVibrateFallback: true`**                         |
 
 Tier 3 exists for devices with no Taptic Engine at all (e.g. iPod touch 7th gen). On any device with a Taptic Engine, Tier 2 handles it and Tier 3 is unnecessary.
 
 **UIKit semantic mapping (Tier 2):**
 
-| UIKit generator | Types |
-|---|---|
-| `UINotificationFeedbackGenerator(.success)` | `notificationSuccess` |
-| `UINotificationFeedbackGenerator(.warning)` | `notificationWarning` |
-| `UINotificationFeedbackGenerator(.error)` | `notificationError`, `reject` |
-| `UIImpactFeedbackGenerator(.light)` | `impactLight`, `soft`, `effectTick`, `clockTick`, `gestureStart`, `segmentTick`, `segmentFrequentTick`, `textHandleMove` |
-| `UIImpactFeedbackGenerator(.medium)` | `impactMedium`, `confirm`, `toggleOn`, `toggleOff`, `effectClick`, `effectDoubleClick` and all other types |
-| `UIImpactFeedbackGenerator(.heavy)` | `impactHeavy`, `rigid`, `effectHeavyClick`, `longPress` |
-| `UISelectionFeedbackGenerator` | `selection`, `keyboardPress`, `keyboardRelease`, `keyboardTap`, `virtualKey`, `virtualKeyRelease`, `gestureEnd`, `contextClick` |
+| UIKit generator                             | Types                                                                                                                           |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `UINotificationFeedbackGenerator(.success)` | `notificationSuccess`                                                                                                           |
+| `UINotificationFeedbackGenerator(.warning)` | `notificationWarning`                                                                                                           |
+| `UINotificationFeedbackGenerator(.error)`   | `notificationError`, `reject`                                                                                                   |
+| `UIImpactFeedbackGenerator(.light)`         | `impactLight`, `soft`, `effectTick`, `clockTick`, `gestureStart`, `segmentTick`, `segmentFrequentTick`, `textHandleMove`        |
+| `UIImpactFeedbackGenerator(.medium)`        | `impactMedium`, `confirm`, `toggleOn`, `toggleOff`, `effectClick`, `effectDoubleClick` and all other types                      |
+| `UIImpactFeedbackGenerator(.heavy)`         | `impactHeavy`, `rigid`, `effectHeavyClick`, `longPress`                                                                         |
+| `UISelectionFeedbackGenerator`              | `selection`, `keyboardPress`, `keyboardRelease`, `keyboardTap`, `virtualKey`, `virtualKeyRelease`, `gestureEnd`, `contextClick` |
 
 ### Android — two-tier fallback chain
 
-| Tier | API level | What fires |
-|---|---|---|
-| **1 — `performHapticFeedback`** | All (via `HapticFeedbackConstants`) | System-quality haptic constant through a hidden 0×0 View — respects user system settings unless `ignoreAndroidSystemSettings: true` |
-| **2 — Vibrator API** | API 21+ | `VibrationEffect.createWaveform` (API 26+) or raw waveform; API 31+ uses `VibrationEffect.Composition` primitives for richer quality |
+| Tier                            | API level                           | What fires                                                                                                                           |
+| ------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **1 — `performHapticFeedback`** | All (via `HapticFeedbackConstants`) | System-quality haptic constant through a hidden 0×0 View — respects user system settings unless `ignoreAndroidSystemSettings: true`  |
+| **2 — Vibrator API**            | API 21+                             | `VibrationEffect.createWaveform` (API 26+) or raw waveform; API 31+ uses `VibrationEffect.Composition` primitives for richer quality |
 
 Tier 1 is skipped when `ignoreAndroidSystemSettings: true` (because `performHapticFeedback` cannot override system settings), falling directly to Tier 2.
 
 **Android API-level progression:**
 
-| API | Improvement |
-|---|---|
-| 21 | Raw waveform vibration |
-| 26 | `VibrationEffect.createWaveform` with per-step amplitudes |
-| 29 | `VibrationEffect.createPredefined` for `effect*` types |
-| 30 | `HapticFeedbackConstants` for `confirm`, `reject`, `gesture*`, `segment*` |
-| 31 | `VibrationEffect.Composition` primitives (richer impact feel) |
-| 34 | `HapticFeedbackConstants` for `toggleOn`, `toggleOff` |
+| API | Improvement                                                               |
+| --- | ------------------------------------------------------------------------- |
+| 21  | Raw waveform vibration                                                    |
+| 26  | `VibrationEffect.createWaveform` with per-step amplitudes                 |
+| 29  | `VibrationEffect.createPredefined` for `effect*` types                    |
+| 30  | `HapticFeedbackConstants` for `confirm`, `reject`, `gesture*`, `segment*` |
+| 31  | `VibrationEffect.Composition` primitives (richer impact feel)             |
+| 34  | `HapticFeedbackConstants` for `toggleOn`, `toggleOff`                     |
 
 ---
 
@@ -450,7 +457,7 @@ Tier 1 is skipped when `ignoreAndroidSystemSettings: true` (because `performHapt
 
 ```typescript
 // In your test file:
-jest.mock('react-native-haptic-feedback');
+jest.mock("react-native-haptic-feedback");
 
 // All methods are automatically mocked:
 // trigger, stop, isSupported (→ true), triggerPattern, playAHAP (→ Promise.resolve()),
@@ -468,8 +475,6 @@ jest.mock('react-native-haptic-feedback');
 2. **React Native minimum is 0.71** — update your peer dependency if needed.
 3. The internal `DeviceUtils` class is removed — if you referenced it directly, remove those imports.
 4. `enableVibrateFallback` on devices without Core Haptics now calls `kSystemSoundID_Vibrate` instead of the UIKit generator path.
-5. `pattern()` now throws a `TypeError` for invalid characters instead of silently ignoring them.
-6. **`pattern()` timing changed** — haptic events now advance the cursor by 100 ms (was 50 ms) to ensure each event is a distinct pulse on hardware. Gap characters also adjusted: `.` = 150 ms (was 100), `-` = 400 ms (was 300), `=` = 1000 ms (unchanged). If you have code that depends on exact `HapticEvent.time` values from `pattern()`, update your expectations.
 
 ### Upgrade steps
 
@@ -480,42 +485,6 @@ cd ios && pod install
 ```
 
 All existing `trigger()` call-sites continue to work without changes. The new `confirm`, `reject`, `gestureStart/End`, `segmentTick/FrequentTick`, `toggleOn/Off` types are additive.
-
----
-
-## Comparison with other libraries
-
-| Feature | **react-native-haptic-feedback** | [expo-haptics] | [react-native-nitro-haptics] | [@candlefinance/haptics] | [expo-ahap] |
-|---|:---:|:---:|:---:|:---:|:---:|
-| iOS (Core Haptics) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Android | ✅ | ✅ | ✅ | ⚠️ basic | ❌ |
-| Web | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Haptic types (count) | **27+** | 10 | 10 | 10 | — |
-| Same types on both platforms | ✅ | ✅ | ✅ | ⚠️ | ❌ |
-| Custom pattern API | ✅ | ❌ | ❌ | ✅ | ❌ |
-| Pattern notation string | ✅ `oO.O` | ❌ | ❌ | ✅ | ❌ |
-| AHAP file playback | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Cross-platform `playHaptic` | ✅ | ❌ | ❌ | ❌ | ❌ |
-| `useHaptics` React hook | ✅ | ❌ | ❌ | ❌ | ❌ |
-| `TouchableHaptic` component | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Global enable / disable | ✅ | ❌ | ❌ | ❌ | ❌ |
-| System haptic status query | ✅ | ❌ | ❌ | ❌ | ❌ |
-| TypeScript (full) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Compile-time pattern check | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Built-in Jest mock | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Old + New Architecture | ✅ | ✅ | ❌ New only | ✅ | ✅ |
-
-[expo-haptics]: https://docs.expo.dev/versions/latest/sdk/haptics/
-[react-native-nitro-haptics]: https://github.com/oblador/react-native-nitro-haptics
-[@candlefinance/haptics]: https://github.com/candlefinance/haptics
-[expo-ahap]: https://github.com/EvanBacon/expo-ahap
-
-**When to choose something else:**
-
-- **expo-haptics** — you only need the basic 3 impact/notification/selection categories and want official Expo SDK + web support.
-- **react-native-nitro-haptics** — you are on New Architecture only and want the lowest possible latency via Nitro modules.
-- **@candlefinance/haptics** — you need AHAP playback combined with a pattern notation API and primarily target iOS.
-- **expo-ahap** — you only need to play `.ahap` files and nothing else.
 
 ---
 

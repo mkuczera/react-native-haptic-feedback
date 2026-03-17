@@ -13,6 +13,7 @@
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
+    [self initEngine]; // pre-warm on module init to eliminate first-call latency
 }
 
 - (dispatch_queue_t)methodQueue
@@ -160,6 +161,14 @@ RCT_EXPORT_MODULE();
         return @[[self makeTransientEvent:0 intensity:1.0 sharpness:0.7]];
     } else if ([type isEqual:@"effectTick"]) {
         return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.8]];
+    } else if ([type isEqual:@"dragStart"]) {
+        return @[[self makeTransientEvent:0 intensity:0.3 sharpness:0.6]];
+    } else if ([type isEqual:@"gestureThresholdActivate"]) {
+        return @[[self makeTransientEvent:0 intensity:0.5 sharpness:0.7]];
+    } else if ([type isEqual:@"gestureThresholdDeactivate"]) {
+        return @[[self makeTransientEvent:0 intensity:0.2 sharpness:0.4]];
+    } else if ([type isEqual:@"noHaptics"]) {
+        return @[]; // explicit no-op
     } else {
         // selection and any unrecognised type
         return @[[self makeTransientEvent:0 intensity:0.2 sharpness:0.5]];
@@ -195,9 +204,12 @@ RCT_EXPORT_MODULE();
                || [type isEqual:@"gestureEnd"] || [type isEqual:@"contextClick"]) {
         UISelectionFeedbackGenerator *g = [UISelectionFeedbackGenerator new];
         [g selectionChanged];
+    } else if ([type isEqual:@"noHaptics"]) {
+        // explicit no-op
     } else {
         // impactMedium, confirm, toggleOn, toggleOff, effectClick, effectDoubleClick,
-        // effectHeavyClick and any unrecognised type
+        // effectHeavyClick, dragStart, gestureThresholdActivate, gestureThresholdDeactivate
+        // and any unrecognised type
         UIImpactFeedbackGenerator *g = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
         [g impactOccurred];
     }
@@ -205,6 +217,7 @@ RCT_EXPORT_MODULE();
 
 - (void)playEvents:(NSArray<CHHapticEvent *> *)events
 {
+    if (events.count == 0) return;
     [self initEngine];
     if (!_engine) return;
 

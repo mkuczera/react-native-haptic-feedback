@@ -11,6 +11,7 @@ import HapticFeedback from "react-native-haptic-feedback";
 | Method                                                     | Returns                       | Description                     |
 | ---------------------------------------------------------- | ----------------------------- | ------------------------------- |
 | [`trigger(type, options?)`](/api/trigger)                  | `void`                        | Fire a single haptic            |
+| [`impact(type?, intensity?, options?)`](/api/impact)       | `void`                        | Haptic with custom intensity    |
 | [`triggerPattern(events, options?)`](/api/trigger-pattern) | `void`                        | Play a `HapticEvent[]` sequence |
 | [`stop()`](/api/control)                                   | `void`                        | Stop ongoing haptics (iOS)      |
 | [`isSupported()`](/api/control)                            | `boolean`                     | Synchronous capability check    |
@@ -26,6 +27,7 @@ import HapticFeedback from "react-native-haptic-feedback";
 ```ts
 import {
   trigger,
+  impact,
   stop,
   isSupported,
   triggerPattern,
@@ -71,7 +73,7 @@ All methods from the default export are also available as named exports.
 
 | Export                                                  | Description                                            |
 | ------------------------------------------------------- | ------------------------------------------------------ |
-| [`HapticFeedbackTypes`](/api/types#hapticfeedbacktypes) | Enum of all 30 haptic type strings                     |
+| [`HapticFeedbackTypes`](/api/types#hapticfeedbacktypes) | Enum of all 34 haptic type strings                     |
 | [`HapticOptions`](/api/types#hapticoptions)             | `enableVibrateFallback`, `ignoreAndroidSystemSettings` |
 | [`HapticEvent`](/api/types#hapticevent)                 | Single event in a pattern sequence                     |
 | [`SystemHapticStatus`](/api/types#systemhapticstatus)   | Result of `getSystemHapticStatus()`                    |

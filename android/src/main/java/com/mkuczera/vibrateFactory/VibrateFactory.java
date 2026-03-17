@@ -8,6 +8,7 @@ import java.util.Map;
 
 import android.os.Build;
 import android.os.Vibrator;
+import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.util.Log;
 
@@ -59,8 +60,13 @@ public class VibrateFactory {
         vibrateMap.put("gestureEnd",           new VibrateWithDuration(new long[]{0, 20}));
         vibrateMap.put("segmentTick",          new VibrateWithDuration(new long[]{0, 10}));
         vibrateMap.put("segmentFrequentTick",  new VibrateWithDuration(new long[]{0, 8}));
-        vibrateMap.put("toggleOn",             new VibrateWithDuration(new long[]{0, 15, 30, 25}));
-        vibrateMap.put("toggleOff",            new VibrateWithDuration(new long[]{0, 25, 30, 15}));
+        vibrateMap.put("toggleOn",                   new VibrateWithDuration(new long[]{0, 15, 30, 25}));
+        vibrateMap.put("toggleOff",                  new VibrateWithDuration(new long[]{0, 25, 30, 15}));
+        // API 34 types — fallback waveforms for pre-34 devices
+        vibrateMap.put("dragStart",                  new VibrateWithDuration(new long[]{0, 15}));
+        vibrateMap.put("gestureThresholdActivate",   new VibrateWithDuration(new long[]{0, 20}));
+        vibrateMap.put("gestureThresholdDeactivate", new VibrateWithDuration(new long[]{0, 10}));
+        // noHaptics intentionally has no entry — callers should skip it
         // effect* types require API 29 (createPredefined); fall back to durations on older devices
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             vibrateMap.put("effectClick",       new VibrateWithCreatePredefined(VibrationEffect.EFFECT_CLICK));
@@ -133,7 +139,13 @@ public class VibrateFactory {
         System.arraycopy(amplitudes, 0, finalAmplitudes, 0, idx);
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                VibrationEffect effect = VibrationEffect.createWaveform(finalTimings, finalAmplitudes, -1);
+                VibrationAttributes attrs = new VibrationAttributes.Builder()
+                    .setUsage(VibrationAttributes.USAGE_TOUCH)
+                    .build();
+                v.vibrate(effect, attrs);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 v.vibrate(VibrationEffect.createWaveform(finalTimings, finalAmplitudes, -1));
             } else {
                 v.vibrate(finalTimings, -1);

@@ -2,6 +2,16 @@ import NativeHapticFeedback from "./codegenSpec/NativeHapticFeedback";
 import { HapticFeedbackTypes } from "./types";
 import type { HapticOptions, HapticEvent, SystemHapticStatus } from "./types";
 
+// Characteristic sharpness per impact type for use with impact()
+const IMPACT_SHARPNESS: Partial<Record<string, number>> = {
+  [HapticFeedbackTypes.impactLight]: 0.3,
+  [HapticFeedbackTypes.impactMedium]: 0.6,
+  [HapticFeedbackTypes.impactHeavy]: 0.8,
+  [HapticFeedbackTypes.rigid]: 1.0,
+  [HapticFeedbackTypes.soft]: 0.1,
+  [HapticFeedbackTypes.selection]: 0.3,
+};
+
 const defaultOptions: Required<HapticOptions> = {
   enableVibrateFallback: false,
   ignoreAndroidSystemSettings: false,
@@ -83,6 +93,37 @@ const RNHapticFeedback = {
       return NativeHapticFeedback.playAHAP(fileName);
     } catch {
       return Promise.resolve();
+    }
+  },
+
+  /**
+   * Play a haptic with a custom intensity (0.0–1.0).
+   *
+   * On iOS (Core Haptics), the intensity is applied precisely via CHHapticEngine.
+   * On Android it maps to `VibrationEffect` amplitude.
+   * On devices without haptic hardware this is a no-op.
+   *
+   * @param type - haptic type that determines the base sharpness/character (default `impactMedium`)
+   * @param intensity - 0.0 (silent) to 1.0 (maximum), default 0.7
+   * @param options - same options as `trigger()`
+   */
+  impact(
+    type:
+      | keyof typeof HapticFeedbackTypes
+      | HapticFeedbackTypes = HapticFeedbackTypes.impactMedium,
+    intensity = 0.7,
+    options: HapticOptions = {},
+  ): void {
+    if (!_enabled) return;
+    const sharpness = IMPACT_SHARPNESS[type as string] ?? 0.5;
+    const clampedIntensity = Math.max(0, Math.min(1, intensity));
+    try {
+      NativeHapticFeedback.triggerPattern(
+        [{ time: 0, intensity: clampedIntensity, sharpness }],
+        { ...defaultOptions, ...options },
+      );
+    } catch (e) {
+      console.warn("RNReactNativeHapticFeedback: impact failed –", e);
     }
   },
 

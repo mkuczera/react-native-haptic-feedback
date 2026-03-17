@@ -33,6 +33,7 @@ export default defineConfig({
             { text: 'Pattern Notation', link: '/guide/pattern' },
             { text: 'iOS — Core Haptics', link: '/guide/ios' },
             { text: 'Android', link: '/guide/android' },
+            { text: 'Web', link: '/guide/web' },
             { text: 'AHAP Files', link: '/guide/ahap' },
             { text: 'Testing (Jest)', link: '/guide/testing' },
             { text: 'Migration v2 → v3', link: '/guide/migration' },
@@ -45,6 +46,7 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/api/' },
             { text: 'trigger()', link: '/api/trigger' },
+            { text: 'impact()', link: '/api/impact' },
             { text: 'triggerPattern()', link: '/api/trigger-pattern' },
             { text: 'stop() / isSupported()', link: '/api/control' },
             { text: 'setEnabled() / isEnabled()', link: '/api/enabled' },

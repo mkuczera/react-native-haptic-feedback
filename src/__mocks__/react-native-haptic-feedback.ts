@@ -13,6 +13,7 @@ export const trigger = jest.fn();
 export const stop = jest.fn();
 export const isSupported = jest.fn().mockReturnValue(true);
 export const triggerPattern = jest.fn();
+export const impact = jest.fn();
 export const playAHAP = jest.fn().mockResolvedValue(undefined);
 export const getSystemHapticStatus = jest
   .fn()
@@ -24,6 +25,7 @@ export const playHaptic = jest.fn().mockImplementation(realPlayHaptic);
 export const useHaptics = jest.fn().mockReturnValue({
   trigger,
   triggerPattern,
+  impact,
   stop,
   isSupported,
   setEnabled,
@@ -39,6 +41,7 @@ const RNHapticFeedback = {
   stop,
   isSupported,
   triggerPattern,
+  impact,
   playAHAP,
   getSystemHapticStatus,
   setEnabled,

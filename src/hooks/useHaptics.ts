@@ -48,6 +48,17 @@ export function useHaptics(defaultOptions?: HapticOptions) {
         });
       },
 
+      impact(
+        type?: keyof typeof HapticFeedbackTypes | HapticFeedbackTypes,
+        intensity?: number,
+        opts?: HapticOptions,
+      ): void {
+        RNHapticFeedback.impact(type, intensity, {
+          ...defaultOptions,
+          ...opts,
+        });
+      },
+
       setEnabled: RNHapticFeedback.setEnabled,
       isEnabled: RNHapticFeedback.isEnabled,
       getSystemHapticStatus: RNHapticFeedback.getSystemHapticStatus,

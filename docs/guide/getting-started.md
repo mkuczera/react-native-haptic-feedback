@@ -2,11 +2,12 @@
 
 ## Requirements
 
-| Platform     | Minimum              |
-| ------------ | -------------------- |
-| iOS          | 13.0                 |
-| Android      | API 21 (Android 5.0) |
-| React Native | 0.71.0               |
+| Platform     | Minimum                                                                                       |
+| ------------ | --------------------------------------------------------------------------------------------- |
+| iOS          | 13.0                                                                                          |
+| Android      | API 21 (Android 5.0)                                                                          |
+| React Native | 0.71.0                                                                                        |
+| Web          | Browsers with [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API) |
 
 ## Installation
 
@@ -33,6 +34,18 @@ No manual linking needed — the library uses React Native's auto-linking.
 ### Android
 
 No extra steps. Auto-linking handles everything.
+
+### Expo managed workflow
+
+Add the plugin to your `app.config.js`:
+
+```js
+export default {
+  plugins: ["react-native-haptic-feedback"],
+};
+```
+
+No permissions or entitlements are needed — haptic feedback is a device-output function.
 
 ---
 
@@ -75,6 +88,7 @@ Everything you need can be imported individually:
 import {
   // Core methods
   trigger,
+  impact,
   stop,
   isSupported,
   triggerPattern,

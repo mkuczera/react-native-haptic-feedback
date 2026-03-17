@@ -29,6 +29,10 @@ export enum HapticFeedbackTypes {
   segmentFrequentTick = "segmentFrequentTick",
   toggleOn = "toggleOn",
   toggleOff = "toggleOff",
+  dragStart = "dragStart",
+  gestureThresholdActivate = "gestureThresholdActivate",
+  gestureThresholdDeactivate = "gestureThresholdDeactivate",
+  noHaptics = "noHaptics",
 }
 
 export interface HapticOptions {

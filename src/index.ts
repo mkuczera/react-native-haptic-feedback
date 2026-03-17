@@ -19,6 +19,7 @@ export const {
   getSystemHapticStatus,
   setEnabled,
   isEnabled,
+  impact,
 } = RNHapticFeedback;
 /** @platform ios */
 export const { playAHAP } = RNHapticFeedback;

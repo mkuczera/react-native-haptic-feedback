@@ -2,6 +2,7 @@ package com.mkuczera.vibrateFactory;
 
 import android.os.Build;
 import android.os.Vibrator;
+import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.util.Log;
 
@@ -30,7 +31,14 @@ public class VibrateWithComposition implements Vibrate {
                 VibrationEffect effect = VibrationEffect.startComposition()
                     .addPrimitive(primitiveId, scale)
                     .compose();
-                v.vibrate(effect);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    VibrationAttributes attrs = new VibrationAttributes.Builder()
+                        .setUsage(VibrationAttributes.USAGE_TOUCH)
+                        .build();
+                    v.vibrate(effect, attrs);
+                } else {
+                    v.vibrate(effect);
+                }
             }
         } catch (Exception e) {
             Log.w(TAG, "VibrateWithComposition failed", e);

@@ -105,7 +105,7 @@
     "lint-staged": "^15",
     "prettier": "^3",
     "react": "^18.0.0",
-    "react-native": "^0.74.7",
+    "react-native": "^0.84.1",
     "react-native-builder-bob": "^0.29",
     "ts-jest": "^29",
     "tslib": "^2",

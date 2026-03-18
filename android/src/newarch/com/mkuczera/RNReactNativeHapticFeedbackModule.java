@@ -1,4 +1,4 @@
-package com.mkuczera;
+package com.mkuczera.haptic;
 
 import androidx.annotation.NonNull;
 

@@ -18,11 +18,12 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Requirements
 
-| Platform     | Minimum version     |
-| ------------ | ------------------- |
-| iOS          | 13.0 (Core Haptics) |
-| Android      | API 21              |
-| React Native | 0.71.0              |
+| Platform     | Minimum version             |
+| ------------ | --------------------------- |
+| iOS          | 13.0 (Core Haptics)         |
+| Android      | API 23 (Android 6.0)        |
+| React Native | 0.71.0                      |
+| Web          | Browsers with Vibration API |
 
 ---
 
@@ -85,6 +86,27 @@ RNHapticFeedback.trigger(type: HapticFeedbackTypes | string, options?: HapticOpt
 | ----------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `enableVibrateFallback`       | `false` | iOS: play `AudioServicesPlaySystemSound` as a last resort on devices with no Taptic Engine (e.g. iPod touch). Has no effect on devices that have a Taptic Engine — those use UIKit generators automatically. |
 | `ignoreAndroidSystemSettings` | `false` | Android: trigger even if vibration is disabled in system settings                                                                                                                                            |
+
+### `impact(type?, intensity?, options?)`
+
+Play a haptic with a **custom intensity** (0.0–1.0). On iOS the intensity is applied precisely via `CHHapticEngine`; on Android it maps to `VibrationEffect` amplitude.
+
+```typescript
+RNHapticFeedback.impact(
+  type?: HapticFeedbackTypes,   // default: 'impactMedium'
+  intensity?: number,            // 0.0–1.0, default: 0.7
+  options?: HapticOptions
+): void
+```
+
+```typescript
+import { impact } from "react-native-haptic-feedback";
+
+impact("impactHeavy", 0.3); // gentle heavy tap
+impact("rigid", 1.0); // full-force crisp tap
+```
+
+---
 
 ### `stop()`
 
@@ -368,38 +390,42 @@ import { TouchableHaptic } from "react-native-haptic-feedback";
 
 ## Available Feedback Types
 
-|         Type          | Android | iOS | Notes                                                                |
-| :-------------------: | :-----: | :-: | -------------------------------------------------------------------- |
-|     `impactLight`     |   ✅    | ✅  | API 31+: `PRIMITIVE_TICK`                                            |
-|    `impactMedium`     |   ✅    | ✅  | API 31+: `PRIMITIVE_CLICK`                                           |
-|     `impactHeavy`     |   ✅    | ✅  | API 31+: `PRIMITIVE_HEAVY_CLICK`                                     |
-|        `rigid`        |   ✅    | ✅  | API 31+: `PRIMITIVE_CLICK` (scale 0.9)                               |
-|        `soft`         |   ✅    | ✅  | API 31+: `PRIMITIVE_TICK` (scale 0.3)                                |
-| `notificationSuccess` |   ✅    | ✅  |                                                                      |
-| `notificationWarning` |   ✅    | ✅  |                                                                      |
-|  `notificationError`  |   ✅    | ✅  |                                                                      |
-|      `selection`      |   ✅    | ✅  |                                                                      |
-|       `confirm`       |   ✅    | ✅  | Android API 30+: `CONFIRM`; fallback waveform on older               |
-|       `reject`        |   ✅    | ✅  | Android API 30+: `REJECT`; fallback waveform on older                |
-|    `gestureStart`     |   ✅    | ✅  | Android API 30+: `GESTURE_START`; fallback waveform on older         |
-|     `gestureEnd`      |   ✅    | ✅  | Android API 30+: `GESTURE_END`; fallback waveform on older           |
-|     `segmentTick`     |   ✅    | ✅  | Android API 30+: `SEGMENT_TICK`; fallback waveform on older          |
-| `segmentFrequentTick` |   ✅    | ✅  | Android API 30+: `SEGMENT_FREQUENT_TICK`; fallback waveform on older |
-|      `toggleOn`       |   ✅    | ✅  | Android API 30+: `TOGGLE_ON`; fallback waveform on older             |
-|      `toggleOff`      |   ✅    | ✅  | Android API 30+: `TOGGLE_OFF`; fallback waveform on older            |
-|      `clockTick`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|    `contextClick`     |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|    `keyboardPress`    |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|   `keyboardRelease`   |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|     `keyboardTap`     |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|      `longPress`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|   `textHandleMove`    |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|     `virtualKey`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|  `virtualKeyRelease`  |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
-|     `effectClick`     |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
-|  `effectDoubleClick`  |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
-|  `effectHeavyClick`   |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
-|     `effectTick`      |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|             Type             | Android | iOS | Notes                                                                |
+| :--------------------------: | :-----: | :-: | -------------------------------------------------------------------- |
+|        `impactLight`         |   ✅    | ✅  | API 31+: `PRIMITIVE_TICK`                                            |
+|        `impactMedium`        |   ✅    | ✅  | API 31+: `PRIMITIVE_CLICK`                                           |
+|        `impactHeavy`         |   ✅    | ✅  | API 31+: `PRIMITIVE_HEAVY_CLICK`                                     |
+|           `rigid`            |   ✅    | ✅  | API 31+: `PRIMITIVE_CLICK` (scale 0.9)                               |
+|            `soft`            |   ✅    | ✅  | API 31+: `PRIMITIVE_TICK` (scale 0.3)                                |
+|    `notificationSuccess`     |   ✅    | ✅  |                                                                      |
+|    `notificationWarning`     |   ✅    | ✅  |                                                                      |
+|     `notificationError`      |   ✅    | ✅  |                                                                      |
+|         `selection`          |   ✅    | ✅  |                                                                      |
+|          `confirm`           |   ✅    | ✅  | Android API 30+: `CONFIRM`; fallback waveform on older               |
+|           `reject`           |   ✅    | ✅  | Android API 30+: `REJECT`; fallback waveform on older                |
+|        `gestureStart`        |   ✅    | ✅  | Android API 30+: `GESTURE_START`; fallback waveform on older         |
+|         `gestureEnd`         |   ✅    | ✅  | Android API 30+: `GESTURE_END`; fallback waveform on older           |
+|        `segmentTick`         |   ✅    | ✅  | Android API 30+: `SEGMENT_TICK`; fallback waveform on older          |
+|    `segmentFrequentTick`     |   ✅    | ✅  | Android API 30+: `SEGMENT_FREQUENT_TICK`; fallback waveform on older |
+|          `toggleOn`          |   ✅    | ✅  | Android API 34+: `TOGGLE_ON`; fallback waveform on older             |
+|         `toggleOff`          |   ✅    | ✅  | Android API 34+: `TOGGLE_OFF`; fallback waveform on older            |
+|         `dragStart`          |   ✅    | ✅  | Android API 34+: `DRAG_START`; fallback waveform on older            |
+|  `gestureThresholdActivate`  |   ✅    | ✅  | Android API 34+: `GESTURE_THRESHOLD_ACTIVATE`; fallback on older     |
+| `gestureThresholdDeactivate` |   ✅    | ✅  | Android API 34+: `GESTURE_THRESHOLD_DEACTIVATE`; fallback on older   |
+|         `noHaptics`          |   ✅    | ✅  | Android API 34+: `NO_HAPTICS` (explicit no-op)                       |
+|         `clockTick`          |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|        `contextClick`        |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|       `keyboardPress`        |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|      `keyboardRelease`       |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|        `keyboardTap`         |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|         `longPress`          |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|       `textHandleMove`       |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|         `virtualKey`         |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|     `virtualKeyRelease`      |   ✅    | ✅  | iOS: Core Haptics approximation                                      |
+|        `effectClick`         |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|     `effectDoubleClick`      |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|      `effectHeavyClick`      |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
+|         `effectTick`         |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
 
 ---
 
@@ -433,23 +459,24 @@ Tier 3 exists for devices with no Taptic Engine at all (e.g. iPod touch 7th gen)
 
 ### Android — two-tier fallback chain
 
-| Tier                            | API level                           | What fires                                                                                                                           |
-| ------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| **1 — `performHapticFeedback`** | All (via `HapticFeedbackConstants`) | System-quality haptic constant through a hidden 0×0 View — respects user system settings unless `ignoreAndroidSystemSettings: true`  |
-| **2 — Vibrator API**            | API 21+                             | `VibrationEffect.createWaveform` (API 26+) or raw waveform; API 31+ uses `VibrationEffect.Composition` primitives for richer quality |
+| Tier                            | API level                           | What fires                                                                                                                               |
+| ------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **1 — `performHapticFeedback`** | All (via `HapticFeedbackConstants`) | System-quality haptic constant via the activity's `decorView` — respects user system settings unless `ignoreAndroidSystemSettings: true` |
+| **2 — Vibrator API**            | API 23+                             | `VibrationEffect.createWaveform` (API 26+) or raw waveform; API 31+ uses `VibrationEffect.Composition` primitives for richer quality     |
 
 Tier 1 is skipped when `ignoreAndroidSystemSettings: true` (because `performHapticFeedback` cannot override system settings), falling directly to Tier 2.
 
 **Android API-level progression:**
 
-| API | Improvement                                                               |
-| --- | ------------------------------------------------------------------------- |
-| 21  | Raw waveform vibration                                                    |
-| 26  | `VibrationEffect.createWaveform` with per-step amplitudes                 |
-| 29  | `VibrationEffect.createPredefined` for `effect*` types                    |
-| 30  | `HapticFeedbackConstants` for `confirm`, `reject`, `gesture*`, `segment*` |
-| 31  | `VibrationEffect.Composition` primitives (richer impact feel)             |
-| 34  | `HapticFeedbackConstants` for `toggleOn`, `toggleOff`                     |
+| API | Improvement                                                                                          |
+| --- | ---------------------------------------------------------------------------------------------------- |
+| 23  | Raw waveform vibration (minimum supported)                                                           |
+| 26  | `VibrationEffect.createWaveform` with per-step amplitudes                                            |
+| 29  | `VibrationEffect.createPredefined` for `effect*` types                                               |
+| 30  | `HapticFeedbackConstants` for `confirm`, `reject`, `gesture*`, `segment*`                            |
+| 31  | `VibrationEffect.Composition` primitives (richer impact feel)                                        |
+| 33  | `VibrationAttributes.USAGE_TOUCH` — vibrations respect system haptic-preference settings             |
+| 34  | `HapticFeedbackConstants` for `toggleOn`, `toggleOff`, `dragStart`, `gestureThreshold*`, `noHaptics` |
 
 ---
 

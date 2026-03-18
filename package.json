@@ -83,7 +83,7 @@
     "type": "modules",
     "jsSrcsDir": "./src/codegenSpec",
     "android": {
-      "javaPackageName": "com.mkuczera"
+      "javaPackageName": "com.mkuczera.haptic"
     }
   },
   "devDependencies": {

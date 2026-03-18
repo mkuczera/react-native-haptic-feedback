@@ -4,15 +4,15 @@ The `pattern()` helper converts a compact notation string into a `HapticEvent[]`
 
 ## Character reference
 
-| Char | Meaning          | Effect                                              |
-| :--: | ---------------- | --------------------------------------------------- |
-| `o`  | Soft transient   | Intensity 0.4, sharpness 0.4; advances cursor 50 ms |
-| `O`  | Strong transient | Intensity 1.0, sharpness 0.8; advances cursor 50 ms |
-| `.`  | Short gap        | +100 ms                                             |
-| `-`  | Medium gap       | +300 ms                                             |
-| `=`  | Long gap         | +1000 ms                                            |
+| Char | Meaning          | Effect                                               |
+| :--: | ---------------- | ---------------------------------------------------- |
+| `o`  | Soft transient   | Intensity 0.4, sharpness 0.4; advances cursor 100 ms |
+| `O`  | Strong transient | Intensity 1.0, sharpness 0.8; advances cursor 100 ms |
+| `.`  | Short gap        | +150 ms                                              |
+| `-`  | Medium gap       | +400 ms                                              |
+| `=`  | Long gap         | +1000 ms                                             |
 
-Gap characters add to the current cursor position. Consecutive haptic events (`OOO`) are implicitly 50 ms apart so the hardware renders each as a distinct pulse.
+Gap characters add to the current cursor position. Consecutive haptic events (`OOO`) are implicitly 100 ms apart so the hardware renders each as a distinct pulse.
 
 ## Examples
 
@@ -20,7 +20,7 @@ Gap characters add to the current cursor position. Consecutive haptic events (`O
 import { pattern } from "react-native-haptic-feedback";
 
 pattern("oO"); // two pulses: soft then strong
-pattern("O.O"); // two strong pulses, 100 ms apart
+pattern("O.O"); // two strong pulses, 250 ms apart
 pattern("oO--oO"); // heartbeat: double-pulse, pause, double-pulse
 pattern("o.o.o"); // rapid triple tap
 ```
@@ -29,16 +29,16 @@ pattern("o.o.o"); // rapid triple tap
 
 ```
 notation  →  o    O    .    O
-cursor    →  0   50  150  250  (ms)
+cursor    →  0   100  200  350  (ms)
 ```
 
 | Notation | Events | Total duration |
 | -------- | :----: | -------------: |
 | `oO`     |   2    |        ~100 ms |
 | `O.O`    |   2    |        ~250 ms |
-| `oO--oO` |   4    |        ~750 ms |
-| `o.o.o`  |   3    |        ~350 ms |
-| `o-O=o`  |   3    |      ~1 450 ms |
+| `oO--oO` |   4    |      ~1 100 ms |
+| `o.o.o`  |   3    |        ~500 ms |
+| `o-O=o`  |   3    |      ~1 600 ms |
 
 ## Compile-time validation
 

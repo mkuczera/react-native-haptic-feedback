@@ -1,4 +1,4 @@
-package com.mkuczera.vibrateFactory;
+package com.mkuczera.haptic.vibrateFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -17,8 +17,8 @@ The native module uses the Codegen spec format introduced in RN 0.71. Older vers
 | v2                                  | v3                                         |
 | ----------------------------------- | ------------------------------------------ |
 | Transient advances cursor **50 ms** | Transient advances cursor **50 ms** ✓ same |
-| `.` added **50 ms**                 | `.` adds **100 ms**                        |
-| `-` added **200 ms**                | `-` adds **300 ms**                        |
+| `.` added **50 ms**                 | `.` adds **150 ms**                        |
+| `-` added **200 ms**                | `-` adds **400 ms**                        |
 | `=` added **500 ms**                | `=` adds **1000 ms**                       |
 
 Re-check any hand-tuned pattern strings if the feel has changed.

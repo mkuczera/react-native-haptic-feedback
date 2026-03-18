@@ -1,4 +1,4 @@
-package com.mkuczera.vibrateFactory;
+package com.mkuczera.haptic.vibrateFactory;
 
 import android.os.Build;
 import android.os.Vibrator;

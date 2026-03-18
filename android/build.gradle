@@ -27,7 +27,7 @@ if (isNewArchitectureEnabled()) {
 }
 
 android {
-    namespace "com.mkuczera"
+    namespace "com.mkuczera.haptic"
 
     buildFeatures {
         buildConfig = true

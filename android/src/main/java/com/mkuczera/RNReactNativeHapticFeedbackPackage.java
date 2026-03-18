@@ -1,5 +1,5 @@
 
-package com.mkuczera;
+package com.mkuczera.haptic;
 
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.NativeModule;

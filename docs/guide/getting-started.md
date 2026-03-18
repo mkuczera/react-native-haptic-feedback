@@ -5,7 +5,7 @@
 | Platform     | Minimum                                                                                       |
 | ------------ | --------------------------------------------------------------------------------------------- |
 | iOS          | 13.0                                                                                          |
-| Android      | API 21 (Android 5.0)                                                                          |
+| Android      | API 23 (Android 6.0)                                                                          |
 | React Native | 0.71.0                                                                                        |
 | Web          | Browsers with [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API) |
 

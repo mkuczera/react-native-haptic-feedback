@@ -1,4 +1,4 @@
-package com.mkuczera;
+package com.mkuczera.haptic;
 
 import android.app.Activity;
 import android.os.Build;
@@ -9,8 +9,8 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import java.util.HashMap;
 import java.util.Map;
-import com.mkuczera.vibrateFactory.VibrateFactory;
-import com.mkuczera.vibrateFactory.Vibrate;
+import com.mkuczera.haptic.vibrateFactory.VibrateFactory;
+import com.mkuczera.haptic.vibrateFactory.Vibrate;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;

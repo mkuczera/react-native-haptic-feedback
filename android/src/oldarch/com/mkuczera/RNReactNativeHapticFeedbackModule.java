@@ -1,4 +1,4 @@
-package com.mkuczera;
+package com.mkuczera.haptic;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

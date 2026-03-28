@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-HapticFeedbackExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-HapticFeedbackExample.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		3F6B47332F781C0F001CE121 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6B47322F781C0F001CE121 /* StoreKit.framework */; };
 		3FA5E8052F65A70800ADD034 /* rumble.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 3FA5E8022F65A70800ADD034 /* rumble.ahap */; };
 		3FA5E8062F65A70800ADD034 /* heartbeat.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 3FA5E8032F65A70800ADD034 /* heartbeat.ahap */; };
 		3FA5E8072F65A70800ADD034 /* celebration.ahap in Resources */ = {isa = PBXBuildFile; fileRef = 3FA5E8042F65A70800ADD034 /* celebration.ahap */; };
@@ -23,6 +24,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = HapticFeedbackExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = HapticFeedbackExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-HapticFeedbackExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticFeedbackExample.debug.xcconfig"; path = "Target Support Files/Pods-HapticFeedbackExample/Pods-HapticFeedbackExample.debug.xcconfig"; sourceTree = "<group>"; };
+		3F6B47322F781C0F001CE121 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		3FA5E8022F65A70800ADD034 /* rumble.ahap */ = {isa = PBXFileReference; lastKnownFileType = text; name = rumble.ahap; path = HapticFeedbackExample/haptics/rumble.ahap; sourceTree = "<group>"; };
 		3FA5E8032F65A70800ADD034 /* heartbeat.ahap */ = {isa = PBXFileReference; lastKnownFileType = text; name = heartbeat.ahap; path = HapticFeedbackExample/haptics/heartbeat.ahap; sourceTree = "<group>"; };
 		3FA5E8042F65A70800ADD034 /* celebration.ahap */ = {isa = PBXFileReference; lastKnownFileType = text; name = celebration.ahap; path = HapticFeedbackExample/haptics/celebration.ahap; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-HapticFeedbackExample.a in Frameworks */,
+				3F6B47332F781C0F001CE121 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +67,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F6B47322F781C0F001CE121 /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-HapticFeedbackExample.a */,
 			);
@@ -293,16 +297,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = MX783T4VSP;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HapticFeedbackExample/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Haptic feedback demo";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -324,15 +330,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = MX783T4VSP;
 				INFOPLIST_FILE = HapticFeedbackExample/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Haptic feedback demo";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

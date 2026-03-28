@@ -1,32 +1,27 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   ActivityIndicator,
   Alert,
   Modal,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  endConnection,
-  finishTransaction,
-  getAvailablePurchases,
-  getProducts,
-  initConnection,
-  purchaseErrorListener,
-  purchaseUpdatedListener,
-  requestPurchase,
-} from 'react-native-iap';
+import { useIAP, ErrorCode } from 'react-native-iap';
+import type { Purchase, PurchaseError } from 'react-native-iap';
 
 // ─── Types & constants ─────────────────────────────────────────────────────────
 
-export type SupportTier = 'bronze' | 'silver' | 'gold' | null;
+export type SupportTier = 'support_0' | 'support_1' | 'support_2' | null;
 export const SUPPORT_STORAGE_KEY = '@haptic_supporter_tier';
 
-const TIER_RANK: Record<string, number> = { bronze: 1, silver: 2, gold: 3 };
+const TIER_RANK: Record<string, number> = {
+  support_0: 1,
+  support_1: 2,
+  support_2: 3,
+};
 
 export function higherTier(a: SupportTier, b: SupportTier): SupportTier {
   const ra = a ? TIER_RANK[a] : 0;
@@ -37,7 +32,7 @@ export function higherTier(a: SupportTier, b: SupportTier): SupportTier {
 const TIERS = [
   {
     productId: 'haptic_support_bronze',
-    tier: 'bronze' as const,
+    tier: 'support_0' as const,
     fallbackPrice: '$0.99',
     label: 'Supporter',
     emoji: '☕',
@@ -46,7 +41,7 @@ const TIERS = [
   },
   {
     productId: 'haptic_support_silver',
-    tier: 'silver' as const,
+    tier: 'support_1' as const,
     fallbackPrice: '$2.99',
     label: 'Super Supporter',
     emoji: '🍕',
@@ -55,7 +50,7 @@ const TIERS = [
   },
   {
     productId: 'haptic_support_gold',
-    tier: 'gold' as const,
+    tier: 'support_2' as const,
     fallbackPrice: '$4.99',
     label: 'Best Supporter',
     emoji: '🏆',
@@ -87,115 +82,97 @@ export default function SupportModal({
   currentTier,
   onTierChange,
 }: Props) {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [purchasing, setPurchasing] = useState<string | null>(null);
-  const [storeError, setStoreError] = useState<string | null>(null);
+  // ── useIAP hook ──────────────────────────────────────────────────────────────
+  // The hook manages initConnection on mount and listener cleanup on unmount.
+  // onPurchaseSuccess / onPurchaseError fire for every purchase event while
+  // this component is mounted.
 
-  // Keep a ref so purchase listener closure always sees latest tier
-  const tierRef = useRef(currentTier);
+  const onPurchaseSuccess = useCallback(
+    async (purchase: Purchase) => {
+      const newTier = tierForProduct(purchase.productId);
+      const best = higherTier(newTier, currentTier);
+      await AsyncStorage.setItem(SUPPORT_STORAGE_KEY, best ?? '');
+      onTierChange(best);
+      const cfg = TIERS.find(t => t.tier === best);
+      Alert.alert(
+        'Thank you! 🙏',
+        `You are now a ${cfg?.label ?? 'Supporter'}! ${cfg?.emoji ?? ''}`,
+      );
+    },
+    [currentTier, onTierChange],
+  );
+
+  const onPurchaseError = useCallback((error: PurchaseError) => {
+    if (error.code !== ErrorCode.UserCancelled) {
+      Alert.alert('Purchase failed', error.message);
+    }
+  }, []);
+
+  const {
+    connected,
+    products,
+    availablePurchases,
+    fetchProducts,
+    requestPurchase,
+    finishTransaction,
+    getAvailablePurchases,
+  } = useIAP({ onPurchaseSuccess, onPurchaseError });
+
+  // ── Fetch products & restore purchases when connected ────────────────────────
+
   useEffect(() => {
-    tierRef.current = currentTier;
-  }, [currentTier]);
+    if (!connected) return;
+
+    fetchProducts({ skus: PRODUCT_IDS, type: 'in-app' });
+    getAvailablePurchases();
+  }, [connected, fetchProducts, getAvailablePurchases]);
+
+  // ── Restore owned tier from availablePurchases state ────────────────────────
+
+  useEffect(() => {
+    if (availablePurchases.length === 0) return;
+
+    let best = currentTier;
+    for (const p of availablePurchases) {
+      best = higherTier(best, tierForProduct(p.productId));
+    }
+
+    if (best !== currentTier) {
+      AsyncStorage.setItem(SUPPORT_STORAGE_KEY, best ?? '').catch(() => {});
+      onTierChange(best);
+    }
+  }, [availablePurchases]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Purchase handler ─────────────────────────────────────────────────────────
+
+  const purchase = useCallback(
+    async (productId: string) => {
+      try {
+        await requestPurchase({
+          type: 'in-app',
+          request: {
+            apple: { sku: productId },
+            google: { skus: [productId] },
+          },
+        });
+      } catch (e: any) {
+        // Non-cancellation errors surface via the onPurchaseError callback
+      }
+    },
+    [requestPurchase, finishTransaction], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
+  // ── Derived state ────────────────────────────────────────────────────────────
+
+  const tierRank = currentTier ? TIER_RANK[currentTier] : 0;
+  const isLoading = !connected;
 
   const cardBg = isDark ? '#1e293b' : '#ffffff';
   const textPrimary = isDark ? '#f8fafc' : '#0f172a';
   const textSecondary = isDark ? '#94a3b8' : '#64748b';
   const overlayBg = isDark ? 'rgba(0,0,0,0.72)' : 'rgba(0,0,0,0.48)';
 
-  // ── IAP lifecycle ────────────────────────────────────────────────────────────
-
-  useEffect(() => {
-    if (!visible) return;
-
-    setLoading(true);
-    setStoreError(null);
-
-    const updateSub = purchaseUpdatedListener(async (purchase: any) => {
-      try {
-        await finishTransaction({ purchase, isConsumable: false });
-        const newTier = tierForProduct(purchase.productId);
-        const best = higherTier(newTier, tierRef.current);
-        await AsyncStorage.setItem(SUPPORT_STORAGE_KEY, best ?? '');
-        onTierChange(best);
-        const cfg = TIERS.find(t => t.tier === best);
-        Alert.alert(
-          'Thank you! 🙏',
-          `You are now a ${cfg?.label ?? 'Supporter'}! ${cfg?.emoji ?? ''}`,
-        );
-      } catch (e) {
-        console.warn('[IAP] finishTransaction error', e);
-      } finally {
-        setPurchasing(null);
-      }
-    });
-
-    const errorSub = purchaseErrorListener((err: any) => {
-      setPurchasing(null);
-      if (err?.code !== 'E_USER_CANCELLED') {
-        setStoreError(err?.message ?? 'Purchase failed. Please try again.');
-      }
-    });
-
-    (async () => {
-      try {
-        await initConnection();
-
-        // Restore owned purchases silently
-        try {
-          const owned = await getAvailablePurchases();
-          let best = tierRef.current;
-          for (const p of owned) {
-            best = higherTier(best, tierForProduct(p.productId));
-          }
-          if (best !== tierRef.current) {
-            await AsyncStorage.setItem(SUPPORT_STORAGE_KEY, best ?? '');
-            onTierChange(best);
-          }
-        } catch (_) {
-          // purchase history is best-effort
-        }
-
-        const fetched = await getProducts({ skus: PRODUCT_IDS });
-        // Sort ascending so order matches TIERS definition
-        (fetched as any[]).sort(
-          (a: any, b: any) => parseFloat(a.price) - parseFloat(b.price),
-        );
-        setProducts(fetched as any[]);
-      } catch (e: any) {
-        setStoreError(e?.message ?? 'Could not connect to the store.');
-      } finally {
-        setLoading(false);
-      }
-    })();
-
-    return () => {
-      updateSub.remove();
-      errorSub.remove();
-      endConnection().catch(() => {});
-    };
-  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Purchase handler ─────────────────────────────────────────────────────────
-
-  const purchase = useCallback(async (productId: string) => {
-    try {
-      setStoreError(null);
-      setPurchasing(productId);
-      const req =
-        Platform.OS === 'android' ? { skus: [productId] } : { sku: productId };
-      await requestPurchase(req as any);
-    } catch (e: any) {
-      setPurchasing(null);
-      if (e?.code !== 'E_USER_CANCELLED') {
-        setStoreError(e?.message ?? 'Purchase failed. Please try again.');
-      }
-    }
-  }, []);
-
   // ── Render ───────────────────────────────────────────────────────────────────
-
-  const tierRank = currentTier ? TIER_RANK[currentTier] : 0;
 
   return (
     <Modal
@@ -224,7 +201,7 @@ export default function SupportModal({
             Your support keeps it maintained and growing.
           </Text>
 
-          {loading ? (
+          {isLoading ? (
             <View style={styles.loaderBox}>
               <ActivityIndicator size="large" color="#f59e0b" />
               <Text style={[styles.loaderText, { color: textSecondary }]}>
@@ -234,12 +211,9 @@ export default function SupportModal({
           ) : (
             <View style={styles.tiersBox}>
               {TIERS.map(cfg => {
-                const product = products.find(
-                  (p: any) => p.productId === cfg.productId,
-                );
+                const product = products.find(p => p.id === cfg.productId);
                 const owned = tierRank >= TIER_RANK[cfg.tier];
-                const isProcessing = purchasing === cfg.productId;
-                const isGold = cfg.tier === 'gold';
+                const isGold = cfg.tier === 'support_2';
 
                 return (
                   <Pressable
@@ -253,16 +227,13 @@ export default function SupportModal({
                         borderColor: cfg.color,
                       },
                       pressed &&
-                        !owned &&
-                        !purchasing && {
+                        !owned && {
                           opacity: 0.72,
                           transform: [{ scale: 0.99 }],
                         },
                     ]}
-                    onPress={() =>
-                      !owned && !purchasing && purchase(cfg.productId)
-                    }
-                    disabled={owned || !!purchasing}
+                    onPress={() => !owned && purchase(cfg.productId)}
+                    disabled={owned}
                   >
                     <Text style={styles.tierEmoji}>{cfg.emoji}</Text>
                     <View style={styles.tierInfo}>
@@ -280,9 +251,7 @@ export default function SupportModal({
                       </Text>
                     </View>
                     <View style={styles.tierAction}>
-                      {isProcessing ? (
-                        <ActivityIndicator size="small" color={cfg.color} />
-                      ) : owned ? (
+                      {owned ? (
                         <Text style={[styles.ownedLabel, { color: cfg.color }]}>
                           ✓ Owned
                         </Text>
@@ -294,7 +263,7 @@ export default function SupportModal({
                           ]}
                         >
                           <Text style={styles.priceBtnText}>
-                            {product?.localizedPrice ?? cfg.fallbackPrice}
+                            {product?.displayPrice ?? cfg.fallbackPrice}
                           </Text>
                         </View>
                       )}
@@ -304,10 +273,6 @@ export default function SupportModal({
               })}
             </View>
           )}
-
-          {storeError ? (
-            <Text style={styles.errorText}>{storeError}</Text>
-          ) : null}
 
           <Text style={[styles.legal, { color: textSecondary }]}>
             One-time non-consumable purchases. Previously purchased tiers are
@@ -400,12 +365,6 @@ const styles = StyleSheet.create({
   },
   priceBtnText: { color: '#fff', fontWeight: '700', fontSize: 14 },
   ownedLabel: { fontWeight: '700', fontSize: 13 },
-  errorText: {
-    color: '#ef4444',
-    fontSize: 12,
-    textAlign: 'center',
-    marginTop: 2,
-  },
   legal: { fontSize: 11, textAlign: 'center', lineHeight: 16 },
   closeBtn: { alignItems: 'center', paddingVertical: 10 },
   closeBtnText: { fontSize: 15, fontWeight: '600' },

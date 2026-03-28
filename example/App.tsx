@@ -229,7 +229,7 @@ export default function App(): React.JSX.Element {
     // Restore supporter tier from storage
     AsyncStorage.getItem(SUPPORT_STORAGE_KEY)
       .then(val => {
-        if (val === 'bronze' || val === 'silver' || val === 'gold') {
+        if (val === 'support_0' || val === 'support_1' || val === 'support_2') {
           setSupportTier(val);
         }
       })
@@ -298,7 +298,7 @@ export default function App(): React.JSX.Element {
           </Text>
 
           {/* Best Supporter gold badge */}
-          {supportTier === 'gold' && (
+          {supportTier === 'support_2' && (
             <View style={styles.goldBadgeWrap}>
               <View style={styles.goldBadge}>
                 <Text style={styles.goldBadgeCrown}>👑</Text>
@@ -306,7 +306,7 @@ export default function App(): React.JSX.Element {
               </View>
             </View>
           )}
-          {supportTier === 'silver' && (
+          {supportTier === 'support_1' && (
             <View style={styles.goldBadgeWrap}>
               <View style={[styles.goldBadge, styles.silverBadge]}>
                 <Text style={styles.goldBadgeCrown}>⭐</Text>
@@ -316,7 +316,7 @@ export default function App(): React.JSX.Element {
               </View>
             </View>
           )}
-          {supportTier === 'bronze' && (
+          {supportTier === 'support_0' && (
             <View style={styles.goldBadgeWrap}>
               <View style={[styles.goldBadge, styles.bronzeBadge]}>
                 <Text style={styles.goldBadgeCrown}>☕</Text>

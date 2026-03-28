@@ -1,3 +1,10 @@
+// playHaptic util uses Platform.OS which isn't available in the Node test
+// environment. Mock it here; its own test file (playHaptic.test.ts) covers
+// the real implementation with a proper Platform mock.
+jest.mock("../utils/playHaptic", () => ({
+  playHaptic: jest.fn().mockResolvedValue(undefined),
+}));
+
 import RNHapticFeedback, {
   trigger,
   stop,
@@ -302,9 +309,25 @@ describe("useHaptics", () => {
     expect(typeof haptics.playAHAP).toBe("function");
   });
 
-  it("exposes playHaptic", () => {
+  it("playHaptic delegates to playHapticUtil with merged options", async () => {
+    const { playHaptic: playHapticUtil } = require("../utils/playHaptic");
+    const events = pattern("o");
+    const haptics = useHaptics({ enableVibrateFallback: true });
+    await haptics.playHaptic("test.ahap", events);
+    expect(playHapticUtil).toHaveBeenCalledWith(
+      "test.ahap",
+      events,
+      expect.objectContaining({ enableVibrateFallback: true }),
+    );
+  });
+
+  it("impact calls native triggerPattern with clamped intensity", () => {
     const haptics = useHaptics();
-    expect(typeof haptics.playHaptic).toBe("function");
+    haptics.impact("impactHeavy", 0.8);
+    expect(NativeHapticFeedbackMock.triggerPattern).toHaveBeenCalledWith(
+      [expect.objectContaining({ time: 0, intensity: 0.8 })],
+      expect.any(Object),
+    );
   });
 });
 

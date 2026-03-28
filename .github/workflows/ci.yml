@@ -115,9 +115,17 @@ jobs:
       - name: Make Gradlew executable
         run: chmod +x example/android/gradlew
 
+      - name: Decode release keystore
+        run: |
+          echo "${{ secrets.HAPTIC_FEEDBACK_KEYSTORE_BASE64 }}" | base64 --decode > example/android/app/release.keystore
+
       - name: Build example for Android
         env:
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
+          ORG_GRADLE_PROJECT_HAPTIC_FEEDBACK_STORE_FILE: release.keystore
+          ORG_GRADLE_PROJECT_HAPTIC_FEEDBACK_STORE_PASSWORD: ${{ secrets.HAPTIC_FEEDBACK_STORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_HAPTIC_FEEDBACK_KEY_ALIAS: ${{ secrets.HAPTIC_FEEDBACK_KEY_ALIAS }}
+          ORG_GRADLE_PROJECT_HAPTIC_FEEDBACK_KEY_PASSWORD: ${{ secrets.HAPTIC_FEEDBACK_KEY_PASSWORD }}
         run: cd example/android && ./gradlew assembleDebug --no-daemon
 
   build-ios:

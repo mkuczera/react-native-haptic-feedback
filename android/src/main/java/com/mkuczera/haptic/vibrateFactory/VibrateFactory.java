@@ -21,14 +21,15 @@ public class VibrateFactory {
     static Map<String, Vibrate> vibrateMap = new HashMap<>();
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // API 31+: high-quality Composition primitives
-            vibrateMap.put("impactLight",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK, 0.3f));
-            vibrateMap.put("impactMedium",   new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_CLICK, 0.6f));
-            vibrateMap.put("impactHeavy",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_THUD, 1.0f));
-            vibrateMap.put("rigid",          new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_CLICK, 0.9f));
-            vibrateMap.put("soft",           new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK, 0.3f));
-            vibrateMap.put("selection",      new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK, 0.4f));
-            // Notifications use multi-primitive sequences via waveform fallback
+            // API 31+: high-quality Composition primitives with waveform fallbacks
+            // for devices that don't support the specific primitive.
+            vibrateMap.put("impactLight",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK,  0.3f, new VibrateWithDuration(new long[]{0, 20})));
+            vibrateMap.put("impactMedium",   new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_CLICK, 0.6f, new VibrateWithDuration(new long[]{0, 40})));
+            vibrateMap.put("impactHeavy",    new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_THUD,  1.0f, new VibrateWithDuration(new long[]{0, 60})));
+            vibrateMap.put("rigid",          new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_CLICK, 0.9f, new VibrateWithDuration(new long[]{0, 30})));
+            vibrateMap.put("soft",           new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK,  0.3f, new VibrateWithDuration(new long[]{0, 10})));
+            vibrateMap.put("selection",      new VibrateWithComposition(VibrationEffect.Composition.PRIMITIVE_TICK,  0.4f, new VibrateWithDuration(new long[]{0, 10})));
+            // Notifications use multi-primitive sequences via waveform
             vibrateMap.put("notificationSuccess", new VibrateWithDuration(new long[]{0, 40, 60, 20}));
             vibrateMap.put("notificationWarning",  new VibrateWithDuration(new long[]{0, 20, 60, 40}));
             vibrateMap.put("notificationError",    new VibrateWithDuration(new long[]{0, 20, 40, 30, 40, 40}));

@@ -115,6 +115,13 @@ jobs:
       - name: Make Gradlew executable
         run: chmod +x example/android/gradlew
 
+      - name: Inject signing properties for debug CI build
+        run: |
+          echo "HAPTIC_FEEDBACK_STORE_FILE=debug.keystore" >> example/android/gradle.properties
+          echo "HAPTIC_FEEDBACK_STORE_PASSWORD=android" >> example/android/gradle.properties
+          echo "HAPTIC_FEEDBACK_KEY_ALIAS=androiddebugkey" >> example/android/gradle.properties
+          echo "HAPTIC_FEEDBACK_KEY_PASSWORD=android" >> example/android/gradle.properties
+
       - name: Build example for Android
         env:
           JAVA_OPTS: "-XX:MaxHeapSize=6g"

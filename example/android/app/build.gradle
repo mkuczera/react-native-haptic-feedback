@@ -93,13 +93,11 @@ android {
             keyPassword 'android'
         }
 
-        if (project.hasProperty('HAPTIC_FEEDBACK_STORE_FILE')) {
-            release {
-                storeFile file(HAPTIC_FEEDBACK_STORE_FILE)
-                storePassword HAPTIC_FEEDBACK_STORE_PASSWORD
-                keyAlias HAPTIC_FEEDBACK_KEY_ALIAS
-                keyPassword HAPTIC_FEEDBACK_KEY_PASSWORD
-            }
+        release {
+            storeFile file(HAPTIC_FEEDBACK_STORE_FILE)
+            storePassword HAPTIC_FEEDBACK_STORE_PASSWORD
+            keyAlias HAPTIC_FEEDBACK_KEY_ALIAS
+            keyPassword HAPTIC_FEEDBACK_KEY_PASSWORD
         }
     }
     buildTypes {
@@ -107,7 +105,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig project.hasProperty('HAPTIC_FEEDBACK_STORE_FILE') ? signingConfigs.release : signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

@@ -13,6 +13,9 @@ hero:
       text: API Reference
       link: /api/
     - theme: alt
+      text: Try on iOS
+      link: https://apps.apple.com/us/app/haptic-feedback-tryout/id6760615313
+    - theme: alt
       text: View on GitHub
       link: https://github.com/mkuczera/react-native-haptic-feedback
 
@@ -40,6 +43,12 @@ features:
   - icon: 🧪
     title: First-class testing
     details: Official Jest auto-mock included. Drop-in support with no extra configuration.
+
+  - icon: 📱
+    title: Tryout App
+    details: Test every haptic type on a real device. Available now on iOS — Android coming soon.
+    link: https://apps.apple.com/us/app/haptic-feedback-tryout/id6760615313
+    linkText: Download on the App Store
 ---
 
 ## Quick look
@@ -85,6 +94,3 @@ yarn add react-native-haptic-feedback
 ```
 
 :::
-
-> **Pre-release** — This docs site covers the `next` pre-release (`3.0.0-next`).
-> For the stable v2 release see the [GitHub README](https://github.com/mkuczera/react-native-haptic-feedback/tree/main).

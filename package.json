@@ -1,6 +1,6 @@
 {
   "name": "react-native-haptic-feedback",
-  "version": "3.0.0-next.1",
+  "version": "3.0.0",
   "description": "Basic haptic feedback for iOS and android",
   "license": "MIT",
   "source": "src/index.ts",
@@ -66,8 +66,7 @@
     }
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "tag": "next"
+    "registry": "https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",

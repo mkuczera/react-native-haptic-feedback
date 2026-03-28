@@ -16,10 +16,10 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'API', link: '/api/' },
       {
-        text: '3.0.0-next',
+        text: 'v3.0.0',
         items: [
-          { text: 'Changelog', link: 'https://github.com/mkuczera/react-native-haptic-feedback/blob/next/CHANGELOG.md' },
-          { text: 'npm (next)', link: 'https://www.npmjs.com/package/react-native-haptic-feedback/v/next' },
+          { text: 'Changelog', link: 'https://github.com/mkuczera/react-native-haptic-feedback/blob/main/CHANGELOG.md' },
+          { text: 'npm', link: 'https://www.npmjs.com/package/react-native-haptic-feedback' },
         ],
       },
     ],
@@ -69,7 +69,7 @@ export default defineConfig({
     ],
 
     editLink: {
-      pattern: 'https://github.com/mkuczera/react-native-haptic-feedback/edit/next/docs/:path',
+      pattern: 'https://github.com/mkuczera/react-native-haptic-feedback/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
 

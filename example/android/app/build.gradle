@@ -82,8 +82,8 @@ android {
         applicationId "com.hapticfeedbackexample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 1001
+        versionName "1.0.0"
     }
     signingConfigs {
         debug {
@@ -92,15 +92,20 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+
+        release {
+          storeFile file(HAPTIC_FEEDBACK_STORE_FILE)
+          storePassword HAPTIC_FEEDBACK_STORE_PASSWORD
+          keyAlias HAPTIC_FEEDBACK_KEY_ALIAS
+          keyPassword HAPTIC_FEEDBACK_KEY_PASSWORD
+      }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

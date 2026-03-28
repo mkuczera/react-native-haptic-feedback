@@ -10,6 +10,12 @@ import {
   Pressable,
   useColorScheme,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SupportModal, {
+  type SupportTier,
+  SUPPORT_STORAGE_KEY,
+  higherTier,
+} from './src/SupportModal';
 
 import HapticFeedback, {
   HapticFeedbackTypes,
@@ -210,6 +216,8 @@ export default function App(): React.JSX.Element {
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const [patternStr, setPatternStr] = useState('');
   const [lastPlayed, setLastPlayed] = useState('');
+  const [supportTier, setSupportTier] = useState<SupportTier>(null);
+  const [showSupport, setShowSupport] = useState(false);
 
   // useHaptics hook demo — shared instance with default options
   const haptics = useHaptics(DEFAULT_OPTIONS);
@@ -217,6 +225,14 @@ export default function App(): React.JSX.Element {
   useEffect(() => {
     getSystemHapticStatus()
       .then(setStatus)
+      .catch(() => {});
+    // Restore supporter tier from storage
+    AsyncStorage.getItem(SUPPORT_STORAGE_KEY)
+      .then(val => {
+        if (val === 'bronze' || val === 'silver' || val === 'gold') {
+          setSupportTier(val);
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -280,6 +296,37 @@ export default function App(): React.JSX.Element {
           <Text style={[styles.subheading, { color: textSecondary }]}>
             react-native-haptic-feedback demo
           </Text>
+
+          {/* Best Supporter gold badge */}
+          {supportTier === 'gold' && (
+            <View style={styles.goldBadgeWrap}>
+              <View style={styles.goldBadge}>
+                <Text style={styles.goldBadgeCrown}>👑</Text>
+                <Text style={styles.goldBadgeText}>Best Supporter</Text>
+              </View>
+            </View>
+          )}
+          {supportTier === 'silver' && (
+            <View style={styles.goldBadgeWrap}>
+              <View style={[styles.goldBadge, styles.silverBadge]}>
+                <Text style={styles.goldBadgeCrown}>⭐</Text>
+                <Text style={[styles.goldBadgeText, styles.silverBadgeText]}>
+                  Super Supporter
+                </Text>
+              </View>
+            </View>
+          )}
+          {supportTier === 'bronze' && (
+            <View style={styles.goldBadgeWrap}>
+              <View style={[styles.goldBadge, styles.bronzeBadge]}>
+                <Text style={styles.goldBadgeCrown}>☕</Text>
+                <Text style={[styles.goldBadgeText, styles.bronzeBadgeText]}>
+                  Supporter
+                </Text>
+              </View>
+            </View>
+          )}
+
           {status ? (
             <View style={styles.badgeRow}>
               <Badge
@@ -305,6 +352,21 @@ export default function App(): React.JSX.Element {
               Checking system status…
             </Text>
           )}
+
+          {/* Support button */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.supportBtn,
+              pressed && { opacity: 0.75 },
+            ]}
+            onPress={() => setShowSupport(true)}
+          >
+            <Text style={styles.supportBtnText}>
+              {supportTier
+                ? '💛 Thank you for your support!'
+                : '❤️ Support the Developer'}
+            </Text>
+          </Pressable>
         </View>
 
         {/* Global enable/disable toggle */}
@@ -563,6 +625,14 @@ export default function App(): React.JSX.Element {
           ) : null}
         </SectionCard>
       </ScrollView>
+
+      <SupportModal
+        visible={showSupport}
+        onClose={() => setShowSupport(false)}
+        isDark={isDark}
+        currentTier={supportTier}
+        onTierChange={tier => setSupportTier(higherTier(tier, supportTier))}
+      />
     </SafeAreaView>
   );
 }
@@ -695,5 +765,60 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     fontStyle: 'italic',
+  },
+
+  // ── Supporter badge ──────────────────────────────────────────────────────────
+  goldBadgeWrap: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  goldBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 30,
+    // Gold gradient approximated with a warm amber background
+    backgroundColor: '#fbbf24',
+    shadowColor: '#f59e0b',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  goldBadgeCrown: { fontSize: 20 },
+  goldBadgeText: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#78350f',
+    letterSpacing: 0.3,
+  },
+  silverBadge: {
+    backgroundColor: '#d1d5db',
+    shadowColor: '#9ca3af',
+  },
+  silverBadgeText: { color: '#374151' },
+  bronzeBadge: {
+    backgroundColor: '#cd9a6a',
+    shadowColor: '#b87333',
+  },
+  bronzeBadgeText: { color: '#431a05' },
+
+  // ── Support button ───────────────────────────────────────────────────────────
+  supportBtn: {
+    marginTop: 12,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: '#f59e0b',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    backgroundColor: '#fef3c7',
+  },
+  supportBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#92400e',
   },
 });

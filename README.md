@@ -6,7 +6,21 @@ The most complete haptic feedback library for React Native — Core Haptics on i
 [![npm](https://img.shields.io/npm/v/react-native-haptic-feedback)](https://www.npmjs.com/package/react-native-haptic-feedback)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-haptic-feedback)](https://www.npmjs.com/package/react-native-haptic-feedback)
 
+**[Full documentation →](https://mkuczera.github.io/react-native-haptic-feedback/)**
+
 If this library saves you time, consider [sponsoring its development](https://github.com/sponsors/mkuczera). ⭐
+
+---
+
+## Try it on your device
+
+Want to feel the difference between every haptic type — or test your own custom pattern notation — before writing a single line of code?
+
+**Haptic Feedback Tryout** is a companion app that lets you tap through all available feedback types and compose your own patterns interactively using the `o O . - =` notation.
+
+[Download on the App Store](https://apps.apple.com/us/app/haptic-feedback-tryout/id6760615313) — iOS available now, Android coming soon.
+
+---
 
 ## Contributions Welcome
 
@@ -29,20 +43,10 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Installation
 
-**Stable (v2):**
-
 ```bash
 npm install react-native-haptic-feedback
 # or
 yarn add react-native-haptic-feedback
-```
-
-**Pre-release (v3 — battle testing):**
-
-```bash
-npm install react-native-haptic-feedback@next
-# or
-yarn add react-native-haptic-feedback@next
 ```
 
 React Native 0.71+ uses auto-linking — no extra steps needed.
@@ -427,6 +431,8 @@ import { TouchableHaptic } from "react-native-haptic-feedback";
 |      `effectHeavyClick`      |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
 |         `effectTick`         |   ✅    | ✅  | Android API 29+; iOS: Core Haptics approximation                     |
 
+> For the complete API reference including all types, options, and examples, see the [documentation site](https://mkuczera.github.io/react-native-haptic-feedback/api/).
+
 ---
 
 ## Platform internals
@@ -506,12 +512,13 @@ jest.mock("react-native-haptic-feedback");
 ### Upgrade steps
 
 ```bash
-# Pre-release (recommended for testing)
-npm install react-native-haptic-feedback@next
+npm install react-native-haptic-feedback@latest
 cd ios && pod install
 ```
 
 All existing `trigger()` call-sites continue to work without changes. The new `confirm`, `reject`, `gestureStart/End`, `segmentTick/FrequentTick`, `toggleOn/Off` types are additive.
+
+See the [full migration guide](https://mkuczera.github.io/react-native-haptic-feedback/guide/migration) in the docs.
 
 ---
 

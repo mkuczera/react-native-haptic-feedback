@@ -1925,7 +1925,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNReactNativeHapticFeedback (3.0.0-next.1):
+  - RNReactNativeHapticFeedback (3.0.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2271,7 +2271,7 @@ SPEC CHECKSUMS:
   ReactCommon: 07572bf9e687c8a52fbe4a3641e9e3a1a477c78e
   ReactNativeDependencies: ba8f663eff75e5c797ba1bed030af4991fa4cbf5
   RNCAsyncStorage: 3a4f5e2777dae1688b781a487923a08569e27fe4
-  RNReactNativeHapticFeedback: 8d394e6250ce96aa4a5728ca29754c4071194409
+  RNReactNativeHapticFeedback: 9c16ffd4f6df9e6ca03cb81b33015e2d9b64e21a
   Yoga: c0b3f2c7e8d3e327e450223a2414ca3fa296b9a2
 
 PODFILE CHECKSUM: f9d39efd6a087e9442b27ea3803d20ff708d0664

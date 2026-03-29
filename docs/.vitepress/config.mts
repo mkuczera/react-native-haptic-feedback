@@ -37,6 +37,7 @@ export default defineConfig({
             { text: 'AHAP Files', link: '/guide/ahap' },
             { text: 'Testing (Jest)', link: '/guide/testing' },
             { text: 'Migration v2 → v3', link: '/guide/migration' },
+            { text: 'v2 Reference', link: '/guide/v2' },
           ],
         },
       ],

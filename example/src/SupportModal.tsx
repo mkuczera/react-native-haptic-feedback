@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -31,7 +31,7 @@ export function higherTier(a: SupportTier, b: SupportTier): SupportTier {
 
 const TIERS = [
   {
-    productId: 'haptic_support_bronze',
+    productId: 'support_0',
     tier: 'support_0' as const,
     fallbackPrice: '$0.99',
     label: 'Supporter',
@@ -40,7 +40,7 @@ const TIERS = [
     color: '#b87333',
   },
   {
-    productId: 'haptic_support_silver',
+    productId: 'support_1',
     tier: 'support_1' as const,
     fallbackPrice: '$2.99',
     label: 'Super Supporter',
@@ -49,7 +49,7 @@ const TIERS = [
     color: '#9ca3af',
   },
   {
-    productId: 'haptic_support_gold',
+    productId: 'support_2',
     tier: 'support_2' as const,
     fallbackPrice: '$4.99',
     label: 'Best Supporter',
@@ -82,6 +82,10 @@ export default function SupportModal({
   currentTier,
   onTierChange,
 }: Props) {
+  // ── Purchase in-progress state ───────────────────────────────────────────────
+
+  const [purchasingId, setPurchasingId] = useState<string | null>(null);
+
   // ── useIAP hook ──────────────────────────────────────────────────────────────
   // The hook manages initConnection on mount and listener cleanup on unmount.
   // onPurchaseSuccess / onPurchaseError fire for every purchase event while
@@ -89,6 +93,7 @@ export default function SupportModal({
 
   const onPurchaseSuccess = useCallback(
     async (purchase: Purchase) => {
+      setPurchasingId(null);
       const newTier = tierForProduct(purchase.productId);
       const best = higherTier(newTier, currentTier);
       await AsyncStorage.setItem(SUPPORT_STORAGE_KEY, best ?? '');
@@ -98,15 +103,20 @@ export default function SupportModal({
         'Thank you! 🙏',
         `You are now a ${cfg?.label ?? 'Supporter'}! ${cfg?.emoji ?? ''}`,
       );
+      onClose();
     },
-    [currentTier, onTierChange],
+    [currentTier, onTierChange, onClose, setPurchasingId],
   );
 
-  const onPurchaseError = useCallback((error: PurchaseError) => {
-    if (error.code !== ErrorCode.UserCancelled) {
-      Alert.alert('Purchase failed', error.message);
-    }
-  }, []);
+  const onPurchaseError = useCallback(
+    (error: PurchaseError) => {
+      setPurchasingId(null);
+      if (error.code !== ErrorCode.UserCancelled) {
+        Alert.alert('Purchase failed', error.message);
+      }
+    },
+    [setPurchasingId],
+  );
 
   const {
     connected,
@@ -147,6 +157,7 @@ export default function SupportModal({
 
   const purchase = useCallback(
     async (productId: string) => {
+      setPurchasingId(productId);
       try {
         await requestPurchase({
           type: 'in-app',
@@ -157,6 +168,7 @@ export default function SupportModal({
         });
       } catch (e: any) {
         // Non-cancellation errors surface via the onPurchaseError callback
+        setPurchasingId(null);
       }
     },
     [requestPurchase, finishTransaction], // eslint-disable-line react-hooks/exhaustive-deps
@@ -214,6 +226,8 @@ export default function SupportModal({
                 const product = products.find(p => p.id === cfg.productId);
                 const owned = tierRank >= TIER_RANK[cfg.tier];
                 const isGold = cfg.tier === 'support_2';
+                const isPurchasing = purchasingId === cfg.productId;
+                const isDisabled = owned || purchasingId !== null;
 
                 return (
                   <Pressable
@@ -226,14 +240,16 @@ export default function SupportModal({
                         backgroundColor: cfg.color + '1a',
                         borderColor: cfg.color,
                       },
+                      purchasingId !== null &&
+                        !isPurchasing && { opacity: 0.45 },
                       pressed &&
-                        !owned && {
+                        !isDisabled && {
                           opacity: 0.72,
                           transform: [{ scale: 0.99 }],
                         },
                     ]}
-                    onPress={() => !owned && purchase(cfg.productId)}
-                    disabled={owned}
+                    onPress={() => !isDisabled && purchase(cfg.productId)}
+                    disabled={isDisabled}
                   >
                     <Text style={styles.tierEmoji}>{cfg.emoji}</Text>
                     <View style={styles.tierInfo}>
@@ -262,9 +278,17 @@ export default function SupportModal({
                             { backgroundColor: cfg.color },
                           ]}
                         >
-                          <Text style={styles.priceBtnText}>
-                            {product?.displayPrice ?? cfg.fallbackPrice}
-                          </Text>
+                          {isPurchasing ? (
+                            <ActivityIndicator
+                              size="small"
+                              color="#fff"
+                              style={styles.priceBtnSpinner}
+                            />
+                          ) : (
+                            <Text style={styles.priceBtnText}>
+                              {product?.displayPrice ?? cfg.fallbackPrice}
+                            </Text>
+                          )}
                         </View>
                       )}
                     </View>
@@ -364,6 +388,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   priceBtnText: { color: '#fff', fontWeight: '700', fontSize: 14 },
+  priceBtnSpinner: { width: 20, height: 20 },
   ownedLabel: { fontWeight: '700', fontSize: 13 },
   legal: { fontSize: 11, textAlign: 'center', lineHeight: 16 },
   closeBtn: { alignItems: 'center', paddingVertical: 10 },

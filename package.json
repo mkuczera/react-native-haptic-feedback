@@ -42,6 +42,8 @@
     "lib",
     "android",
     "ios",
+    "Package.swift",
+    "include",
     "cpp",
     "app.plugin.js",
     "*.podspec",
@@ -129,5 +131,8 @@
       "module",
       "typescript"
     ]
+  },
+  "swiftpmConfig": {
+    "name": "RNReactNativeHapticFeedback"
   }
 }

@@ -7,21 +7,45 @@
 @property (nonatomic, strong) id<CHHapticPatternPlayer> hapticPlayer;
 @end
 
+// Core Haptics work (engine creation/start, players) runs on this serial
+// queue, never the main thread. CHHapticEngine's init/start is synchronous and
+// can block for many seconds when the haptic server is slow or absent (seen on
+// Apple's virtual review devices: ~12s per call, every call), which froze the
+// whole UI when this ran on the main queue. Every engine/player access happens
+// on this queue, so no extra locking is needed.
+static dispatch_queue_t RNHapticFeedbackQueue(void)
+{
+    static dispatch_queue_t queue;
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(
+            DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INTERACTIVE, 0);
+        queue = dispatch_queue_create("com.mkuczera.RNHapticFeedback", attr);
+    });
+    return queue;
+}
+
 @implementation RNHapticFeedback
 @synthesize bridge = _bridge;
 
 - (void)setBridge:(RCTBridge *)bridge
 {
     _bridge = bridge;
-    [self initEngine]; // pre-warm on module init to eliminate first-call latency
+    // pre-warm on module init to eliminate first-call latency
+    dispatch_async(RNHapticFeedbackQueue(), ^{ [self initEngine]; });
 }
 
 - (dispatch_queue_t)methodQueue
 {
-    return dispatch_get_main_queue();
+    return RNHapticFeedbackQueue();
 }
 
 RCT_EXPORT_MODULE();
+
++ (BOOL)requiresMainQueueSetup
+{
+    return NO;
+}
 
 // MARK: - Engine lifecycle
 
@@ -40,7 +64,7 @@ RCT_EXPORT_MODULE();
     _engine.stoppedHandler = ^(CHHapticEngineStoppedReason reason) {
         __strong __typeof__(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(RNHapticFeedbackQueue(), ^{
                 strongSelf.engine = nil;
                 strongSelf.hapticPlayer = nil;
             });
@@ -50,7 +74,7 @@ RCT_EXPORT_MODULE();
     _engine.resetHandler = ^{
         __strong __typeof__(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(RNHapticFeedbackQueue(), ^{
                 NSError *startError = nil;
                 [strongSelf.engine startAndReturnError:&startError];
             });
@@ -255,7 +279,8 @@ RCT_EXPORT_METHOD(trigger:(NSString *)type options:(NSDictionary *)options)
     // Note: enableVibrateFallback is NOT triggered here. On iOS 13+ all iPhones
     // capable of running this SDK have a Taptic Engine, so UIKit already handles them.
     // Adding AudioServicesPlaySystemSound here would cause a double-fire on 6s/7.
-    [self playUIKitHaptic:type];
+    // UIKit feedback generators are main-thread only.
+    dispatch_async(dispatch_get_main_queue(), ^{ [self playUIKitHaptic:type]; });
     (void)enableVibrateFallback; // consumed; not used on UIKit path
 }
 
